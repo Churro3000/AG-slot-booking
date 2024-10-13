@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archer Slot Booking</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
+        label { display: block; margin: 10px 0 5px; }
+        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { background-color: #4CAF50; color: white; padding: 10px; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .availability { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Archer Slot Booking</h1>
+        <p>Book your shooting slots easily without any hassle!</p>
+        <div class="availability">
+            <h3>Available Slots</h3>
+            <p>8 AM - 9 AM: <span id="slot-1">3 slots remaining</span></p>
+            <p>9 AM - 10 AM: <span id="slot-2">Fully booked</span></p>
+            <p>10 AM - 11 AM: <span id="slot-3">5 slots remaining</span></p>
+        </div>
+        <form id="booking-form">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" required placeholder="Enter your name">
+            
+            <label for="time-slot">Select Your Time Slot</label>
+            <select id="time-slot" required>
+                <option value="8-9">8 AM - 9 AM</option>
+                <option value="9-10">9 AM - 10 AM</option>
+                <option value="10-11">10 AM - 11 AM</option>
+            </select>
 
+            <label for="day">Select the Day</label>
+            <select id="day" required>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+
+            <label for="comments">Additional Notes (optional)</label>
+            <textarea id="comments" placeholder="Any special requests or notes?"></textarea>
+
+            <button type="submit">Book Slot</button>
+        </form>
+        <div id="confirmation" style="display:none; margin-top: 20px; color: green;">
+            Booking confirmed! Thank you!
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-functions.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        document.getElementById('booking-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const timeSlot = document.getElementById('time-slot').value;
+            const day = document.getElementById('day').value;
+            const comments = document.getElementById('comments').value;
+
+            // Send booking data to Firebase Firestore
+            db.collection('bookings').add({
+                name: name,
+                timeSlot: timeSlot,
+                day: day,
+                comments: comments,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                // Show confirmation message
+                document.getElementById('confirmation').style.display = 'block';
+                document.getElementById('booking-form').reset(); // Reset the form
+            }).catch((error) => {
+                console.error("Error adding document: ", error);
+            });
+        });
+    </script>
+</body>
+</html>
