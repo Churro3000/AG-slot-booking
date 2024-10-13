@@ -6,28 +6,110 @@
     <title>Archer Slot Booking</title>
     <link rel="stylesheet" href="style.css"> <!-- Assuming you have a separate CSS file -->
     <style>
-        /* Additional inline styles for demonstration purposes */
-        body { font-family: Arial, sans-serif; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        #confirmation { display: none; color: green; }
+        /* CSS Styles */
+        body {
+            font-family: 'Times New Roman', serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+
+        h1, h2 {
+            margin: 20px 0;
+        }
+
+        form {
+            display: inline-block;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 250px;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #222;
+            color: white;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #444;
+        }
+
+        #confirmation {
+            display: none;
+            color: green;
+            margin-top: 20px;
+        }
+
+        #notes-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        /* Optional styling for the note section */
+        #notes {
+            margin: 20px auto;
+            width: 80%;
+        }
     </style>
 </head>
 <body>
     <h1>Book Your Slot</h1>
     <form id="booking-form">
         <label for="name">Name:</label>
-        <input type="text" id="name" required><br><br>
+        <input type="text" id="name" required>
 
         <label for="time-slot">Time Slot:</label>
-        <input type="text" id="time-slot" required><br><br>
+        <select id="time-slot" required>
+            <option value="9-10">9:00 AM - 10:00 AM</option>
+            <option value="10-11">10:00 AM - 11:00 AM</option>
+        </select>
 
         <label for="day">Day:</label>
-        <input type="text" id="day" required><br><br>
+        <select id="day" required>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+        </select>
 
-        <label for="comments">Comments:</label>
-        <textarea id="comments"></textarea><br><br>
+        <label for="comments">Optional Notes or Requests (optional):</label>
+        <textarea id="comments"></textarea>
 
         <button type="submit">Submit</button>
     </form>
