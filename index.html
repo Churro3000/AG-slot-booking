@@ -11,7 +11,10 @@
         input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; }
         button { background-color: #4CAF50; color: white; padding: 10px; border: none; cursor: pointer; }
         button:hover { background-color: #45a049; }
-        .availability { margin: 20px 0; }
+        .availability, .bookings, .notes { margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
     </style>
 </head>
 <body>
@@ -46,48 +49,55 @@
 
             <button type="submit">Book Slot</button>
         </form>
+
         <div id="confirmation" style="display:none; margin-top: 20px; color: green;">
             Booking confirmed! Thank you!
         </div>
+
+        <div class="bookings">
+            <h3>Current Bookings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Time Slot</th>
+                        <th>Day</th>
+                    </tr>
+                </thead>
+                <tbody id="bookings-list">
+                    <!-- Booking entries will be added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="notes">
+            <h3>Requests & Notes</h3>
+            <ul id="notes-list">
+                <!-- Notes will be added here -->
+            </ul>
+        </div>
     </div>
 
+    <!-- Firebase Configuration -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <script>
         // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
-            authDomain: "archer-slot-booking.firebaseapp.com",
-            projectId: "archer-slot-booking",
-            storageBucket: "archer-slot-booking.appspot.com",
-            messagingSenderId: "96539149968",
-            appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Function to update the availability display
-        async function updateAvailability() {
-            const slots = ["8-9", "9-10", "10-11"];
-            
-            for (const slot of slots) {
-                const docRef = db.collection('slots').doc(slot);
-                const docSnapshot = await docRef.get();
-                
-                if (docSnapshot.exists) {
-                    const available = docSnapshot.data().available;
-                    document.getElementById(`slot-${slots.indexOf(slot) + 1}`).innerText = 
-                        available > 0 ? `${available} slots remaining` : 'Fully booked';
-                }
-            }
-        }
-
-        // Call this function on page load to display availability
-        updateAvailability();
-
-        document.getElementById('booking-form').addEventListener('submit', async function(event) {
+        // Handle form submission
+        document.getElementById('booking-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
             const name = document.getElementById('name').value;
@@ -95,37 +105,50 @@
             const day = document.getElementById('day').value;
             const comments = document.getElementById('comments').value;
 
-            const slotDocRef = db.collection('slots').doc(timeSlot);
-            const slotDocSnapshot = await slotDocRef.get();
+            // Send booking data to Firebase Firestore
+            db.collection('bookings').add({
+                name: name,
+                timeSlot: timeSlot,
+                day: day,
+                comments: comments,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                // Show confirmation message
+                document.getElementById('confirmation').style.display = 'block';
+                document.getElementById('booking-form').reset(); // Reset the form
+            }).catch((error) => {
+                console.error("Error adding document: ", error);
+            });
+        });
 
-            if (slotDocSnapshot.exists) {
-                const availableSlots = slotDocSnapshot.data().available;
+        // Real-time listener for bookings
+        db.collection('bookings').orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
+            const bookingsList = document.getElementById('bookings-list');
+            const notesList = document.getElementById('notes-list');
 
-                if (availableSlots > 0) {
-                    // Send booking data to Firebase Firestore
-                    await db.collection('bookings').add({
-                        name: name,
-                        timeSlot: timeSlot,
-                        day: day,
-                        comments: comments,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+            // Clear the lists before repopulating
+            bookingsList.innerHTML = '';
+            notesList.innerHTML = '';
 
-                    // Update available slots
-                    await slotDocRef.update({ available: availableSlots - 1 });
+            snapshot.forEach((doc) => {
+                const booking = doc.data();
 
-                    // Show confirmation message
-                    document.getElementById('confirmation').style.display = 'block';
-                    document.getElementById('booking-form').reset(); // Reset the form
+                // Add bookings to the table
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${booking.name}</td>
+                    <td>${booking.timeSlot}</td>
+                    <td>${booking.day}</td>
+                `;
+                bookingsList.appendChild(row);
 
-                    // Update the availability display
-                    updateAvailability();
-                } else {
-                    alert('Sorry, no available slots for this time.');
+                // Add notes to the notes section
+                if (booking.comments) {
+                    const noteItem = document.createElement('li');
+                    noteItem.innerText = `"${booking.comments}" by ${booking.name}`;
+                    notesList.appendChild(noteItem);
                 }
-            } else {
-                alert('Time slot does not exist.');
-            }
+            });
         });
     </script>
 </body>
