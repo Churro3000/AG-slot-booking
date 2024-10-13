@@ -18,11 +18,17 @@
             margin: 20px 0;
         }
 
+        /* Add top padding */
+        h1 {
+            padding-top: 20px;
+        }
+
         form {
             display: inline-block;
             background-color: #333;
             padding: 20px;
             border-radius: 10px;
+            margin-top: 20px; /* Space between titles and forms */
         }
 
         label {
@@ -88,10 +94,26 @@
             margin: 20px auto;
             width: 80%;
         }
+
+        #slots-available {
+            margin: 20px;
+            font-size: 18px;
+        }
+
+        .delete-btn {
+            background-color: #ff4d4d; /* Red color for delete button */
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>Book Your Slot</h1>
+    <div id="slots-available">Slots Available: <span id="available-slots">14</span></div>
+
     <form id="booking-form">
         <label for="name">Name:</label>
         <input type="text" id="name" required>
@@ -123,6 +145,7 @@
                 <th>Name</th>
                 <th>Time Slot</th>
                 <th>Day</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody id="bookings-list"></tbody>
@@ -134,7 +157,7 @@
     <script type="module">
         // Import the necessary Firebase SDK functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
         // Your Firebase config
         const firebaseConfig = {
@@ -150,6 +173,13 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        let totalSlots = 14; // Total slots available
+
+        // Update available slots display
+        const updateAvailableSlots = (count) => {
+            document.getElementById('available-slots').innerText = count;
+        };
+
         // Handle form submission
         document.getElementById('booking-form').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -159,20 +189,26 @@
             const day = document.getElementById('day').value;
             const comments = document.getElementById('comments').value;
 
-            try {
-                await addDoc(collection(db, 'bookings'), {
-                    name: name,
-                    timeSlot: timeSlot,
-                    day: day,
-                    comments: comments,
-                    timestamp: serverTimestamp()
-                });
-                // Show confirmation message
-                document.getElementById('confirmation').style.display = 'block';
-                document.getElementById('booking-form').reset(); // Reset the form
-            } catch (error) {
-                console.error("Error adding document: ", error);
-                alert("Failed to commit: " + error.message); // Alert the error message
+            if (totalSlots > 0) {
+                try {
+                    await addDoc(collection(db, 'bookings'), {
+                        name: name,
+                        timeSlot: timeSlot,
+                        day: day,
+                        comments: comments,
+                        timestamp: serverTimestamp()
+                    });
+                    totalSlots--; // Decrease the available slots
+                    updateAvailableSlots(totalSlots);
+                    // Show confirmation message
+                    document.getElementById('confirmation').style.display = 'block';
+                    document.getElementById('booking-form').reset(); // Reset the form
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("Failed to commit: " + error.message); // Alert the error message
+                }
+            } else {
+                alert("No slots available!");
             }
         });
 
@@ -188,6 +224,7 @@
 
             snapshot.forEach((doc) => {
                 const booking = doc.data();
+                const bookingDocId = doc.id; // Get document ID for deletion
 
                 // Add bookings to the table
                 const row = document.createElement('tr');
@@ -195,6 +232,7 @@
                     <td>${booking.name}</td>
                     <td>${booking.timeSlot}</td>
                     <td>${booking.day}</td>
+                    <td><button class="delete-btn" data-id="${bookingDocId}" data-name="${booking.name}">Delete</button></td>
                 `;
                 bookingsList.appendChild(row);
 
@@ -205,7 +243,32 @@
                     notesList.appendChild(noteItem);
                 }
             });
+
+            // Add event listeners for delete buttons
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', async function() {
+                    const bookingId = this.dataset.id;
+                    const bookingName = this.dataset.name;
+
+                    // Confirm deletion only for the user who made the booking
+                    if (prompt(`Type "${bookingName}" to confirm deletion:`) === bookingName) {
+                        try {
+                            await deleteDoc(doc(db, 'bookings', bookingId));
+                            totalSlots++; // Increase available slots
+                            updateAvailableSlots(totalSlots);
+                        } catch (error) {
+                            console.error("Error deleting document: ", error);
+                            alert("Failed to delete: " + error.message);
+                        }
+                    } else {
+                        alert("Incorrect name entered for deletion.");
+                    }
+                });
+            });
         });
+
+        // Initial update of available slots
+        updateAvailableSlots(totalSlots);
     </script>
 </body>
 </html>
