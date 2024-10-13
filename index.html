@@ -3,191 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archer Slot Booking</title>
-    <link rel="stylesheet" href="style.css"> <!-- Assuming you have a separate CSS file -->
+    <title>Booking System</title>
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js"></script>
     <style>
-        /* CSS Styles */
         body {
-            font-family: 'Times New Roman', serif;
-            background-color: black;
-            color: white;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
             text-align: center;
         }
-
-        h1, h2 {
-            margin: 20px 0;
-        }
-
-        /* Add top padding */
-        h1 {
-            padding-top: 20px;
-        }
-
-        form {
-            display: inline-block;
-            background-color: #333;
+        #booking-form {
+            background-color: white;
             padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px; /* Space between titles and forms */
+            border-radius: 15px; /* Fully rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
-
-        label {
-            display: block;
-            margin-top: 15px; /* More padding space between labels */
-            font-size: 1.2em; /* Increased font size for labels */
+        .form-title {
+            font-size: 24px; /* Increased font size for titles */
+            margin-bottom: 10px;
         }
-
-        input[type="text"],
-        select,
-        textarea {
-            width: 250px;
+        input[type="text"], input[type="email"], textarea {
+            width: calc(100% - 22px);
             padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            background-color: #222;
-            color: white;
+            border-radius: 25px; /* Fully rounded edges */
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            box-sizing: border-box;
         }
-
         button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
+            border: none;
+            border-radius: 25px; /* Fully rounded edges */
+            padding: 10px 15px;
             cursor: pointer;
+            width: 100%; /* All buttons same width */
+            margin-bottom: 10px;
+            font-size: 16px;
         }
-
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
-
-        table {
-            width: 80%;
-            border-collapse: collapse;
-            margin: 20px auto;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #444;
-        }
-
         #confirmation {
             display: none;
-            color: green;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 15px; /* Fully rounded corners */
+            margin-top: 10px;
+        }
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        #modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px; /* Fully rounded corners */
+            text-align: center;
+        }
+        .close {
+            cursor: pointer;
+            font-weight: bold;
+            float: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        #bookings-list {
             margin-top: 20px;
         }
-
-        #notes-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        /* Optional styling for the note section */
-        #notes {
-            margin: 20px auto;
-            width: 80%;
-        }
-
-        #slots-available {
-            margin: 20px;
-            font-size: 18px;
-        }
-
-        .sunday-availability {
-            color: white; /* White color for Sunday availability */
-            margin-top: 10px; /* Add space between Saturday and Sunday */
-        }
-
-        .slot-count {
-            color: #a1c8e5; /* Soft blue color for slot count */
-        }
-
-        .slot-count-low {
-            color: red; /* Color for low slot count */
-        }
-
-        /* Style for the confirmation popup */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-        }
-
-        .modal-content {
-            background-color: #333;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-        }
-
-        .modal-header, .modal-footer {
+        th, td {
             padding: 10px;
-            text-align: right;
+            border: 1px solid #ccc;
+            text-align: left;
         }
-
-        .modal-header h2 {
-            display: inline; /* Make the header inline with close button */
-            font-size: 1.5em; /* Increased size for modal header */
-        }
-
-        .close-button {
-            cursor: pointer;
-            float: right; /* Align close button to the right */
-            font-size: 1.5em; /* Increase size for close button */
+        .note-display {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 15px; /* Fully rounded corners */
+            background-color: #f9f9f9;
         }
     </style>
 </head>
 <body>
-    <h1>Book Your Slot</h1>
-    <div id="slots-available">
-        Saturday: <span id="available-slots-saturday" class="slot-count">14</span> slots available
-        <div class="sunday-availability">
-            Sunday: <span id="available-slots-sunday" class="slot-count">14</span> slots available
+    <h1>Booking System</h1>
+    <div id="booking-form">
+        <div class="form-title">Make a Booking</div>
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <div>
+            <label for="day">Select Day:</label>
+            <select id="day">
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
         </div>
+        <div>
+            <label for="time-slot">Select Time Slot:</label>
+            <select id="time-slot">
+                <option value="one">9:00 AM - 10:00 AM</option>
+                <option value="two">10:00 AM - 11:00 AM</option>
+                <option value="both">Both Slots</option>
+            </select>
+        </div>
+        <textarea id="notes" placeholder="Additional Notes (optional)"></textarea>
+        <button id="submit-button">Book Now</button>
+        <div id="confirmation">Booking Confirmed!</div>
+        <div id="note-display" class="note-display"></div> <!-- Display area for additional notes -->
     </div>
 
-    <form id="booking-form">
-        <label for="name">Your Name:</label>
-        <input type="text" id="name" required>
-
-        <label for="time-slot">Select Your Time Slot:</label>
-        <select id="time-slot" required>
-            <option value="9-10">9:00 AM - 10:00 AM</option>
-            <option value="10-11">10:00 AM - 11:00 AM</option>
-            <option value="both">Both 9:00 AM - 10:00 AM & 10:00 AM - 11:00 AM</option>
-        </select>
-
-        <label for="day">Select the Day:</label>
-        <select id="day" required>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-        </select>
-
-        <label for="comments">Additional Notes (optional):</label>
-        <textarea id="comments"></textarea>
-
-        <button type="submit">Submit</button>
-    </form>
-
-    <div id="confirmation">Booking submitted successfully!</div>
-
-    <h2>Bookings</h2>
-    <table>
+    <h2>Current Bookings</h2>
+    <table id="bookings-list">
         <thead>
             <tr>
                 <th>Name</th>
@@ -196,77 +135,58 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="bookings-list"></tbody>
+        <tbody>
+            <!-- Booking entries will be populated here -->
+        </tbody>
     </table>
 
-    <h2>Comments</h2>
-    <ul id="notes-list"></ul>
-
-    <!-- Confirmation Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Confirmation</h2>
-                <span id="close-modal" class="close-button">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this booking?</p>
-            </div>
-            <div class="modal-footer">
-                <button id="confirm-delete">Yes, delete this booking</button>
-                <button id="cancel-delete">Cancel</button>
-            </div>
+    <div id="modal">
+        <div id="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <div class="form-title">Confirmation</div>
+            <p>Are you sure you want to delete this booking?</p>
+            <button id="confirm-delete">Yes, Delete</button>
+            <button id="cancel-delete">Cancel</button>
         </div>
     </div>
 
-    <script type="module">
-        // Import the necessary Firebase SDK functions
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-        // Your Firebase config
-        const firebaseConfig = {
-            apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
-            authDomain: "archer-slot-booking.firebaseapp.com",
-            projectId: "archer-slot-booking",
-            storageBucket: "archer-slot-booking.appspot.com",
-            messagingSenderId: "96539149968",
-            appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
-        };
-
+    <script>
         // Initialize Firebase
+        const firebaseConfig = {
+            // Your Firebase configuration
+        };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let totalSlotsSaturday = 14; // Total slots available for Saturday
-        let totalSlotsSunday = 14; // Total slots available for Sunday
+        const submitButton = document.getElementById('submit-button');
+        const noteDisplay = document.getElementById('note-display');
+        let totalSlotsSaturday = 4; // Assuming 4 slots available for Saturday
+        let totalSlotsSunday = 4; // Assuming 4 slots available for Sunday
 
-        // Update available slots display
-        const updateAvailableSlots = () => {
-            const saturdaySlotsElement = document.getElementById('available-slots-saturday');
-            const sundaySlotsElement = document.getElementById('available-slots-sunday');
+        // Function to update available slots display
+        function updateAvailableSlots() {
+            // Display available slots logic here (if needed)
+        }
 
-            saturdaySlotsElement.innerText = totalSlotsSaturday;
-            sundaySlotsElement.innerText = totalSlotsSunday;
-
-            // Change color based on remaining slots
-            saturdaySlotsElement.className = totalSlotsSaturday <= 5 ? 'slot-count-low' : 'slot-count';
-            sundaySlotsElement.className = totalSlotsSunday <= 5 ? 'slot-count-low' : 'slot-count';
-        };
-
-        // Handle form submission
-        document.getElementById('booking-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
+        // Add booking functionality
+        submitButton.addEventListener('click', async (e) => {
+            e.preventDefault();
             const name = document.getElementById('name').value;
-            const timeSlot = document.getElementById('time-slot').value;
+            const email = document.getElementById('email').value;
             const day = document.getElementById('day').value;
+            const timeSlot = document.getElementById('time-slot').value;
+            const notes = document.getElementById('notes').value;
+
+            // Display additional notes below the form
+            noteDisplay.innerText = notes ? `Additional Notes: ${notes}` : '';
 
             try {
-                const docRef = await addDoc(collection(db, "bookings"), {
+                await addDoc(collection(db, "bookings"), {
                     name: name,
+                    email: email,
                     timeSlot: timeSlot,
                     day: day,
+                    notes: notes, // Save the additional notes to Firestore
                     timestamp: serverTimestamp()
                 });
 
@@ -298,7 +218,7 @@
         });
 
         // Fetch and display bookings
-        const bookingsListElement = document.getElementById('bookings-list');
+        const bookingsListElement = document.getElementById('bookings-list').getElementsByTagName('tbody')[0];
         onSnapshot(query(collection(db, "bookings"), orderBy("timestamp")), (snapshot) => {
             bookingsListElement.innerHTML = ''; // Clear existing bookings
             snapshot.forEach(doc => {
@@ -321,50 +241,24 @@
         bookingsListElement.addEventListener('click', async (event) => {
             if (event.target.classList.contains('delete-button')) {
                 const bookingId = event.target.getAttribute('data-id');
+                // Show modal for confirmation
                 const modal = document.getElementById('modal');
-                modal.style.display = 'block'; // Show modal
+                modal.style.display = 'flex';
 
-                // Confirm delete button
-                document.getElementById('confirm-delete').onclick = async function() {
-                    try {
-                        await deleteDoc(doc(db, "bookings", bookingId));
-                        const booking = event.target.closest('tr');
-                        const timeSlot = booking.children[1].innerText;
-                        const day = booking.children[2].innerText;
-
-                        // Update available slots based on the deleted booking
-                        if (day === 'Saturday') {
-                            if (timeSlot === 'both') {
-                                totalSlotsSaturday += 2; // Both slots freed
-                            } else {
-                                totalSlotsSaturday++; // One slot freed
-                            }
-                        } else {
-                            if (timeSlot === 'both') {
-                                totalSlotsSunday += 2; // Both slots freed
-                            } else {
-                                totalSlotsSunday++; // One slot freed
-                            }
-                        }
-
-                        // Update available slots display
-                        updateAvailableSlots();
-                        modal.style.display = 'none'; // Hide modal
-                    } catch (error) {
-                        console.error("Error deleting document: ", error);
-                    }
+                document.getElementById('confirm-delete').onclick = async () => {
+                    await deleteDoc(doc(db, "bookings", bookingId));
+                    modal.style.display = 'none'; // Close modal after deletion
                 };
 
-                // Cancel delete button
-                document.getElementById('cancel-delete').onclick = function() {
-                    modal.style.display = 'none'; // Hide modal
+                document.getElementById('cancel-delete').onclick = () => {
+                    modal.style.display = 'none'; // Close modal if cancelled
                 };
             }
         });
 
-        // Close the modal when clicking on the close button
-        document.getElementById('close-modal').onclick = function() {
-            document.getElementById('modal').style.display = 'none'; // Hide modal
+        // Close modal on clicking the close button
+        document.getElementById('close-modal').onclick = () => {
+            document.getElementById('modal').style.display = 'none';
         };
     </script>
 </body>
