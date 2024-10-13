@@ -100,21 +100,62 @@
             font-size: 18px;
         }
 
+        .sunday-availability {
+            color: #ffcc00; /* Yellow color for Sunday availability */
+            margin-top: 10px; /* Add space between Saturday and Sunday */
+        }
+
         .delete-btn {
             background-color: #ff4d4d; /* Red color for delete button */
             border: none;
             color: white;
-            padding: 7px 10px;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
+        }
+
+        .slot-count {
+            color: blue; /* Default color for slot count */
+        }
+
+        .slot-count-low {
+            color: red; /* Color for low slot count */
+        }
+
+        /* Style for the confirmation popup */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #333;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        .modal-header, .modal-footer {
+            padding: 10px;
+            text-align: right;
         }
     </style>
 </head>
 <body>
     <h1>Book Your Slot</h1>
     <div id="slots-available">
-        Saturday: <span id="available-slots-saturday">14</span> slots available, 
-        Sunday: <span id="available-slots-sunday">14</span> slots available
+        Saturday: <span id="available-slots-saturday" class="slot-count">14</span> slots available
+        <div class="sunday-availability">
+            Sunday: <span id="available-slots-sunday" class="slot-count">14</span> slots available
+        </div>
     </div>
 
     <form id="booking-form">
@@ -125,6 +166,7 @@
         <select id="time-slot" required>
             <option value="9-10">9:00 AM - 10:00 AM</option>
             <option value="10-11">10:00 AM - 11:00 AM</option>
+            <option value="both">Both 9:00 AM - 10:00 AM & 10:00 AM - 11:00 AM</option>
         </select>
 
         <label for="day">Day:</label>
@@ -157,6 +199,23 @@
     <h2>Comments</h2>
     <ul id="notes-list"></ul>
 
+    <!-- Confirmation Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmation</h2>
+                <span id="close-modal" style="cursor:pointer;">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>You are only allowed to delete your own booking. Is this your booking?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-delete">Yes, this is my booking</button>
+                <button id="cancel-delete">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         // Import the necessary Firebase SDK functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
@@ -181,8 +240,15 @@
 
         // Update available slots display
         const updateAvailableSlots = () => {
-            document.getElementById('available-slots-saturday').innerText = totalSlotsSaturday;
-            document.getElementById('available-slots-sunday').innerText = totalSlotsSunday;
+            const saturdaySlotsElement = document.getElementById('available-slots-saturday');
+            const sundaySlotsElement = document.getElementById('available-slots-sunday');
+
+            saturdaySlotsElement.innerText = totalSlotsSaturday;
+            sundaySlotsElement.innerText = totalSlotsSunday;
+
+            // Change color based on remaining slots
+            saturdaySlotsElement.className = totalSlotsSaturday <= 5 ? 'slot-count-low' : 'slot-count';
+            sundaySlotsElement.className = totalSlotsSunday <= 5 ? 'slot-count-low' : 'slot-count';
         };
 
         // Handle form submission
@@ -192,99 +258,93 @@
             const name = document.getElementById('name').value;
             const timeSlot = document.getElementById('time-slot').value;
             const day = document.getElementById('day').value;
-            const comments = document.getElementById('comments').value;
 
-            if ((day === 'Saturday' && totalSlotsSaturday > 0) || (day === 'Sunday' && totalSlotsSunday > 0)) {
-                try {
-                    await addDoc(collection(db, 'bookings'), {
-                        name: name,
-                        timeSlot: timeSlot,
-                        day: day,
-                        comments: comments,
-                        timestamp: serverTimestamp()
-                    });
+            try {
+                const docRef = await addDoc(collection(db, "bookings"), {
+                    name: name,
+                    timeSlot: timeSlot,
+                    day: day,
+                    timestamp: serverTimestamp(),
+                });
 
-                    // Decrease the available slots for the respective day
-                    if (day === 'Saturday') {
-                        totalSlotsSaturday--;
-                    } else {
-                        totalSlotsSunday--;
-                    }
+                console.log("Document written with ID: ", docRef.id);
+                document.getElementById('confirmation').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('confirmation').style.display = 'none';
+                }, 2000);
 
-                    updateAvailableSlots();
-                    // Show confirmation message
-                    document.getElementById('confirmation').style.display = 'block';
-                    document.getElementById('booking-form').reset(); // Reset the form
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                    alert("Failed to commit: " + error.message); // Alert the error message
+                // Decrease available slots
+                if (day === 'Saturday') {
+                    totalSlotsSaturday--;
+                } else {
+                    totalSlotsSunday--;
                 }
-            } else {
-                alert("No slots available for " + day + "!");
+                updateAvailableSlots();
+            } catch (error) {
+                console.error("Error adding document: ", error);
             }
         });
 
-        // Real-time listener for bookings
-        const bookingsQuery = query(collection(db, 'bookings'), orderBy('timestamp', 'asc'));
-        onSnapshot(bookingsQuery, (snapshot) => {
+        // Listen for real-time updates to the bookings
+        onSnapshot(query(collection(db, "bookings"), orderBy("timestamp")), (snapshot) => {
             const bookingsList = document.getElementById('bookings-list');
-            const notesList = document.getElementById('notes-list');
-
-            // Clear the lists before repopulating
             bookingsList.innerHTML = '';
-            notesList.innerHTML = '';
 
             snapshot.forEach((doc) => {
                 const booking = doc.data();
-                const bookingDocId = doc.id; // Get document ID for deletion
-
-                // Add bookings to the table
                 const row = document.createElement('tr');
+
                 row.innerHTML = `
                     <td>${booking.name}</td>
                     <td>${booking.timeSlot}</td>
                     <td>${booking.day}</td>
-                    <td><button class="delete-btn" data-id="${bookingDocId}" data-name="${booking.name}">Delete</button></td>
+                    <td><button class="delete-btn" data-id="${doc.id}" data-name="${booking.name}">Delete</button></td>
                 `;
                 bookingsList.appendChild(row);
-
-                // Add notes to the notes section
-                if (booking.comments) {
-                    const noteItem = document.createElement('li');
-                    noteItem.innerText = `"${booking.comments}" by ${booking.name}`;
-                    notesList.appendChild(noteItem);
-                }
             });
 
-            // Add event listeners for delete buttons
+            // Add event listeners to delete buttons
             document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', async function() {
-                    const bookingId = this.dataset.id;
-                    const bookingName = this.dataset.name;
+                button.addEventListener('click', function() {
+                    const bookingName = button.getAttribute('data-name');
+                    const bookingId = button.getAttribute('data-id');
+                    const userName = document.getElementById('name').value;
 
-                    // Check if the logged-in user is the same as the booking name
-                    const currentUserName = document.getElementById('name').value;
+                    const modal = document.getElementById('modal');
+                    const confirmDelete = document.getElementById('confirm-delete');
+                    const cancelDelete = document.getElementById('cancel-delete');
+                    const closeModal = document.getElementById('close-modal');
 
-                    if (currentUserName === bookingName) {
-                        try {
-                            await deleteDoc(doc(db, 'bookings', bookingId));
+                    // Show the modal
+                    modal.style.display = 'block';
 
-                            // Increase available slots for the respective day
-                            const bookingDay = bookingsList.querySelector(`tr:nth-child(${Array.from(bookingsList.children).indexOf(button.closest('tr')) + 1}) td:nth-child(3)`).innerText;
-                            if (bookingDay === 'Saturday') {
-                                totalSlotsSaturday++;
-                            } else {
-                                totalSlotsSunday++;
+                    confirmDelete.onclick = async () => {
+                        if (bookingName === userName) {
+                            try {
+                                await deleteDoc(doc(db, "bookings", bookingId));
+                                // Increase available slots
+                                if (booking.day === 'Saturday') {
+                                    totalSlotsSaturday++;
+                                } else {
+                                    totalSlotsSunday++;
+                                }
+                                updateAvailableSlots();
+                            } catch (error) {
+                                console.error("Error deleting document: ", error);
                             }
-
-                            updateAvailableSlots();
-                        } catch (error) {
-                            console.error("Error deleting document: ", error);
-                            alert("Failed to delete: " + error.message); // Alert the error message
+                            modal.style.display = 'none'; // Close the modal
+                        } else {
+                            alert("You are only allowed to delete your own booking.");
                         }
-                    } else {
-                        alert("You can only delete your own bookings.");
-                    }
+                    };
+
+                    cancelDelete.onclick = () => {
+                        modal.style.display = 'none'; // Close the modal
+                    };
+
+                    closeModal.onclick = () => {
+                        modal.style.display = 'none'; // Close the modal
+                    };
                 });
             });
         });
