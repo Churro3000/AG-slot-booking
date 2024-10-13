@@ -12,7 +12,7 @@
         button { background-color: #4CAF50; color: white; padding: 10px; border: none; cursor: pointer; }
         button:hover { background-color: #45a049; }
         .availability, .bookings, .notes { margin: 20px 0; }
-        table { width: 100%; border-collapse: collapse; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
     </style>
@@ -21,12 +21,8 @@
     <div class="container">
         <h1>Archer Slot Booking</h1>
         <p>Book your shooting slots easily without any hassle!</p>
-        <div class="availability">
-            <h3>Available Slots</h3>
-            <p>8 AM - 9 AM: <span id="slot-1">3 slots remaining</span></p>
-            <p>9 AM - 10 AM: <span id="slot-2">Fully booked</span></p>
-            <p>10 AM - 11 AM: <span id="slot-3">5 slots remaining</span></p>
-        </div>
+
+        <!-- Booking Form -->
         <form id="booking-form">
             <label for="name">Your Name</label>
             <input type="text" id="name" required placeholder="Enter your name">
@@ -54,6 +50,7 @@
             Booking confirmed! Thank you!
         </div>
 
+        <!-- Bookings Table -->
         <div class="bookings">
             <h3>Current Bookings</h3>
             <table>
@@ -70,6 +67,7 @@
             </table>
         </div>
 
+        <!-- Notepad for Requests and Notes -->
         <div class="notes">
             <h3>Requests & Notes</h3>
             <ul id="notes-list">
