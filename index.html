@@ -4,150 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archer Slot Booking</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: auto; padding: 20px; }
-        label { display: block; margin: 10px 0 5px; }
-        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; }
-        button { background-color: #4CAF50; color: white; padding: 10px; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-        .availability, .bookings, .notes { margin: 20px 0; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Your CSS file -->
 </head>
 <body>
-    <div class="container">
-        <h1>Archer Slot Booking</h1>
-        <p>Book your shooting slots easily without any hassle!</p>
 
-        <!-- Booking Form -->
-        <form id="booking-form">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" required placeholder="Enter your name">
-            
-            <label for="time-slot">Select Your Time Slot</label>
-            <select id="time-slot" required>
-                <option value="8-9">8 AM - 9 AM</option>
-                <option value="9-10">9 AM - 10 AM</option>
-                <option value="10-11">10 AM - 11 AM</option>
-            </select>
+    <h1>Archer Slot Booking</h1>
 
-            <label for="day">Select the Day</label>
-            <select id="day" required>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-            </select>
+    <form id="booking-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
 
-            <label for="comments">Additional Notes (optional)</label>
-            <textarea id="comments" placeholder="Any special requests or notes?"></textarea>
+        <label for="time-slot">Time Slot:</label>
+        <select id="time-slot" required>
+            <option value="9:00 AM - 10:00 AM">9:00 AM - 10:00 AM</option>
+            <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+            <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+            <option value="12:00 PM - 1:00 PM">12:00 PM - 1:00 PM</option>
+        </select>
 
-            <button type="submit">Book Slot</button>
-        </form>
+        <label for="day">Day:</label>
+        <input type="date" id="day" required>
 
-        <div id="confirmation" style="display:none; margin-top: 20px; color: green;">
-            Booking confirmed! Thank you!
-        </div>
+        <label for="comments">Comments:</label>
+        <textarea id="comments"></textarea>
 
-        <!-- Bookings Table -->
-        <div class="bookings">
-            <h3>Current Bookings</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Time Slot</th>
-                        <th>Day</th>
-                    </tr>
-                </thead>
-                <tbody id="bookings-list">
-                    <!-- Booking entries will be added here -->
-                </tbody>
-            </table>
-        </div>
+        <button type="submit">Book Slot</button>
+    </form>
 
-        <!-- Notepad for Requests and Notes -->
-        <div class="notes">
-            <h3>Requests & Notes</h3>
-            <ul id="notes-list">
-                <!-- Notes will be added here -->
-            </ul>
-        </div>
-    </div>
+    <div id="confirmation" style="display:none;">Booking successful!</div>
 
-    <!-- Firebase Configuration -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
-            authDomain: "archer-slot-booking.firebaseapp.com",
-            projectId: "archer-slot-booking",
-            storageBucket: "archer-slot-booking.appspot.com",
-            messagingSenderId: "96539149968",
-            appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
-        };
+    <h2>Bookings</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Time Slot</th>
+                <th>Day</th>
+            </tr>
+        </thead>
+        <tbody id="bookings-list">
+            <!-- Entries will be populated here -->
+        </tbody>
+    </table>
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+    <h2>Notes</h2>
+    <ul id="notes-list">
+        <!-- Notes will be populated here -->
+    </ul>
 
-        // Handle form submission
-        document.getElementById('booking-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+    <!-- Firebase scripts -->
+    <script type="module">
+      // Import the necessary Firebase SDK functions
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-            const name = document.getElementById('name').value;
-            const timeSlot = document.getElementById('time-slot').value;
-            const day = document.getElementById('day').value;
-            const comments = document.getElementById('comments').value;
+      // Your Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
+        authDomain: "archer-slot-booking.firebaseapp.com",
+        projectId: "archer-slot-booking",
+        storageBucket: "archer-slot-booking.appspot.com",
+        messagingSenderId: "96539149968",
+        appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
+      };
 
-            // Send booking data to Firebase Firestore
-            db.collection('bookings').add({
-                name: name,
-                timeSlot: timeSlot,
-                day: day,
-                comments: comments,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                // Show confirmation message
-                document.getElementById('confirmation').style.display = 'block';
-                document.getElementById('booking-form').reset(); // Reset the form
-            }).catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-        });
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
 
-        // Real-time listener for bookings
-        db.collection('bookings').orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
-            const bookingsList = document.getElementById('bookings-list');
-            const notesList = document.getElementById('notes-list');
+      // Handle form submission
+      document.getElementById('booking-form').addEventListener('submit', async function(event) {
+          event.preventDefault();
 
-            // Clear the lists before repopulating
-            bookingsList.innerHTML = '';
-            notesList.innerHTML = '';
+          const name = document.getElementById('name').value;
+          const timeSlot = document.getElementById('time-slot').value;
+          const day = document.getElementById('day').value;
+          const comments = document.getElementById('comments').value;
 
-            snapshot.forEach((doc) => {
-                const booking = doc.data();
+          try {
+              await addDoc(collection(db, 'bookings'), {
+                  name: name,
+                  timeSlot: timeSlot,
+                  day: day,
+                  comments: comments,
+                  timestamp: serverTimestamp()
+              });
+              // Show confirmation message
+              document.getElementById('confirmation').style.display = 'block';
+              document.getElementById('booking-form').reset(); // Reset the form
+          } catch (error) {
+              console.error("Error adding document: ", error);
+          }
+      });
 
-                // Add bookings to the table
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${booking.name}</td>
-                    <td>${booking.timeSlot}</td>
-                    <td>${booking.day}</td>
-                `;
-                bookingsList.appendChild(row);
+      // Real-time listener for bookings
+      const bookingsQuery = query(collection(db, 'bookings'), orderBy('timestamp', 'asc'));
+      onSnapshot(bookingsQuery, (snapshot) => {
+          const bookingsList = document.getElementById('bookings-list');
+          const notesList = document.getElementById('notes-list');
 
-                // Add notes to the notes section
-                if (booking.comments) {
-                    const noteItem = document.createElement('li');
-                    noteItem.innerText = `"${booking.comments}" by ${booking.name}`;
-                    notesList.appendChild(noteItem);
-                }
-            });
-        });
+          // Clear the lists before repopulating
+          bookingsList.innerHTML = '';
+          notesList.innerHTML = '';
+
+          snapshot.forEach((doc) => {
+              const booking = doc.data();
+
+              // Add bookings to the table
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                  <td>${booking.name}</td>
+                  <td>${booking.timeSlot}</td>
+                  <td>${booking.day}</td>
+              `;
+              bookingsList.appendChild(row);
+
+              // Add notes to the notes section
+              if (booking.comments) {
+                  const noteItem = document.createElement('li');
+                  noteItem.innerText = `"${booking.comments}" by ${booking.name}`;
+                  notesList.appendChild(noteItem);
+              }
+          });
+      });
     </script>
+
 </body>
 </html>
