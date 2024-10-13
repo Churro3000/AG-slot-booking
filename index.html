@@ -104,7 +104,7 @@
             background-color: #ff4d4d; /* Red color for delete button */
             border: none;
             color: white;
-            padding: 5px 10px;
+            padding: 7px 10px;
             border-radius: 5px;
             cursor: pointer;
         }
@@ -112,7 +112,10 @@
 </head>
 <body>
     <h1>Book Your Slot</h1>
-    <div id="slots-available">Slots Available: <span id="available-slots">14</span></div>
+    <div id="slots-available">
+        Saturday: <span id="available-slots-saturday">14</span> slots available, 
+        Sunday: <span id="available-slots-sunday">14</span> slots available
+    </div>
 
     <form id="booking-form">
         <label for="name">Name:</label>
@@ -173,11 +176,13 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let totalSlots = 14; // Total slots available
+        let totalSlotsSaturday = 14; // Total slots available for Saturday
+        let totalSlotsSunday = 14; // Total slots available for Sunday
 
         // Update available slots display
-        const updateAvailableSlots = (count) => {
-            document.getElementById('available-slots').innerText = count;
+        const updateAvailableSlots = () => {
+            document.getElementById('available-slots-saturday').innerText = totalSlotsSaturday;
+            document.getElementById('available-slots-sunday').innerText = totalSlotsSunday;
         };
 
         // Handle form submission
@@ -189,7 +194,7 @@
             const day = document.getElementById('day').value;
             const comments = document.getElementById('comments').value;
 
-            if (totalSlots > 0) {
+            if ((day === 'Saturday' && totalSlotsSaturday > 0) || (day === 'Sunday' && totalSlotsSunday > 0)) {
                 try {
                     await addDoc(collection(db, 'bookings'), {
                         name: name,
@@ -198,8 +203,15 @@
                         comments: comments,
                         timestamp: serverTimestamp()
                     });
-                    totalSlots--; // Decrease the available slots
-                    updateAvailableSlots(totalSlots);
+
+                    // Decrease the available slots for the respective day
+                    if (day === 'Saturday') {
+                        totalSlotsSaturday--;
+                    } else {
+                        totalSlotsSunday--;
+                    }
+
+                    updateAvailableSlots();
                     // Show confirmation message
                     document.getElementById('confirmation').style.display = 'block';
                     document.getElementById('booking-form').reset(); // Reset the form
@@ -208,7 +220,7 @@
                     alert("Failed to commit: " + error.message); // Alert the error message
                 }
             } else {
-                alert("No slots available!");
+                alert("No slots available for " + day + "!");
             }
         });
 
@@ -250,25 +262,32 @@
                     const bookingId = this.dataset.id;
                     const bookingName = this.dataset.name;
 
-                    // Confirm deletion only for the user who made the booking
-                    if (prompt(`Type "${bookingName}" to confirm deletion:`) === bookingName) {
+                    // Check if the logged-in user is the same as the booking name
+                    const currentUserName = document.getElementById('name').value;
+
+                    if (currentUserName === bookingName) {
                         try {
                             await deleteDoc(doc(db, 'bookings', bookingId));
-                            totalSlots++; // Increase available slots
-                            updateAvailableSlots(totalSlots);
+
+                            // Increase available slots for the respective day
+                            const bookingDay = bookingsList.querySelector(`tr:nth-child(${Array.from(bookingsList.children).indexOf(button.closest('tr')) + 1}) td:nth-child(3)`).innerText;
+                            if (bookingDay === 'Saturday') {
+                                totalSlotsSaturday++;
+                            } else {
+                                totalSlotsSunday++;
+                            }
+
+                            updateAvailableSlots();
                         } catch (error) {
                             console.error("Error deleting document: ", error);
-                            alert("Failed to delete: " + error.message);
+                            alert("Failed to delete: " + error.message); // Alert the error message
                         }
                     } else {
-                        alert("Incorrect name entered for deletion.");
+                        alert("You can only delete your own bookings.");
                     }
                 });
             });
         });
-
-        // Initial update of available slots
-        updateAvailableSlots(totalSlots);
     </script>
 </body>
 </html>
