@@ -68,7 +68,26 @@
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        document.getElementById('booking-form').addEventListener('submit', function(event) {
+        // Function to update the availability display
+        async function updateAvailability() {
+            const slots = ["8-9", "9-10", "10-11"];
+            
+            for (const slot of slots) {
+                const docRef = db.collection('slots').doc(slot);
+                const docSnapshot = await docRef.get();
+                
+                if (docSnapshot.exists) {
+                    const available = docSnapshot.data().available;
+                    document.getElementById(`slot-${slots.indexOf(slot) + 1}`).innerText = 
+                        available > 0 ? `${available} slots remaining` : 'Fully booked';
+                }
+            }
+        }
+
+        // Call this function on page load to display availability
+        updateAvailability();
+
+        document.getElementById('booking-form').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const name = document.getElementById('name').value;
@@ -76,20 +95,37 @@
             const day = document.getElementById('day').value;
             const comments = document.getElementById('comments').value;
 
-            // Send booking data to Firebase Firestore
-            db.collection('bookings').add({
-                name: name,
-                timeSlot: timeSlot,
-                day: day,
-                comments: comments,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                // Show confirmation message
-                document.getElementById('confirmation').style.display = 'block';
-                document.getElementById('booking-form').reset(); // Reset the form
-            }).catch((error) => {
-                console.error("Error adding document: ", error);
-            });
+            const slotDocRef = db.collection('slots').doc(timeSlot);
+            const slotDocSnapshot = await slotDocRef.get();
+
+            if (slotDocSnapshot.exists) {
+                const availableSlots = slotDocSnapshot.data().available;
+
+                if (availableSlots > 0) {
+                    // Send booking data to Firebase Firestore
+                    await db.collection('bookings').add({
+                        name: name,
+                        timeSlot: timeSlot,
+                        day: day,
+                        comments: comments,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // Update available slots
+                    await slotDocRef.update({ available: availableSlots - 1 });
+
+                    // Show confirmation message
+                    document.getElementById('confirmation').style.display = 'block';
+                    document.getElementById('booking-form').reset(); // Reset the form
+
+                    // Update the availability display
+                    updateAvailability();
+                } else {
+                    alert('Sorry, no available slots for this time.');
+                }
+            } else {
+                alert('Time slot does not exist.');
+            }
         });
     </script>
 </body>
