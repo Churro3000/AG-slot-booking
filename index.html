@@ -6,12 +6,12 @@
     <title>Active Generation Booking</title>
     <style>
         body {
-            background-color: #FCF8FC;
+            background-color: #dddddd; /* soft grey beige color */
             font-family: 'Canva Sans', sans-serif;
             color: black;
         }
         .banner {
-            background-color: #c30010;
+            background-color: #c30010; /* nicer soft red */
             padding: 20px;
             text-align: center;
             font-size: 2em;
@@ -28,7 +28,6 @@
             margin: 40px 0;
             font-size: 1.5em;
             font-weight: bold;
-            display: none; /* Initially hidden */
         }
         .rect-bar {
             background-color: #a3c6f1;
@@ -105,7 +104,7 @@
             text-align: center;
         }
         button {
-            background-color: #3b8132;
+            background-color: #589f55;
             color: white;
             padding: 10px;
             border: none;
@@ -120,6 +119,7 @@
             margin-top: 10px;
             display: none;
         }
+        /* Table */
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -144,7 +144,7 @@
             background-color: white;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
             display: none;
         }
         .popup-btn {
@@ -161,6 +161,7 @@
             background-color: #c04a4a;
             color: white;
         }
+        /* Notes section */
         .note-item {
             list-style-type: disc;
             margin-left: 20px;
@@ -258,103 +259,112 @@
             saturday: document.querySelector('.saturday-bar'),
             sunday: document.querySelector('.sunday-bar')
         };
-        const headerTitle = document.querySelector('.header-title');
+        const title = document.querySelector('.header-title');
         let saturdaySlots = 14;
         let sundaySlots = 14;
         let selectedBooking = null;
 
-        // Show section and handle navigation
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelector('.nav-item.active').classList.remove('active');
                 item.classList.add('active');
-                showSection(item.dataset.section);
+                const section = item.getAttribute('data-section');
+                Object.values(cards).forEach(card => card.classList.add('hidden'));
+                cards[section].classList.remove('hidden');
+
+                if (section === 'slots') {
+                    bars.saturday.style.display = 'block';
+                    bars.sunday.style.display = 'block';
+                    title.style.display = 'block';
+                } else {
+                    bars.saturday.style.display = 'none';
+                    bars.sunday.style.display = 'none';
+                    title.style.display = 'none';
+                }
             });
         });
 
-        function showSection(section) {
-            Object.keys(cards).forEach(key => {
-                if (key === section) {
-                    cards[key].classList.remove('hidden');
-                } else {
-                    cards[key].classList.add('hidden');
-                }
-            });
-            if (section === 'slots') {
-                headerTitle.style.display = 'block'; // Show "Book Your Slot" when on Slots page
-            } else {
-                headerTitle.style.display = 'none'; // Hide it on other pages
-            }
-        }
-
-        // Slot booking and data persistence
-        const bookingList = document.getElementById('bookingList');
-        const notesList = document.getElementById('notesList');
-        const submitButton = document.getElementById('submit');
-        const successMessage = document.getElementById('successMessage');
-
-        // Retrieve saved bookings from localStorage
-        const savedBookings = JSON.parse(localStorage.getItem('bookings')) || [];
-        displayBookings();
-
-        // Submit booking
-        submitButton.addEventListener('click', () => {
+        // Submit Booking
+        document.getElementById('submit').addEventListener('click', function() {
             const name = document.getElementById('name').value;
             const timeSlot = document.getElementById('timeSlot').value;
             const day = document.getElementById('day').value;
             const additionalNotes = document.getElementById('additionalNotes').value;
 
-            if (name && timeSlot && day) {
-                const booking = { name, timeSlot, day, additionalNotes };
-                savedBookings.push(booking);
-                localStorage.setItem('bookings', JSON.stringify(savedBookings));
-                displayBookings();
-                successMessage.style.display = 'block';
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 2000);
+            if (!name || !timeSlot || !day) {
+                alert('Please fill out all required fields.');
+                return;
             }
+
+            const bookingList = document.getElementById('bookingList');
+            const notesList = document.getElementById('notesList');
+
+            // Update slots
+            if (day === 'saturday' || day === 'both') {
+                saturdaySlots--;
+                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+            }
+            if (day === 'sunday' || day === 'both') {
+                sundaySlots--;
+                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+            }
+
+            // Add booking to table
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${name}</td>
+                <td>${timeSlot}</td>
+                <td>${day}</td>
+                <td><button class="action-btn" onclick="handleDelete(this)">Delete</button></td>
+            `;
+            bookingList.appendChild(newRow);
+
+            // Add notes if provided
+            if (additionalNotes) {
+                const noteItem = document.createElement('li');
+                noteItem.classList.add('note-item');
+                noteItem.textContent = `${name}: ${additionalNotes}`;
+                notesList.appendChild(noteItem);
+            }
+
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 3000);
+
+            // Clear inputs
+            document.getElementById('name').value = '';
+            document.getElementById('timeSlot').value = '9-10';
+            document.getElementById('day').value = 'saturday';
+            document.getElementById('additionalNotes').value = '';
         });
 
-        // Display bookings in the table and notes
-        function displayBookings() {
-            bookingList.innerHTML = '';
-            notesList.innerHTML = '';
-            savedBookings.forEach((booking, index) => {
-                const bookingRow = `
-                    <tr>
-                        <td>${booking.name}</td>
-                        <td>${booking.timeSlot}</td>
-                        <td>${booking.day}</td>
-                        <td><button class="action-btn" onclick="deleteBooking(${index})">Delete</button></td>
-                    </tr>
-                `;
-                bookingList.innerHTML += bookingRow;
-
-                if (booking.additionalNotes) {
-                    const noteItem = `<li class="note-item">${booking.name}: ${booking.additionalNotes}</li>`;
-                    notesList.innerHTML += noteItem;
-                }
-            });
+        // Handle delete booking
+        function handleDelete(button) {
+            selectedBooking = button.parentElement.parentElement;
+            document.getElementById('deletePopup').style.display = 'block';
         }
 
-        // Delete booking
-        window.deleteBooking = (index) => {
-            selectedBooking = index;
-            document.getElementById('deletePopup').style.display = 'block';
-        };
-
-        document.getElementById('confirmDelete').addEventListener('click', () => {
-            savedBookings.splice(selectedBooking, 1);
-            localStorage.setItem('bookings', JSON.stringify(savedBookings));
-            displayBookings();
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            const day = selectedBooking.children[2].textContent;
+            if (day === 'saturday' || day === 'both') {
+                saturdaySlots++;
+                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+            }
+            if (day === 'sunday' || day === 'both') {
+                sundaySlots++;
+                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+            }
+            selectedBooking.remove();
             document.getElementById('deletePopup').style.display = 'none';
         });
 
-        document.getElementById('cancelDelete').addEventListener('click', () => {
+        document.getElementById('cancelDelete').addEventListener('click', function() {
+            selectedBooking = null;
             document.getElementById('deletePopup').style.display = 'none';
         });
-
     </script>
+
 </body>
 </html>
