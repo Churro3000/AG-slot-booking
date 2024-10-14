@@ -11,7 +11,7 @@
             color: black;
         }
         .banner {
-            background-color: #c04a4a; /* soft red */
+            background-color: #d66a6a; /* nicer soft red */
             padding: 20px;
             text-align: center;
             font-size: 2em;
@@ -25,16 +25,20 @@
         }
         .header-title {
             text-align: center;
-            margin: 20px 0;
+            margin: 40px 0; /* Added padding for more space */
             font-size: 1.5em;
+            font-weight: bold; /* Thicker font */
         }
         .rect-bar {
-            background-color: white;
+            background-color: #a3c6f1; /* soft blue color */
             border: 1px solid black;
             border-radius: 200px;
             padding: 10px;
             margin: 10px 0;
             text-align: center;
+            max-width: 60%; /* Shorter width */
+            margin-left: auto;
+            margin-right: auto;
         }
         .navigation {
             display: flex;
@@ -59,7 +63,7 @@
         }
         .card {
             background-color: white;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Increased shadow */
             border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
@@ -69,7 +73,10 @@
         }
         .card-title {
             font-size: 1.2em;
-            margin-bottom: 10px;
+            font-weight: bold; /* Thicker font */
+            margin-top: 20px; /* Added padding above */
+            margin-bottom: 20px; /* Added padding below */
+            text-align: center; /* Centered title for Bookings */
         }
         .input-bar {
             display: flex;
@@ -82,29 +89,35 @@
             border: 1px solid black;
             border-radius: 200px;
             padding: 10px;
+            background-color: #f7f7f7; /* Light grey inside */
         }
         .input-title {
             font-size: 0.8em;
             text-align: left;
+            font-weight: bold; /* Thicker font */
+            margin-bottom: 5px; /* Slight padding below */
         }
         select, input[type="text"], textarea {
             width: 100%;
             border: none;
             outline: none;
+            text-align: center; /* Center-aligned text inside bars */
         }
         button {
-            background-color: #6abf69;
+            background-color: #589f55; /* Slightly darker green */
             color: white;
             padding: 10px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             margin-top: 20px;
+            font-weight: bold; /* Thicker text */
         }
         .success-message {
             color: #2d6a2d;
             font-size: 0.8em;
             margin-top: 10px;
+            display: none; /* Initially hidden */
         }
         /* Table */
         .table {
@@ -117,7 +130,7 @@
             text-align: center;
         }
         .action-btn {
-            background-color: #c04a4a;
+            background-color: #b04a4a; /* Nice darker red */
             color: white;
             padding: 5px;
             border: none;
@@ -153,6 +166,7 @@
             list-style-type: disc;
             margin-left: 20px;
             font-size: 0.9em;
+            text-align: left;
         }
     </style>
 </head>
@@ -168,20 +182,20 @@
         </div>
 
         <div class="header-title">Book Your Slot</div>
-        <div class="rect-bar">Saturday: 14 slots available</div>
-        <div class="rect-bar">Sunday: 14 slots available</div>
+        <div class="rect-bar saturday-bar">Saturday: 14 slots available</div>
+        <div class="rect-bar sunday-bar">Sunday: 14 slots available</div>
 
         <!-- Slots Form -->
         <div class="card slots-card">
-            <div class="card-title">Slots</div>
+            <div class="card-title">One Slot Booking per Archer</div>
             <div class="input-bar">
                 <div class="input-row">
                     <div class="input-title">Your Name</div>
-                    <input type="text" placeholder="Enter your name">
+                    <input type="text" id="name" placeholder="Enter your name">
                 </div>
                 <div class="input-row">
                     <div class="input-title">Select Your Time Slot</div>
-                    <select>
+                    <select id="timeSlot">
                         <option value="9-10">9-10</option>
                         <option value="10-11">10-11</option>
                         <option value="both">Both 9-10, 10-11</option>
@@ -189,7 +203,7 @@
                 </div>
                 <div class="input-row">
                     <div class="input-title">Select the Day</div>
-                    <select>
+                    <select id="day">
                         <option value="saturday">Saturday</option>
                         <option value="sunday">Sunday</option>
                         <option value="both">Both Saturday & Sunday</option>
@@ -197,10 +211,10 @@
                 </div>
                 <div class="input-row">
                     <div class="input-title">Additional Notes/Requests (optional)</div>
-                    <textarea placeholder="Enter additional requests"></textarea>
+                    <textarea id="additionalNotes" placeholder="Enter additional requests"></textarea>
                 </div>
-                <button>Submit</button>
-                <div class="success-message">Slot Booked Successfully!</div>
+                <button id="submit">Submit</button>
+                <div class="success-message" id="successMessage">Slot Booked Successfully!</div>
             </div>
         </div>
 
@@ -216,33 +230,22 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>9-10</td>
-                        <td>Saturday</td>
-                        <td><button class="action-btn">Delete</button></td>
-                    </tr>
-                    <!-- More rows here -->
-                </tbody>
+                <tbody id="bookingList"></tbody>
             </table>
         </div>
 
         <!-- Notes Section -->
         <div class="card notes-card hidden">
             <div class="card-title">Notes/Requests From Archers</div>
-            <ul>
-                <li class="note-item">Please assign me to the first slot.</li>
-                <!-- More notes here -->
-            </ul>
+            <ul id="notesList"></ul>
         </div>
 
     </div>
 
-    <div class="action-popup">
+    <div class="action-popup" id="deletePopup">
         <p>Are you sure you want to delete this booking?</p>
-        <button class="popup-btn delete">Yes, Delete this booking</button>
-        <button class="popup-btn cancel">Cancel</button>
+        <button class="popup-btn delete" id="confirmDelete">Yes, Delete this booking</button>
+        <button class="popup-btn cancel" id="cancelDelete">Cancel</button>
     </div>
 
     <script>
@@ -252,16 +255,135 @@
             bookings: document.querySelector('.bookings-card'),
             notes: document.querySelector('.notes-card')
         };
+        const bars = {
+            saturday: document.querySelector('.saturday-bar'),
+            sunday: document.querySelector('.sunday-bar')
+        };
+        let saturdaySlots = 14;
+        let sundaySlots = 14;
+        let selectedBooking = null;
 
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelector('.nav-item.active').classList.remove('active');
                 item.classList.add('active');
                 const section = item.getAttribute('data-section');
-                Object.keys(cards).forEach(card => {
-                    cards[card].classList.toggle('hidden', card !== section);
-                });
+                showCard(section);
             });
+        });
+
+        function showCard(section) {
+            Object.keys(cards).forEach(key => {
+                cards[key].classList.add('hidden');
+            });
+            cards[section].classList.remove('hidden');
+        }
+
+        const bookingList = document.getElementById('bookingList');
+        const notesList = document.getElementById('notesList');
+
+        document.getElementById('submit').addEventListener('click', () => {
+            const name = document.getElementById('name').value;
+            const timeSlot = document.getElementById('timeSlot').value;
+            const day = document.getElementById('day').value;
+            const notes = document.getElementById('additionalNotes').value;
+
+            if (!name) {
+                alert("Please enter your name");
+                return;
+            }
+
+            const newBooking = {
+                name,
+                timeSlot,
+                day,
+                notes
+            };
+
+            if (day === 'saturday') {
+                if (saturdaySlots > 0) {
+                    saturdaySlots--;
+                    bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+                } else {
+                    alert('No available slots for Saturday.');
+                    return;
+                }
+            } else if (day === 'sunday') {
+                if (sundaySlots > 0) {
+                    sundaySlots--;
+                    bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+                } else {
+                    alert('No available slots for Sunday.');
+                    return;
+                }
+            } else {
+                if (saturdaySlots > 0 && sundaySlots > 0) {
+                    saturdaySlots--;
+                    sundaySlots--;
+                    bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+                    bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+                } else {
+                    alert('No available slots for both days.');
+                    return;
+                }
+            }
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${timeSlot}</td>
+                <td>${day}</td>
+                <td><button class="action-btn" data-name="${name}">Delete</button></td>
+            `;
+            bookingList.appendChild(row);
+
+            if (notes) {
+                const noteItem = document.createElement('li');
+                noteItem.classList.add('note-item');
+                noteItem.textContent = `${name}: ${notes}`;
+                notesList.appendChild(noteItem);
+            }
+
+            document.getElementById('successMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 2000);
+
+            // Clear form
+            document.getElementById('name').value = '';
+            document.getElementById('timeSlot').value = '9-10';
+            document.getElementById('day').value = 'saturday';
+            document.getElementById('additionalNotes').value = '';
+        });
+
+        document.getElementById('bookingList').addEventListener('click', (e) => {
+            if (e.target.classList.contains('action-btn')) {
+                selectedBooking = e.target.closest('tr');
+                document.getElementById('deletePopup').style.display = 'block';
+            }
+        });
+
+        document.getElementById('confirmDelete').addEventListener('click', () => {
+            const day = selectedBooking.querySelector('td:nth-child(3)').textContent;
+            if (day === 'saturday') {
+                saturdaySlots++;
+                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+            } else if (day === 'sunday') {
+                sundaySlots++;
+                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+            } else {
+                saturdaySlots++;
+                sundaySlots++;
+                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+            }
+
+            bookingList.removeChild(selectedBooking);
+            document.getElementById('deletePopup').style.display = 'none';
+        });
+
+        document.getElementById('cancelDelete').addEventListener('click', () => {
+            document.getElementById('deletePopup').style.display = 'none';
         });
     </script>
 
