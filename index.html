@@ -25,18 +25,18 @@
         }
         .header-title {
             text-align: center;
-            margin: 40px 0; /* Added padding for more space */
+            margin: 40px 0;
             font-size: 1.5em;
-            font-weight: bold; /* Thicker font */
+            font-weight: bold;
         }
         .rect-bar {
-            background-color: #a3c6f1; /* soft blue color */
+            background-color: #a3c6f1;
             border: 1px solid black;
             border-radius: 200px;
             padding: 10px;
             margin: 10px 0;
             text-align: center;
-            max-width: 60%; /* Shorter width */
+            max-width: 60%;
             margin-left: auto;
             margin-right: auto;
         }
@@ -63,7 +63,7 @@
         }
         .card {
             background-color: white;
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Increased shadow */
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
             border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
@@ -73,10 +73,10 @@
         }
         .card-title {
             font-size: 1.2em;
-            font-weight: bold; /* Thicker font */
-            margin-top: 20px; /* Added padding above */
-            margin-bottom: 20px; /* Added padding below */
-            text-align: center; /* Centered title for Bookings */
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: center;
         }
         .input-bar {
             display: flex;
@@ -89,35 +89,35 @@
             border: 1px solid black;
             border-radius: 200px;
             padding: 10px;
-            background-color: #f7f7f7; /* Light grey inside */
+            background-color: #f7f7f7;
         }
         .input-title {
             font-size: 0.8em;
             text-align: left;
-            font-weight: bold; /* Thicker font */
-            margin-bottom: 5px; /* Slight padding below */
+            font-weight: bold;
+            margin-bottom: 5px;
         }
         select, input[type="text"], textarea {
             width: 100%;
             border: none;
             outline: none;
-            text-align: center; /* Center-aligned text inside bars */
+            text-align: center;
         }
         button {
-            background-color: #589f55; /* Slightly darker green */
+            background-color: #589f55;
             color: white;
             padding: 10px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             margin-top: 20px;
-            font-weight: bold; /* Thicker text */
+            font-weight: bold;
         }
         .success-message {
             color: #2d6a2d;
             font-size: 0.8em;
             margin-top: 10px;
-            display: none; /* Initially hidden */
+            display: none;
         }
         /* Table */
         .table {
@@ -130,7 +130,7 @@
             text-align: center;
         }
         .action-btn {
-            background-color: #c30010; /* Nice darker red */
+            background-color: #c30010;
             color: white;
             padding: 5px;
             border: none;
@@ -144,7 +144,7 @@
             background-color: white;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
             display: none;
         }
         .popup-btn {
@@ -255,106 +255,129 @@
             bookings: document.querySelector('.bookings-card'),
             notes: document.querySelector('.notes-card')
         };
-        const bookingList = document.getElementById('bookingList');
-        const notesList = document.getElementById('notesList');
-        const successMessage = document.getElementById('successMessage');
-        const deletePopup = document.getElementById('deletePopup');
+        const bars = {
+            saturday: document.querySelector('.saturday-bar'),
+            sunday: document.querySelector('.sunday-bar')
+        };
+        const title = document.querySelector('.header-title');
+        let saturdaySlots = 14;
+        let sundaySlots = 14;
+        let selectedBooking = null;
+
+        // Load bookings from localStorage on page load
+        window.onload = function() {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings.forEach(booking => {
+                addBookingToTable(booking);
+            });
+            updateSlotBars();
+        };
 
         navItems.forEach(item => {
             item.addEventListener('click', () => {
-                // Remove active class from all nav-items
-                navItems.forEach(nav => nav.classList.remove('active'));
-                // Add active class to the clicked nav-item
+                document.querySelector('.nav-item.active').classList.remove('active');
                 item.classList.add('active');
+                const section = item.dataset.section;
 
-                // Hide all cards
-                Object.values(cards).forEach(card => card.classList.add('hidden'));
-                // Show the corresponding card
-                cards[item.getAttribute('data-section')].classList.remove('hidden');
+                // Show/Hide cards based on the active section
+                Object.values(cards).forEach(card => {
+                    card.classList.add('hidden');
+                });
+                cards[section].classList.remove('hidden');
+                title.textContent = `Book Your ${section.charAt(0).toUpperCase() + section.slice(1)}`;
             });
         });
 
-        let bookings = [];
-        let currentDeleteIndex = null;
+        function updateSlotBars() {
+            bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+            bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+        }
 
-        document.getElementById('submit').addEventListener('click', () => {
+        // Booking Slot Form Submission
+        document.getElementById('submit').addEventListener('click', function() {
             const name = document.getElementById('name').value;
             const timeSlot = document.getElementById('timeSlot').value;
             const day = document.getElementById('day').value;
             const additionalNotes = document.getElementById('additionalNotes').value;
+            const successMessage = document.getElementById('successMessage');
 
             if (!name || !timeSlot || !day) {
-                alert('Please fill all required fields');
+                alert('Please fill in all the details');
                 return;
             }
 
-            // Add booking to array
-            bookings.push({ name, timeSlot, day, additionalNotes });
-            updateTable();
-            updateNotes();
+            // Check availability for the selected day
+            if (day === 'saturday' && saturdaySlots === 0 || day === 'sunday' && sundaySlots === 0) {
+                alert(`${day.charAt(0).toUpperCase() + day.slice(1)} slots are full. Please select another day.`);
+                return;
+            }
+
+            // Store booking details
+            const booking = { name, timeSlot, day, additionalNotes };
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            // Update UI
+            addBookingToTable(booking);
+            if (day === 'saturday') {
+                saturdaySlots--;
+            } else if (day === 'sunday') {
+                sundaySlots--;
+            } else {
+                saturdaySlots--;
+                sundaySlots--;
+            }
+            updateSlotBars();
             successMessage.style.display = 'block';
             setTimeout(() => successMessage.style.display = 'none', 3000);
-
-            // Clear form
-            document.getElementById('name').value = '';
-            document.getElementById('timeSlot').value = '9-10';
-            document.getElementById('day').value = 'saturday';
-            document.getElementById('additionalNotes').value = '';
-
-            updateAvailability();
         });
 
-        function updateTable() {
-            bookingList.innerHTML = '';
-            bookings.forEach((booking, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${booking.name}</td>
-                    <td>${booking.timeSlot}</td>
-                    <td>${booking.day}</td>
-                    <td><button class="action-btn" onclick="showDeletePopup(${index})">Delete</button></td>
-                `;
-                bookingList.appendChild(row);
-            });
+        function addBookingToTable(booking) {
+            const bookingList = document.getElementById('bookingList');
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${booking.name}</td>
+                <td>${booking.timeSlot}</td>
+                <td>${booking.day}</td>
+                <td><button class="action-btn" data-name="${booking.name}" data-day="${booking.day}">Delete</button></td>
+            `;
+
+            bookingList.appendChild(row);
         }
 
-        function updateNotes() {
-            notesList.innerHTML = '';
-            bookings.forEach(booking => {
-                if (booking.additionalNotes) {
-                    const noteItem = document.createElement('li');
-                    noteItem.classList.add('note-item');
-                    noteItem.textContent = `${booking.name} (${booking.day}, ${booking.timeSlot}): ${booking.additionalNotes}`;
-                    notesList.appendChild(noteItem);
-                }
-            });
-        }
-
-        function showDeletePopup(index) {
-            currentDeleteIndex = index;
-            deletePopup.style.display = 'block';
-        }
-
-        document.getElementById('confirmDelete').addEventListener('click', () => {
-            if (currentDeleteIndex !== null) {
-                bookings.splice(currentDeleteIndex, 1);
-                updateTable();
-                updateNotes();
-                updateAvailability();
-                deletePopup.style.display = 'none';
+        // Delete booking event handler
+        document.getElementById('bookingList').addEventListener('click', function(event) {
+            if (event.target.classList.contains('action-btn')) {
+                selectedBooking = event.target.dataset;
+                document.getElementById('deletePopup').style.display = 'block';
             }
         });
 
-        document.getElementById('cancelDelete').addEventListener('click', () => {
-            deletePopup.style.display = 'none';
+        // Confirm Delete Booking
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            const newBookings = bookings.filter(booking => !(booking.name === selectedBooking.name && booking.day === selectedBooking.day));
+            localStorage.setItem('bookings', JSON.stringify(newBookings));
+
+            document.querySelector(`[data-name="${selectedBooking.name}"]`).parentElement.parentElement.remove();
+            if (selectedBooking.day === 'saturday') {
+                saturdaySlots++;
+            } else if (selectedBooking.day === 'sunday') {
+                sundaySlots++;
+            } else {
+                saturdaySlots++;
+                sundaySlots++;
+            }
+            updateSlotBars();
+            document.getElementById('deletePopup').style.display = 'none';
         });
 
-        function updateAvailability() {
-            const saturdaySlots = bookings.filter(b => b.day === 'saturday' || b.day === 'both').length;
-            const sundaySlots = bookings.filter(b => b.day === 'sunday' || b.day === 'both').length;
-            document.querySelector('.saturday-bar').textContent = `Saturday: ${14 - saturdaySlots} slots available`;
-            document.querySelector('.sunday-bar').textContent = `Sunday: ${14 - sundaySlots} slots available`;
-        }
+        // Cancel Delete
+        document.getElementById('cancelDelete').addEventListener('click', function() {
+            document.getElementById('deletePopup').style.display = 'none';
+        });
     </script>
 </body>
 </html>
