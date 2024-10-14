@@ -6,12 +6,12 @@
     <title>Active Generation Booking</title>
     <style>
         body {
-            background-color: #FCF8FC; /* soft grey beige color */
+            background-color: #FCF8FC;
             font-family: 'Canva Sans', sans-serif;
             color: black;
         }
         .banner {
-            background-color: #c30010; /* nicer soft red */
+            background-color: #c30010;
             padding: 20px;
             text-align: center;
             font-size: 2em;
@@ -25,18 +25,19 @@
         }
         .header-title {
             text-align: center;
-            margin: 40px 0; /* Added padding for more space */
+            margin: 40px 0;
             font-size: 1.5em;
-            font-weight: bold; /* Thicker font */
+            font-weight: bold;
+            display: none; /* Initially hidden */
         }
         .rect-bar {
-            background-color: #a3c6f1; /* soft blue color */
+            background-color: #a3c6f1;
             border: 1px solid black;
             border-radius: 200px;
             padding: 10px;
             margin: 10px 0;
             text-align: center;
-            max-width: 60%; /* Shorter width */
+            max-width: 60%;
             margin-left: auto;
             margin-right: auto;
         }
@@ -63,7 +64,7 @@
         }
         .card {
             background-color: white;
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Increased shadow */
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
             border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
@@ -73,10 +74,10 @@
         }
         .card-title {
             font-size: 1.2em;
-            font-weight: bold; /* Thicker font */
-            margin-top: 20px; /* Added padding above */
-            margin-bottom: 20px; /* Added padding below */
-            text-align: center; /* Centered title for Bookings */
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: center;
         }
         .input-bar {
             display: flex;
@@ -89,37 +90,36 @@
             border: 1px solid black;
             border-radius: 200px;
             padding: 10px;
-            background-color: #f7f7f7; /* Light grey inside */
+            background-color: #f7f7f7;
         }
         .input-title {
             font-size: 0.8em;
             text-align: left;
-            font-weight: bold; /* Thicker font */
-            margin-bottom: 5px; /* Slight padding below */
+            font-weight: bold;
+            margin-bottom: 5px;
         }
         select, input[type="text"], textarea {
             width: 100%;
             border: none;
             outline: none;
-            text-align: center; /* Center-aligned text inside bars */
+            text-align: center;
         }
         button {
-            background-color: #3b8132; /* Slightly darker green */
+            background-color: #3b8132;
             color: white;
             padding: 10px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             margin-top: 20px;
-            font-weight: bold; /* Thicker text */
+            font-weight: bold;
         }
         .success-message {
             color: #2d6a2d;
             font-size: 0.8em;
             margin-top: 10px;
-            display: none; /* Initially hidden */
+            display: none;
         }
-        /* Table */
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -130,7 +130,7 @@
             text-align: center;
         }
         .action-btn {
-            background-color: #c30010; /* Nice darker red */
+            background-color: #c30010;
             color: white;
             padding: 5px;
             border: none;
@@ -161,7 +161,6 @@
             background-color: #c04a4a;
             color: white;
         }
-        /* Notes section */
         .note-item {
             list-style-type: disc;
             margin-left: 20px;
@@ -259,10 +258,12 @@
             saturday: document.querySelector('.saturday-bar'),
             sunday: document.querySelector('.sunday-bar')
         };
+        const headerTitle = document.querySelector('.header-title');
         let saturdaySlots = 14;
         let sundaySlots = 14;
         let selectedBooking = null;
 
+        // Show section and handle navigation
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelector('.nav-item.active').classList.remove('active');
@@ -279,112 +280,81 @@
                     cards[key].classList.add('hidden');
                 }
             });
-
             if (section === 'slots') {
-                bars.saturday.style.display = 'block';
-                bars.sunday.style.display = 'block';
+                headerTitle.style.display = 'block'; // Show "Book Your Slot" when on Slots page
             } else {
-                bars.saturday.style.display = 'none';
-                bars.sunday.style.display = 'none';
+                headerTitle.style.display = 'none'; // Hide it on other pages
             }
         }
 
-        document.getElementById('submit').addEventListener('click', () => {
+        // Slot booking and data persistence
+        const bookingList = document.getElementById('bookingList');
+        const notesList = document.getElementById('notesList');
+        const submitButton = document.getElementById('submit');
+        const successMessage = document.getElementById('successMessage');
+
+        // Retrieve saved bookings from localStorage
+        const savedBookings = JSON.parse(localStorage.getItem('bookings')) || [];
+        displayBookings();
+
+        // Submit booking
+        submitButton.addEventListener('click', () => {
             const name = document.getElementById('name').value;
             const timeSlot = document.getElementById('timeSlot').value;
             const day = document.getElementById('day').value;
             const additionalNotes = document.getElementById('additionalNotes').value;
 
-            if (!name) {
-                alert('Please enter your name.');
-                return;
-            }
-
-            if (day.includes('saturday') && saturdaySlots === 0) {
-                alert('No available slots for Saturday');
-                return;
-            }
-
-            if (day.includes('sunday') && sundaySlots === 0) {
-                alert('No available slots for Sunday');
-                return;
-            }
-
-            // Adjust available slots
-            if (day === 'saturday' || day === 'both') {
-                saturdaySlots--;
-                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-            }
-
-            if (day === 'sunday' || day === 'both') {
-                sundaySlots--;
-                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-            }
-
-            // Update booking table
-            const bookingList = document.getElementById('bookingList');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${timeSlot}</td>
-                <td>${day}</td>
-                <td><button class="action-btn" data-name="${name}" data-timeSlot="${timeSlot}" data-day="${day}">Delete</button></td>
-            `;
-            bookingList.appendChild(row);
-
-            // Update notes section if there's an additional note
-            if (additionalNotes) {
-                const notesList = document.getElementById('notesList');
-                const listItem = document.createElement('li');
-                listItem.classList.add('note-item');
-                listItem.textContent = `${name}: ${additionalNotes}`;
-                notesList.appendChild(listItem);
-            }
-
-            // Show success message
-            const successMessage = document.getElementById('successMessage');
-            successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 3000);
-
-            // Clear form
-            document.getElementById('name').value = '';
-            document.getElementById('timeSlot').value = '9-10';
-            document.getElementById('day').value = 'saturday';
-            document.getElementById('additionalNotes').value = '';
-        });
-
-        // Delete booking logic
-        document.getElementById('bookingList').addEventListener('click', (event) => {
-            if (event.target.classList.contains('action-btn')) {
-                selectedBooking = event.target;
-                document.getElementById('deletePopup').style.display = 'block';
+            if (name && timeSlot && day) {
+                const booking = { name, timeSlot, day, additionalNotes };
+                savedBookings.push(booking);
+                localStorage.setItem('bookings', JSON.stringify(savedBookings));
+                displayBookings();
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 2000);
             }
         });
+
+        // Display bookings in the table and notes
+        function displayBookings() {
+            bookingList.innerHTML = '';
+            notesList.innerHTML = '';
+            savedBookings.forEach((booking, index) => {
+                const bookingRow = `
+                    <tr>
+                        <td>${booking.name}</td>
+                        <td>${booking.timeSlot}</td>
+                        <td>${booking.day}</td>
+                        <td><button class="action-btn" onclick="deleteBooking(${index})">Delete</button></td>
+                    </tr>
+                `;
+                bookingList.innerHTML += bookingRow;
+
+                if (booking.additionalNotes) {
+                    const noteItem = `<li class="note-item">${booking.name}: ${booking.additionalNotes}</li>`;
+                    notesList.innerHTML += noteItem;
+                }
+            });
+        }
+
+        // Delete booking
+        window.deleteBooking = (index) => {
+            selectedBooking = index;
+            document.getElementById('deletePopup').style.display = 'block';
+        };
 
         document.getElementById('confirmDelete').addEventListener('click', () => {
-            const bookingRow = selectedBooking.closest('tr');
-            const day = selectedBooking.dataset.day;
-
-            if (day === 'saturday' || day === 'both') {
-                saturdaySlots++;
-                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-            }
-
-            if (day === 'sunday' || day === 'both') {
-                sundaySlots++;
-                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-            }
-
-            bookingRow.remove();
+            savedBookings.splice(selectedBooking, 1);
+            localStorage.setItem('bookings', JSON.stringify(savedBookings));
+            displayBookings();
             document.getElementById('deletePopup').style.display = 'none';
         });
 
         document.getElementById('cancelDelete').addEventListener('click', () => {
             document.getElementById('deletePopup').style.display = 'none';
         });
-    </script>
 
+    </script>
 </body>
 </html>
