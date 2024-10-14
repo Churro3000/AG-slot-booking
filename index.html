@@ -268,124 +268,103 @@
                 document.querySelector('.nav-item.active').classList.remove('active');
                 item.classList.add('active');
                 const section = item.getAttribute('data-section');
-                showCard(section);
+                switchSection(section);
             });
         });
 
-        function showCard(section) {
-            Object.keys(cards).forEach(key => {
-                cards[key].classList.add('hidden');
-            });
+        function switchSection(section) {
+            Object.values(cards).forEach(card => card.classList.add('hidden'));
             cards[section].classList.remove('hidden');
         }
 
+        const submitButton = document.getElementById('submit');
+        const successMessage = document.getElementById('successMessage');
         const bookingList = document.getElementById('bookingList');
         const notesList = document.getElementById('notesList');
+        const deletePopup = document.getElementById('deletePopup');
+        const confirmDelete = document.getElementById('confirmDelete');
+        const cancelDelete = document.getElementById('cancelDelete');
 
-        document.getElementById('submit').addEventListener('click', () => {
-            const name = document.getElementById('name').value;
+        submitButton.addEventListener('click', () => {
+            const name = document.getElementById('name').value.trim();
             const timeSlot = document.getElementById('timeSlot').value;
             const day = document.getElementById('day').value;
-            const notes = document.getElementById('additionalNotes').value;
-
+            const additionalNotes = document.getElementById('additionalNotes').value.trim();
             if (!name) {
-                alert("Please enter your name");
+                alert('Please enter your name.');
                 return;
             }
-
-            const newBooking = {
-                name,
-                timeSlot,
-                day,
-                notes
-            };
-
-            if (day === 'saturday') {
-                if (saturdaySlots > 0) {
-                    saturdaySlots--;
-                    bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-                } else {
-                    alert('No available slots for Saturday.');
+            if (day === 'both') {
+                if (saturdaySlots === 0 || sundaySlots === 0) {
+                    alert('No slots available for both days.');
                     return;
                 }
+                saturdaySlots--;
+                sundaySlots--;
+            } else if (day === 'saturday') {
+                if (saturdaySlots === 0) {
+                    alert('No slots available for Saturday.');
+                    return;
+                }
+                saturdaySlots--;
             } else if (day === 'sunday') {
-                if (sundaySlots > 0) {
-                    sundaySlots--;
-                    bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-                } else {
-                    alert('No available slots for Sunday.');
+                if (sundaySlots === 0) {
+                    alert('No slots available for Sunday.');
                     return;
                 }
-            } else {
-                if (saturdaySlots > 0 && sundaySlots > 0) {
-                    saturdaySlots--;
-                    sundaySlots--;
-                    bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-                    bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-                } else {
-                    alert('No available slots for both days.');
-                    return;
-                }
+                sundaySlots--;
             }
 
+            updateSlotBars();
+            addBookingToTable(name, timeSlot, day);
+            if (additionalNotes) {
+                addNoteToList(name, additionalNotes);
+            }
+
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 2000);
+        });
+
+        function updateSlotBars() {
+            bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+            bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+        }
+
+        function addBookingToTable(name, timeSlot, day) {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${name}</td>
                 <td>${timeSlot}</td>
                 <td>${day}</td>
-                <td><button class="action-btn" data-name="${name}">Delete</button></td>
+                <td><button class="action-btn" onclick="promptDeleteBooking(this)">Delete</button></td>
             `;
             bookingList.appendChild(row);
+        }
 
-            if (notes) {
-                const noteItem = document.createElement('li');
-                noteItem.classList.add('note-item');
-                noteItem.textContent = `${name}: ${notes}`;
-                notesList.appendChild(noteItem);
-            }
+        function addNoteToList(name, note) {
+            const listItem = document.createElement('li');
+            listItem.classList.add('note-item');
+            listItem.textContent = `${name}: ${note}`;
+            notesList.appendChild(listItem);
+        }
 
-            document.getElementById('successMessage').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('successMessage').style.display = 'none';
-            }, 2000);
+        window.promptDeleteBooking = (btn) => {
+            selectedBooking = btn.closest('tr');
+            deletePopup.style.display = 'block';
+        };
 
-            // Clear form
-            document.getElementById('name').value = '';
-            document.getElementById('timeSlot').value = '9-10';
-            document.getElementById('day').value = 'saturday';
-            document.getElementById('additionalNotes').value = '';
+        confirmDelete.addEventListener('click', () => {
+            selectedBooking.remove();
+            deletePopup.style.display = 'none';
+            selectedBooking = null;
         });
 
-        document.getElementById('bookingList').addEventListener('click', (e) => {
-            if (e.target.classList.contains('action-btn')) {
-                selectedBooking = e.target.closest('tr');
-                document.getElementById('deletePopup').style.display = 'block';
-            }
-        });
-
-        document.getElementById('confirmDelete').addEventListener('click', () => {
-            const day = selectedBooking.querySelector('td:nth-child(3)').textContent;
-            if (day === 'saturday') {
-                saturdaySlots++;
-                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-            } else if (day === 'sunday') {
-                sundaySlots++;
-                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-            } else {
-                saturdaySlots++;
-                sundaySlots++;
-                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-            }
-
-            bookingList.removeChild(selectedBooking);
-            document.getElementById('deletePopup').style.display = 'none';
-        });
-
-        document.getElementById('cancelDelete').addEventListener('click', () => {
-            document.getElementById('deletePopup').style.display = 'none';
+        cancelDelete.addEventListener('click', () => {
+            deletePopup.style.display = 'none';
+            selectedBooking = null;
         });
     </script>
-
 </body>
 </html>
