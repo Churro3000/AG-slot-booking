@@ -3,368 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Active Generation Booking</title>
+    <title>Archery Booking System</title>
     <style>
         body {
-            background-color: #f5f3eb; /* soft grey beige color */
-            font-family: 'Canva Sans', sans-serif;
-            color: black;
+            background-color: #dddddd; /* Background color */
+            font-family: Arial, sans-serif;
+            margin: 0;
         }
-        .banner {
-            background-color: #d66a6a; /* nicer soft red */
-            padding: 20px;
+
+        header {
+            background-color: #C30010; /* Top bar color */
+            color: white;
+            padding: 10px;
             text-align: center;
-            font-size: 2em;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        nav button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #C30010;
+            color: white;
+        }
+
+        .content {
+            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .visible {
+            display: block;
+        }
+
+        .slots-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #007BFF;
+            border-radius: 5px;
             color: white;
             font-weight: bold;
         }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 10px;
+
+        .slots-bar.hidden {
+            display: none; /* Hide slots bar */
         }
-        .header-title {
-            text-align: center;
-            margin: 40px 0; /* Added padding for more space */
-            font-size: 1.5em;
-            font-weight: bold; /* Thicker font */
+
+        .form-group {
+            margin-bottom: 15px;
         }
-        .rect-bar {
-            background-color: #a3c6f1; /* soft blue color */
-            border: 1px solid black;
-            border-radius: 200px;
-            padding: 10px;
-            margin: 10px 0;
-            text-align: center;
-            max-width: 60%; /* Shorter width */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .navigation {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 20px;
-        }
-        .nav-item {
-            font-size: 0.9em;
-            cursor: pointer;
-            position: relative;
-        }
-        .nav-item.active::after {
-            content: '';
+
+        .form-group label {
             display: block;
-            width: 50%;
-            height: 2px;
-            background-color: black;
-            position: absolute;
-            bottom: -5px;
-            left: 25%;
+            margin-bottom: 5px;
         }
-        .card {
-            background-color: white;
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Increased shadow */
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
+
+        .action-btn {
+            background-color: #C30010;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
         }
-        .card.hidden {
+
+        #successMessage {
+            display: none;
+            color: green;
+            font-weight: bold;
+        }
+
+        #notesList {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .note-item {
+            margin: 5px 0;
+        }
+
+        .hidden {
             display: none;
         }
-        .card-title {
-            font-size: 1.2em;
-            font-weight: bold; /* Thicker font */
-            margin-top: 20px; /* Added padding above */
-            margin-bottom: 20px; /* Added padding below */
-            text-align: center; /* Centered title for Bookings */
-        }
-        .input-bar {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .input-row {
-            display: flex;
-            flex-direction: column;
-            border: 1px solid black;
-            border-radius: 200px;
-            padding: 10px;
-            background-color: #f7f7f7; /* Light grey inside */
-        }
-        .input-title {
-            font-size: 0.8em;
-            text-align: left;
-            font-weight: bold; /* Thicker font */
-            margin-bottom: 5px; /* Slight padding below */
-        }
-        select, input[type="text"], textarea {
-            width: 100%;
-            border: none;
-            outline: none;
-            text-align: center; /* Center-aligned text inside bars */
-        }
-        button {
-            background-color: #589f55; /* Slightly darker green */
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-weight: bold; /* Thicker text */
-        }
-        .success-message {
-            color: #2d6a2d;
-            font-size: 0.8em;
-            margin-top: 10px;
-            display: none; /* Initially hidden */
-        }
-        /* Table */
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .table th, .table td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-        .action-btn {
-            background-color: #b04a4a; /* Nice darker red */
-            color: white;
-            padding: 5px;
-            border: none;
-            cursor: pointer;
-        }
-        .action-popup {
-            position: absolute;
+
+        /* Delete popup styles */
+        #deletePopup {
+            display: none;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: white;
-            border-radius: 10px;
             padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            display: none;
+            background-color: white;
+            border: 1px solid #C30010;
+            border-radius: 10px;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-        .popup-btn {
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px;
-            cursor: pointer;
+
+        #deletePopup button {
+            margin-top: 10px;
         }
-        .popup-btn.delete {
-            background-color: #6abf69;
-            color: white;
+
+        .notes-title {
+            font-weight: bold;
         }
-        .popup-btn.cancel {
-            background-color: #c04a4a;
-            color: white;
-        }
-        /* Notes section */
-        .note-item {
-            list-style-type: disc;
-            margin-left: 20px;
-            font-size: 0.9em;
-            text-align: left;
+
+        .no-notes {
+            color: grey; /* Color for no notes message */
+            font-size: 0.9em; /* Slightly smaller font size */
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Archery Booking System</h1>
+    </header>
+    <nav>
+        <button data-section="slots">Slots</button>
+        <button data-section="bookings">Bookings</button>
+        <button data-section="notes">Notes</button>
+    </nav>
 
-    <div class="banner">Active Generation</div>
-
-    <div class="container">
-        <div class="navigation">
-            <div class="nav-item active" data-section="slots">Slots</div>
-            <div class="nav-item" data-section="bookings">Bookings</div>
-            <div class="nav-item" data-section="notes">Notes</div>
-        </div>
-
-        <div class="header-title">Book Your Slot</div>
-        <div class="rect-bar saturday-bar">Saturday: 14 slots available</div>
-        <div class="rect-bar sunday-bar">Sunday: 14 slots available</div>
-
-        <!-- Slots Form -->
-        <div class="card slots-card">
-            <div class="card-title">One Slot Booking per Archer</div>
-            <div class="input-bar">
-                <div class="input-row">
-                    <div class="input-title">Your Name</div>
-                    <input type="text" id="name" placeholder="Enter your name">
-                </div>
-                <div class="input-row">
-                    <div class="input-title">Select Your Time Slot</div>
-                    <select id="timeSlot">
-                        <option value="9-10">9-10</option>
-                        <option value="10-11">10-11</option>
-                        <option value="both">Both 9-10, 10-11</option>
-                    </select>
-                </div>
-                <div class="input-row">
-                    <div class="input-title">Select the Day</div>
-                    <select id="day">
-                        <option value="saturday">Saturday</option>
-                        <option value="sunday">Sunday</option>
-                        <option value="both">Both Saturday & Sunday</option>
-                    </select>
-                </div>
-                <div class="input-row">
-                    <div class="input-title">Additional Notes/Requests (optional)</div>
-                    <textarea id="additionalNotes" placeholder="Enter additional requests"></textarea>
-                </div>
-                <button id="submit">Submit</button>
-                <div class="success-message" id="successMessage">Slot Booked Successfully!</div>
-            </div>
-        </div>
-
-        <!-- Bookings Table -->
-        <div class="card bookings-card hidden">
-            <div class="card-title">Bookings</div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Time Slot</th>
-                        <th>Day</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="bookingList"></tbody>
-            </table>
-        </div>
-
-        <!-- Notes Section -->
-        <div class="card notes-card hidden">
-            <div class="card-title">Notes/Requests From Archers</div>
-            <ul id="notesList"></ul>
-        </div>
-
+    <div class="content" id="slots">
+        <h2>Available Slots</h2>
+        <div class="slots-bar" id="saturdayBar">Saturday: <span id="saturdaySlots">14</span> slots available</div>
+        <div class="slots-bar" id="sundayBar">Sunday: <span id="sundaySlots">14</span> slots available</div>
     </div>
 
-    <div class="action-popup" id="deletePopup">
+    <div class="content" id="bookings">
+        <h2>Your Bookings</h2>
+        <table id="bookingList">
+            <thead>
+                <tr>
+                    <th>Your Name</th>
+                    <th>Time Slot</th>
+                    <th>Day</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content" id="notes">
+        <h2>Notes/Requests From Archers</h2>
+        <ul id="notesList"></ul>
+        <p class="no-notes hidden">No notes/requests yet!</p>
+    </div>
+
+    <div class="content" id="bookingForm">
+        <h2>Book a Slot</h2>
+        <div class="form-group">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name">
+        </div>
+        <div class="form-group">
+            <label for="timeSlot">Time Slot:</label>
+            <select id="timeSlot">
+                <option value="9-10">9:00 - 10:00</option>
+                <option value="10-11">10:00 - 11:00</option>
+                <option value="11-12">11:00 - 12:00</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="day">Day:</label>
+            <select id="day">
+                <option value="saturday">Saturday</option>
+                <option value="sunday">Sunday</option>
+                <option value="both">Both</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="additionalNotes">Additional Notes:</label>
+            <input type="text" id="additionalNotes">
+        </div>
+        <button id="submit">Submit Booking</button>
+        <p id="successMessage">Booking successful!</p>
+    </div>
+
+    <div id="deletePopup">
         <p>Are you sure you want to delete this booking?</p>
-        <button class="popup-btn delete" id="confirmDelete">Yes, Delete this booking</button>
-        <button class="popup-btn cancel" id="cancelDelete">Cancel</button>
+        <button id="confirmDelete">Yes</button>
+        <button id="cancelDelete">No</button>
     </div>
 
     <script>
-        const navItems = document.querySelectorAll('.nav-item');
-        const cards = {
-            slots: document.querySelector('.slots-card'),
-            bookings: document.querySelector('.bookings-card'),
-            notes: document.querySelector('.notes-card')
-        };
-        const bars = {
-            saturday: document.querySelector('.saturday-bar'),
-            sunday: document.querySelector('.sunday-bar')
-        };
         let saturdaySlots = 14;
         let sundaySlots = 14;
         let selectedBooking = null;
+        const bars = {
+            saturday: document.getElementById('saturdayBar'),
+            sunday: document.getElementById('sundayBar')
+        };
+        const notesList = document.getElementById('notesList');
+        const noNotesMessage = document.querySelector('.no-notes');
+        const submitButton = document.getElementById('submit');
+        const successMessage = document.getElementById('successMessage');
+        const bookingList = document.getElementById('bookingList').getElementsByTagName('tbody')[0];
 
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                document.querySelector('.nav-item.active').classList.remove('active');
-                item.classList.add('active');
-                const section = item.getAttribute('data-section');
+        document.querySelectorAll('nav button').forEach(button => {
+            button.addEventListener('click', () => {
+                const section = button.getAttribute('data-section');
                 switchSection(section);
             });
         });
 
         function switchSection(section) {
-            Object.values(cards).forEach(card => card.classList.add('hidden'));
-            cards[section].classList.remove('hidden');
+            document.querySelectorAll('.content').forEach(content => content.classList.remove('visible'));
+            document.getElementById(section).classList.add('visible');
+
+            if (section === 'slots') {
+                updateSlotBars();
+            } else {
+                bars.saturday.classList.add('hidden');
+                bars.sunday.classList.add('hidden');
+            }
         }
 
-        const submitButton = document.getElementById('submit');
-        const successMessage = document.getElementById('successMessage');
-        const bookingList = document.getElementById('bookingList');
-        const notesList = document.getElementById('notesList');
-        const deletePopup = document.getElementById('deletePopup');
-        const confirmDelete = document.getElementById('confirmDelete');
-        const cancelDelete = document.getElementById('cancelDelete');
+        function updateSlotBars() {
+            bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+            bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+            bars.saturday.classList.remove('hidden');
+            bars.sunday.classList.remove('hidden');
+        }
 
         submitButton.addEventListener('click', () => {
             const name = document.getElementById('name').value.trim();
             const timeSlot = document.getElementById('timeSlot').value;
             const day = document.getElementById('day').value;
             const additionalNotes = document.getElementById('additionalNotes').value.trim();
+            
             if (!name) {
                 alert('Please enter your name.');
                 return;
             }
+
+            let slotsToDeduct = 0;
             if (day === 'both') {
                 if (saturdaySlots === 0 || sundaySlots === 0) {
                     alert('No slots available for both days.');
                     return;
                 }
+                slotsToDeduct = 4; // 2 slots for each day
                 saturdaySlots--;
                 sundaySlots--;
-            } else if (day === 'saturday') {
-                if (saturdaySlots === 0) {
-                    alert('No slots available for Saturday.');
-                    return;
+            } else {
+                if (day === 'saturday') {
+                    if (saturdaySlots === 0) {
+                        alert('No slots available for Saturday.');
+                        return;
+                    }
+                    slotsToDeduct = 2; // 2 slots for Saturday
+                    saturdaySlots--;
+                } else {
+                    if (sundaySlots === 0) {
+                        alert('No slots available for Sunday.');
+                        return;
+                    }
+                    slotsToDeduct = 2; // 2 slots for Sunday
+                    sundaySlots--;
                 }
-                saturdaySlots--;
-            } else if (day === 'sunday') {
-                if (sundaySlots === 0) {
-                    alert('No slots available for Sunday.');
-                    return;
-                }
-                sundaySlots--;
             }
 
-            updateSlotBars();
-            addBookingToTable(name, timeSlot, day);
+            const row = bookingList.insertRow();
+            row.insertCell(0).textContent = name;
+            row.insertCell(1).textContent = timeSlot;
+            row.insertCell(2).textContent = day.charAt(0).toUpperCase() + day.slice(1);
+            const actionCell = row.insertCell(3);
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.className = 'action-btn';
+            deleteButton.addEventListener('click', () => {
+                selectedBooking = row;
+                document.getElementById('deletePopup').style.display = 'block';
+            });
+            actionCell.appendChild(deleteButton);
+
+            // Add note to notes list
             if (additionalNotes) {
                 addNoteToList(name, additionalNotes);
             }
 
             successMessage.style.display = 'block';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 2000);
+            setTimeout(() => successMessage.style.display = 'none', 2000);
+            updateSlotBars();
+            switchSection('bookings'); // Switch to bookings section after submission
         });
-
-        function updateSlotBars() {
-            bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-            bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-        }
-
-        function addBookingToTable(name, timeSlot, day) {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${name}</td>
-                <td>${timeSlot}</td>
-                <td>${day}</td>
-                <td><button class="action-btn" onclick="promptDeleteBooking(this)">Delete</button></td>
-            `;
-            bookingList.appendChild(row);
-        }
 
         function addNoteToList(name, note) {
-            const listItem = document.createElement('li');
-            listItem.classList.add('note-item');
-            listItem.textContent = `${name}: ${note}`;
-            notesList.appendChild(listItem);
+            const noteItem = document.createElement('li');
+            noteItem.className = 'note-item';
+            noteItem.textContent = `${name}: ${note}`;
+            notesList.appendChild(noteItem);
+            noNotesMessage.classList.add('hidden'); // Hide no notes message
         }
 
-        window.promptDeleteBooking = (btn) => {
-            selectedBooking = btn.closest('tr');
-            deletePopup.style.display = 'block';
-        };
+        document.getElementById('confirmDelete').addEventListener('click', () => {
+            if (selectedBooking) {
+                const bookingName = selectedBooking.cells[0].textContent;
+                const bookingDay = selectedBooking.cells[2].textContent.toLowerCase();
+                const bookingTimeSlot = selectedBooking.cells[1].textContent;
 
-        confirmDelete.addEventListener('click', () => {
-            selectedBooking.remove();
-            deletePopup.style.display = 'none';
-            selectedBooking = null;
+                // Deduct slots
+                if (bookingDay === 'both') {
+                    saturdaySlots++;
+                    sundaySlots++;
+                } else if (bookingDay === 'saturday') {
+                    saturdaySlots++;
+                } else {
+                    sundaySlots++;
+                }
+
+                // Remove notes for deleted booking
+                removeNoteForBooking(bookingName);
+
+                // Delete booking row
+                selectedBooking.remove();
+                selectedBooking = null;
+                updateSlotBars();
+                document.getElementById('deletePopup').style.display = 'none';
+            }
         });
 
-        cancelDelete.addEventListener('click', () => {
-            deletePopup.style.display = 'none';
-            selectedBooking = null;
+        document.getElementById('cancelDelete').addEventListener('click', () => {
+            document.getElementById('deletePopup').style.display = 'none';
         });
+
+        function removeNoteForBooking(name) {
+            const notes = notesList.getElementsByClassName('note-item');
+            for (let i = notes.length - 1; i >= 0; i--) {
+                if (notes[i].textContent.startsWith(name + ':')) {
+                    notes[i].remove();
+                }
+            }
+
+            // Show no notes message if the list is empty
+            if (notesList.children.length === 0) {
+                noNotesMessage.classList.remove('hidden');
+            }
+        }
+
+        // Initial section display
+        switchSection('slots');
     </script>
 </body>
 </html>
