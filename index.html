@@ -284,6 +284,25 @@
             });
         });
 
+        // firebase config
+        // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
+  authDomain: "archer-slot-booking.firebaseapp.com",
+  projectId: "archer-slot-booking",
+  storageBucket: "archer-slot-booking.appspot.com",
+  messagingSenderId: "96539149968",
+  appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
         // Submit Booking
         document.getElementById('submit').addEventListener('click', function() {
             const name = document.getElementById('name').value;
