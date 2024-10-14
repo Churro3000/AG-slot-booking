@@ -160,71 +160,6 @@
         .popup-btn.cancel {
             background-color: #c04a4a;
             color: white;
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Title</title>
-    <style>
-        /* Basic styles for the bars and sections */
-        .slots-info {
-            display: none; /* Initially hidden */
-            background-color: lightblue; /* For visibility */
-            padding: 10px;
-        }
-
-        .nav-button {
-            cursor: pointer;
-            padding: 10px;
-            background-color: blue;
-            color: white;
-            margin: 5px;
-        }
-    </style>
-</head>
-<body>
-
-    <div>
-        <div class="nav-button" onclick="showSection('slots')">Slots</div>
-        <div class="nav-button" onclick="showSection('bookings')">Bookings</div>
-        <div class="nav-button" onclick="showSection('notes')">Notes</div>
-    </div>
-
-    <h2 class="slots-info" id="slots-info">Book Your Slots</h2>
-    <div class="slots-info" id="available-slots">
-        <div style="background-color: blue; height: 20px; width: 80%; margin: 5px 0;"></div>
-        <div style="background-color: blue; height: 20px; width: 50%; margin: 5px 0;"></div>
-    </div>
-
-    <div id="bookings" style="display:none;">Bookings Content</div>
-    <div id="notes" style="display:none;">Notes Content</div>
-
-    <script>
-        function showSection(section) {
-            // Hide all sections
-            document.getElementById('bookings').style.display = 'none';
-            document.getElementById('notes').style.display = 'none';
-            document.getElementById('slots-info').style.display = 'none';
-            document.getElementById('available-slots').style.display = 'none';
-
-            // Show the selected section
-            if (section === 'slots') {
-                document.getElementById('slots-info').style.display = 'block';
-                document.getElementById('available-slots').style.display = 'block';
-            } else if (section === 'bookings') {
-                document.getElementById('bookings').style.display = 'block';
-            } else if (section === 'notes') {
-                document.getElementById('notes').style.display = 'block';
-            }
-        }
-    </script>
-
-</body>
-</html>
-
-            
         }
         /* Notes section */
         .note-item {
@@ -407,12 +342,12 @@
             const bookingList = document.getElementById('bookingList');
             const row = document.createElement('tr');
 
-            row.innerHTML = `
+            row.innerHTML = 
                 <td>${booking.name}</td>
                 <td>${booking.timeSlot}</td>
                 <td>${booking.day}</td>
                 <td><button class="action-btn" data-name="${booking.name}">Delete</button></td>
-            `;
+            ;
             bookingList.appendChild(row);
 
             // Add event listener to delete button
@@ -429,8 +364,8 @@
         }
 
         function updateSlotBars() {
-            bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-            bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+            bars.saturday.textContent = Saturday: ${saturdaySlots} slots available;
+            bars.sunday.textContent = Sunday: ${sundaySlots} slots available;
         }
 
         function clearInputs() {
