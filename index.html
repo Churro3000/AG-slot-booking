@@ -6,7 +6,7 @@
     <title>Active Generation Booking</title>
     <style>
         body {
-            background-color: #FCF8FC; /* soft grey beige color */
+            background-color: #dddddd; /* soft grey beige color */
             font-family: 'Canva Sans', sans-serif;
             color: black;
         }
@@ -144,7 +144,7 @@
             background-color: white;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
             display: none;
         }
         .popup-btn {
@@ -302,28 +302,28 @@
             // Update slots
             if (day === 'saturday' || day === 'both') {
                 saturdaySlots--;
-                bars.saturday.textContent = Saturday: ${saturdaySlots} slots available;
+                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
             }
             if (day === 'sunday' || day === 'both') {
                 sundaySlots--;
-                bars.sunday.textContent = Sunday: ${sundaySlots} slots available;
+                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
             }
 
             // Add booking to table
             const newRow = document.createElement('tr');
-            newRow.innerHTML = 
+            newRow.innerHTML = `
                 <td>${name}</td>
                 <td>${timeSlot}</td>
                 <td>${day}</td>
                 <td><button class="action-btn" onclick="handleDelete(this)">Delete</button></td>
-            ;
+            `;
             bookingList.appendChild(newRow);
 
             // Add notes if provided
             if (additionalNotes) {
                 const noteItem = document.createElement('li');
                 noteItem.classList.add('note-item');
-                noteItem.textContent = ${name}: ${additionalNotes};
+                noteItem.textContent = `${name}: ${additionalNotes}`;
                 notesList.appendChild(noteItem);
             }
 
@@ -350,11 +350,11 @@
             const day = selectedBooking.children[2].textContent;
             if (day === 'saturday' || day === 'both') {
                 saturdaySlots++;
-                bars.saturday.textContent = Saturday: ${saturdaySlots} slots available;
+                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
             }
             if (day === 'sunday' || day === 'both') {
                 sundaySlots++;
-                bars.sunday.textContent = Sunday: ${sundaySlots} slots available;
+                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
             }
             selectedBooking.remove();
             document.getElementById('deletePopup').style.display = 'none';
@@ -368,4 +368,3 @@
 
 </body>
 </html>
-
