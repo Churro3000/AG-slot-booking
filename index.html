@@ -144,7 +144,7 @@
             background-color: white;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
             display: none;
         }
         .popup-btn {
@@ -249,138 +249,169 @@
     </div>
 
     <script>
-        const navItems = document.querySelectorAll('.nav-item'); // Selects all navigation items
+        const navItems = document.querySelectorAll('.nav-item');
         const cards = {
-            slots: document.querySelector('.slots-card'), // Slots card element
-            bookings: document.querySelector('.bookings-card'), // Bookings card element
-            notes: document.querySelector('.notes-card') // Notes card element
+            slots: document.querySelector('.slots-card'),
+            bookings: document.querySelector('.bookings-card'),
+            notes: document.querySelector('.notes-card')
         };
         const bars = {
-            saturday: document.querySelector('.saturday-bar'), // Saturday slot availability bar
-            sunday: document.querySelector('.sunday-bar') // Sunday slot availability bar
+            saturday: document.querySelector('.saturday-bar'),
+            sunday: document.querySelector('.sunday-bar')
         };
-        const title = document.querySelector('.header-title'); // Title element
-        let saturdaySlots = 14; // Initial number of Saturday slots
-        let sundaySlots = 14; // Initial number of Sunday slots
-        let selectedBooking = null; // Currently selected booking for deletion
+        const title = document.querySelector('.header-title');
+        let saturdaySlots = 14;
+        let sundaySlots = 14;
+        let selectedBooking = null;
 
-        // Navigation item click event listener
+        // Load bookings from localStorage on page load
+        window.onload = function() {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings.forEach(booking => {
+                addBookingToTable(booking);
+            });
+            updateSlotBars();
+        };
+
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelector('.nav-item.active').classList.remove('active');
                 item.classList.add('active');
-                Object.values(cards).forEach(card => card.classList.add('hidden')); // Hide all cards
-                cards[item.dataset.section].classList.remove('hidden'); // Show selected card
-                title.innerText = item.dataset.section.charAt(0).toUpperCase() + item.dataset.section.slice(1); // Update title
+                const section = item.dataset.section;
+
+                // Show/Hide cards based on the active section
+                Object.values(cards).forEach(card => {
+                    card.classList.add('hidden');
+                });
+                cards[section].classList.remove('hidden');
+                title.innerText = section.charAt(0).toUpperCase() + section.slice(1);
             });
         });
 
-        // Submit button click event listener
         document.getElementById('submit').addEventListener('click', () => {
-            const name = document.getElementById('name').value; // Get name input value
-            const timeSlot = document.getElementById('timeSlot').value; // Get selected time slot
-            const day = document.getElementById('day').value; // Get selected day
-            const additionalNotes = document.getElementById('additionalNotes').value; // Get additional notes
-            if (validateForm(name, timeSlot, day)) {
-                bookSlot(name, timeSlot, day, additionalNotes); // Call booking function
+            const name = document.getElementById('name').value;
+            const timeSlot = document.getElementById('timeSlot').value;
+            const day = document.getElementById('day').value;
+            const additionalNotes = document.getElementById('additionalNotes').value;
+
+            if (name.trim() === '' || (day === 'both' && (timeSlot === 'both' || timeSlot.trim() === ''))) {
+                alert('Please fill in all fields correctly.');
+                return;
             }
-        });
 
-        // Function to validate form inputs
-        function validateForm(name, timeSlot, day) {
-            if (!name || !timeSlot || !day) { // Check if any field is empty
-                alert("Please fill in all fields.");
-                return false;
-            }
-            return true;
-        }
+            // Create a booking object
+            const booking = {
+                name: name,
+                timeSlot: timeSlot,
+                day: day,
+                additionalNotes: additionalNotes
+            };
 
-        // Function to book a slot
-        function bookSlot(name, timeSlot, day, additionalNotes) {
-            const bookingList = document.getElementById('bookingList'); // Booking list element
-            const row = document.createElement('tr'); // Create new table row
-            const deleteButton = `<button class="action-btn" onclick="confirmDelete(this)">Delete</button>`; // Delete button
-            row.innerHTML = `<td>${name}</td><td>${timeSlot}</td><td>${day}</td><td>${deleteButton}</td>`; // Populate row
-            bookingList.appendChild(row); // Append row to booking list
-
-            // Update slot counts based on selected day
+            // Check available slots
             if (day === 'saturday' || day === 'both') {
-                saturdaySlots--;
+                if (timeSlot !== 'both' && saturdaySlots <= 0) {
+                    alert('No slots available for Saturday.');
+                    return;
+                }
+                if (timeSlot === 'both') {
+                    saturdaySlots -= 2; // Deduct two slots if both are booked
+                } else {
+                    saturdaySlots -= 1; // Deduct one slot
+                }
             }
             if (day === 'sunday' || day === 'both') {
-                sundaySlots--;
+                if (timeSlot !== 'both' && sundaySlots <= 0) {
+                    alert('No slots available for Sunday.');
+                    return;
+                }
+                if (timeSlot === 'both') {
+                    sundaySlots -= 2; // Deduct two slots if both are booked
+                } else {
+                    sundaySlots -= 1; // Deduct one slot
+                }
             }
 
-            // Update availability bars
-            updateAvailabilityBars();
+            addBookingToTable(booking);
+            saveBookingToLocalStorage(booking);
+            updateSlotBars();
+            clearInputs();
+            showSuccessMessage();
+        });
 
-            // Show success message
-            document.getElementById('successMessage').style.display = 'block';
+        function addBookingToTable(booking) {
+            const bookingList = document.getElementById('bookingList');
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${booking.name}</td>
+                <td>${booking.timeSlot}</td>
+                <td>${booking.day}</td>
+                <td><button class="action-btn" data-name="${booking.name}">Delete</button></td>
+            `;
+            bookingList.appendChild(row);
+
+            // Add event listener to delete button
+            row.querySelector('.action-btn').addEventListener('click', () => {
+                selectedBooking = booking.name; // Store the selected booking name
+                showDeletePopup();
+            });
+        }
+
+        function saveBookingToLocalStorage(booking) {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+        }
+
+        function updateSlotBars() {
+            bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+            bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+        }
+
+        function clearInputs() {
+            document.getElementById('name').value = '';
+            document.getElementById('timeSlot').value = '9-10';
+            document.getElementById('day').value = 'saturday';
+            document.getElementById('additionalNotes').value = '';
+        }
+
+        function showSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
             setTimeout(() => {
-                document.getElementById('successMessage').style.display = 'none';
-            }, 3000); // Hide success message after 3 seconds
+                successMessage.style.display = 'none';
+            }, 3000);
         }
 
-        // Function to update availability bars
-        function updateAvailabilityBars() {
-            bars.saturday.innerText = `Saturday: ${saturdaySlots} slots available`; // Update Saturday availability
-            bars.sunday.innerText = `Sunday: ${sundaySlots} slots available`; // Update Sunday availability
+        function showDeletePopup() {
+            document.getElementById('deletePopup').style.display = 'block';
         }
 
-        // Function to confirm delete booking
-        function confirmDelete(button) {
-            selectedBooking = button.closest('tr'); // Store the row to be deleted
-            document.getElementById('deletePopup').style.display = 'block'; // Show delete confirmation popup
-        }
-
-        // Confirm delete action
         document.getElementById('confirmDelete').addEventListener('click', () => {
-            if (selectedBooking) {
-                const cells = selectedBooking.querySelectorAll('td'); // Get all cells of the selected row
-                const day = cells[2].innerText; // Get day from the selected row
-
-                // Update slot counts based on selected day
-                if (day === 'saturday' || day === 'both') {
-                    saturdaySlots++;
-                }
-                if (day === 'sunday' || day === 'both') {
-                    sundaySlots++;
-                }
-
-                selectedBooking.remove(); // Remove the selected booking row
-                updateAvailabilityBars(); // Update availability bars
-                document.getElementById('deletePopup').style.display = 'none'; // Hide delete confirmation popup
-            }
+            deleteBooking(selectedBooking);
+            document.getElementById('deletePopup').style.display = 'none';
         });
 
-        // Cancel delete action
         document.getElementById('cancelDelete').addEventListener('click', () => {
-            document.getElementById('deletePopup').style.display = 'none'; // Hide delete confirmation popup
+            document.getElementById('deletePopup').style.display = 'none';
         });
 
-       // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+        function deleteBooking(name) {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            const updatedBookings = bookings.filter(booking => booking.name !== name);
+            localStorage.setItem('bookings', JSON.stringify(updatedBookings));
+            refreshBookingTable();
+            updateSlotBars();
+        }
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
-  authDomain: "archer-slot-booking.firebaseapp.com",
-  projectId: "archer-slot-booking",
-  storageBucket: "archer-slot-booking.appspot.com",
-  messagingSenderId: "96539149968",
-  appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        function refreshBookingTable() {
+            const bookingList = document.getElementById('bookingList');
+            bookingList.innerHTML = ''; // Clear the table
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            bookings.forEach(booking => {
+                addBookingToTable(booking);
+            });
+        }
     </script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore.js"></script>
 </body>
 </html>
