@@ -249,122 +249,138 @@
     </div>
 
     <script>
-        const navItems = document.querySelectorAll('.nav-item');
+        const navItems = document.querySelectorAll('.nav-item'); // Selects all navigation items
         const cards = {
-            slots: document.querySelector('.slots-card'),
-            bookings: document.querySelector('.bookings-card'),
-            notes: document.querySelector('.notes-card')
+            slots: document.querySelector('.slots-card'), // Slots card element
+            bookings: document.querySelector('.bookings-card'), // Bookings card element
+            notes: document.querySelector('.notes-card') // Notes card element
         };
         const bars = {
-            saturday: document.querySelector('.saturday-bar'),
-            sunday: document.querySelector('.sunday-bar')
+            saturday: document.querySelector('.saturday-bar'), // Saturday slot availability bar
+            sunday: document.querySelector('.sunday-bar') // Sunday slot availability bar
         };
-        const title = document.querySelector('.header-title');
-        let saturdaySlots = 14;
-        let sundaySlots = 14;
-        let selectedBooking = null;
+        const title = document.querySelector('.header-title'); // Title element
+        let saturdaySlots = 14; // Initial number of Saturday slots
+        let sundaySlots = 14; // Initial number of Sunday slots
+        let selectedBooking = null; // Currently selected booking for deletion
 
+        // Navigation item click event listener
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelector('.nav-item.active').classList.remove('active');
                 item.classList.add('active');
-                const section = item.getAttribute('data-section');
-                Object.values(cards).forEach(card => card.classList.add('hidden'));
-                cards[section].classList.remove('hidden');
-
-                if (section === 'slots') {
-                    bars.saturday.style.display = 'block';
-                    bars.sunday.style.display = 'block';
-                    title.style.display = 'block';
-                } else {
-                    bars.saturday.style.display = 'none';
-                    bars.sunday.style.display = 'none';
-                    title.style.display = 'none';
-                }
+                Object.values(cards).forEach(card => card.classList.add('hidden')); // Hide all cards
+                cards[item.dataset.section].classList.remove('hidden'); // Show selected card
+                title.innerText = item.dataset.section.charAt(0).toUpperCase() + item.dataset.section.slice(1); // Update title
             });
         });
 
-        // Submit Booking
-        document.getElementById('submit').addEventListener('click', function() {
-            const name = document.getElementById('name').value;
-            const timeSlot = document.getElementById('timeSlot').value;
-            const day = document.getElementById('day').value;
-            const additionalNotes = document.getElementById('additionalNotes').value;
-
-            if (!name || !timeSlot || !day) {
-                alert('Please fill out all required fields.');
-                return;
+        // Submit button click event listener
+        document.getElementById('submit').addEventListener('click', () => {
+            const name = document.getElementById('name').value; // Get name input value
+            const timeSlot = document.getElementById('timeSlot').value; // Get selected time slot
+            const day = document.getElementById('day').value; // Get selected day
+            const additionalNotes = document.getElementById('additionalNotes').value; // Get additional notes
+            if (validateForm(name, timeSlot, day)) {
+                bookSlot(name, timeSlot, day, additionalNotes); // Call booking function
             }
+        });
 
-            const bookingList = document.getElementById('bookingList');
-            const notesList = document.getElementById('notesList');
+        // Function to validate form inputs
+        function validateForm(name, timeSlot, day) {
+            if (!name || !timeSlot || !day) { // Check if any field is empty
+                alert("Please fill in all fields.");
+                return false;
+            }
+            return true;
+        }
 
-            // Update slots
+        // Function to book a slot
+        function bookSlot(name, timeSlot, day, additionalNotes) {
+            const bookingList = document.getElementById('bookingList'); // Booking list element
+            const row = document.createElement('tr'); // Create new table row
+            const deleteButton = `<button class="action-btn" onclick="confirmDelete(this)">Delete</button>`; // Delete button
+            row.innerHTML = `<td>${name}</td><td>${timeSlot}</td><td>${day}</td><td>${deleteButton}</td>`; // Populate row
+            bookingList.appendChild(row); // Append row to booking list
+
+            // Update slot counts based on selected day
             if (day === 'saturday' || day === 'both') {
                 saturdaySlots--;
-                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
             }
             if (day === 'sunday' || day === 'both') {
                 sundaySlots--;
-                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
             }
 
-            // Add booking to table
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td>${name}</td>
-                <td>${timeSlot}</td>
-                <td>${day}</td>
-                <td><button class="action-btn" onclick="handleDelete(this)">Delete</button></td>
-            `;
-            bookingList.appendChild(newRow);
-
-            // Add notes if provided
-            if (additionalNotes) {
-                const noteItem = document.createElement('li');
-                noteItem.classList.add('note-item');
-                noteItem.textContent = `${name}: ${additionalNotes}`;
-                notesList.appendChild(noteItem);
-            }
+            // Update availability bars
+            updateAvailabilityBars();
 
             // Show success message
             document.getElementById('successMessage').style.display = 'block';
             setTimeout(() => {
                 document.getElementById('successMessage').style.display = 'none';
-            }, 3000);
-
-            // Clear inputs
-            document.getElementById('name').value = '';
-            document.getElementById('timeSlot').value = '9-10';
-            document.getElementById('day').value = 'saturday';
-            document.getElementById('additionalNotes').value = '';
-        });
-
-        // Handle delete booking
-        function handleDelete(button) {
-            selectedBooking = button.parentElement.parentElement;
-            document.getElementById('deletePopup').style.display = 'block';
+            }, 3000); // Hide success message after 3 seconds
         }
 
-        document.getElementById('confirmDelete').addEventListener('click', function() {
-            const day = selectedBooking.children[2].textContent;
-            if (day === 'saturday' || day === 'both') {
-                saturdaySlots++;
-                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+        // Function to update availability bars
+        function updateAvailabilityBars() {
+            bars.saturday.innerText = `Saturday: ${saturdaySlots} slots available`; // Update Saturday availability
+            bars.sunday.innerText = `Sunday: ${sundaySlots} slots available`; // Update Sunday availability
+        }
+
+        // Function to confirm delete booking
+        function confirmDelete(button) {
+            selectedBooking = button.closest('tr'); // Store the row to be deleted
+            document.getElementById('deletePopup').style.display = 'block'; // Show delete confirmation popup
+        }
+
+        // Confirm delete action
+        document.getElementById('confirmDelete').addEventListener('click', () => {
+            if (selectedBooking) {
+                const cells = selectedBooking.querySelectorAll('td'); // Get all cells of the selected row
+                const day = cells[2].innerText; // Get day from the selected row
+
+                // Update slot counts based on selected day
+                if (day === 'saturday' || day === 'both') {
+                    saturdaySlots++;
+                }
+                if (day === 'sunday' || day === 'both') {
+                    sundaySlots++;
+                }
+
+                selectedBooking.remove(); // Remove the selected booking row
+                updateAvailabilityBars(); // Update availability bars
+                document.getElementById('deletePopup').style.display = 'none'; // Hide delete confirmation popup
             }
-            if (day === 'sunday' || day === 'both') {
-                sundaySlots++;
-                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-            }
-            selectedBooking.remove();
-            document.getElementById('deletePopup').style.display = 'none';
         });
 
-        document.getElementById('cancelDelete').addEventListener('click', function() {
-            selectedBooking = null;
-            document.getElementById('deletePopup').style.display = 'none';
+        // Cancel delete action
+        document.getElementById('cancelDelete').addEventListener('click', () => {
+            document.getElementById('deletePopup').style.display = 'none'; // Hide delete confirmation popup
         });
+
+       // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
+  authDomain: "archer-slot-booking.firebaseapp.com",
+  projectId: "archer-slot-booking",
+  storageBucket: "archer-slot-booking.appspot.com",
+  messagingSenderId: "96539149968",
+  appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
     </script>
-
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore.js"></script>
 </body>
 </html>
