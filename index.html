@@ -6,7 +6,7 @@
     <title>Active Generation Booking</title>
     <style>
         body {
-            background-color: #dddddd; /* soft grey beige color */
+            background-color: #FCF8FC; /* soft grey beige color */
             font-family: 'Canva Sans', sans-serif;
             color: black;
         }
@@ -104,7 +104,7 @@
             text-align: center; /* Center-aligned text inside bars */
         }
         button {
-            background-color: #589f55; /* Slightly darker green */
+            background-color: #3b8132; /* Slightly darker green */
             color: white;
             padding: 10px;
             border: none;
@@ -267,12 +267,27 @@
             item.addEventListener('click', () => {
                 document.querySelector('.nav-item.active').classList.remove('active');
                 item.classList.add('active');
-                const section = item.getAttribute('data-section');
-                Object.values(cards).forEach(card => card.classList.add('hidden'));
-                cards[section].classList.remove('hidden');
-                updateAvailability();
+                showSection(item.dataset.section);
             });
         });
+
+        function showSection(section) {
+            Object.keys(cards).forEach(key => {
+                if (key === section) {
+                    cards[key].classList.remove('hidden');
+                } else {
+                    cards[key].classList.add('hidden');
+                }
+            });
+
+            if (section === 'slots') {
+                bars.saturday.style.display = 'block';
+                bars.sunday.style.display = 'block';
+            } else {
+                bars.saturday.style.display = 'none';
+                bars.sunday.style.display = 'none';
+            }
+        }
 
         document.getElementById('submit').addEventListener('click', () => {
             const name = document.getElementById('name').value;
@@ -280,80 +295,96 @@
             const day = document.getElementById('day').value;
             const additionalNotes = document.getElementById('additionalNotes').value;
 
-            if (name.trim() === '' || (day === 'saturday' && saturdaySlots === 0) || (day === 'sunday' && sundaySlots === 0)) {
-                alert('Please fill in all fields and ensure slots are available.');
+            if (!name) {
+                alert('Please enter your name.');
                 return;
             }
 
-            let slotsAvailable = false;
-            if (day === 'saturday' && saturdaySlots > 0) {
-                slotsAvailable = true;
-                saturdaySlots--;
-            } else if (day === 'sunday' && sundaySlots > 0) {
-                slotsAvailable = true;
-                sundaySlots--;
-            } else if (day === 'both' && saturdaySlots > 0 && sundaySlots > 0) {
-                slotsAvailable = true;
-                saturdaySlots--;
-                sundaySlots--;
+            if (day.includes('saturday') && saturdaySlots === 0) {
+                alert('No available slots for Saturday');
+                return;
             }
 
-            if (slotsAvailable) {
-                const bookingList = document.getElementById('bookingList');
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${name}</td>
-                    <td>${timeSlot}</td>
-                    <td>${day}</td>
-                    <td><button class="action-btn delete-btn">Delete</button></td>
-                `;
-                bookingList.appendChild(newRow);
-                document.getElementById('successMessage').style.display = 'block';
-                setTimeout(() => {
-                    document.getElementById('successMessage').style.display = 'none';
-                }, 3000);
-                document.getElementById('name').value = '';
-                document.getElementById('timeSlot').value = '9-10';
-                document.getElementById('day').value = 'saturday';
-                document.getElementById('additionalNotes').value = '';
-                updateAvailability();
+            if (day.includes('sunday') && sundaySlots === 0) {
+                alert('No available slots for Sunday');
+                return;
             }
+
+            // Adjust available slots
+            if (day === 'saturday' || day === 'both') {
+                saturdaySlots--;
+                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
+            }
+
+            if (day === 'sunday' || day === 'both') {
+                sundaySlots--;
+                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+            }
+
+            // Update booking table
+            const bookingList = document.getElementById('bookingList');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${timeSlot}</td>
+                <td>${day}</td>
+                <td><button class="action-btn" data-name="${name}" data-timeSlot="${timeSlot}" data-day="${day}">Delete</button></td>
+            `;
+            bookingList.appendChild(row);
+
+            // Update notes section if there's an additional note
+            if (additionalNotes) {
+                const notesList = document.getElementById('notesList');
+                const listItem = document.createElement('li');
+                listItem.classList.add('note-item');
+                listItem.textContent = `${name}: ${additionalNotes}`;
+                notesList.appendChild(listItem);
+            }
+
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+
+            // Clear form
+            document.getElementById('name').value = '';
+            document.getElementById('timeSlot').value = '9-10';
+            document.getElementById('day').value = 'saturday';
+            document.getElementById('additionalNotes').value = '';
         });
 
-        document.getElementById('bookingList').addEventListener('click', (e) => {
-            if (e.target.classList.contains('delete-btn')) {
-                selectedBooking = e.target.closest('tr');
+        // Delete booking logic
+        document.getElementById('bookingList').addEventListener('click', (event) => {
+            if (event.target.classList.contains('action-btn')) {
+                selectedBooking = event.target;
                 document.getElementById('deletePopup').style.display = 'block';
             }
         });
 
         document.getElementById('confirmDelete').addEventListener('click', () => {
-            if (selectedBooking) {
-                const day = selectedBooking.cells[2].innerText;
-                const timeSlot = selectedBooking.cells[1].innerText;
+            const bookingRow = selectedBooking.closest('tr');
+            const day = selectedBooking.dataset.day;
 
-                if (day === 'saturday') {
-                    saturdaySlots++;
-                } else if (day === 'sunday') {
-                    sundaySlots++;
-                } else if (day === 'both') {
-                    saturdaySlots++;
-                    sundaySlots++;
-                }
-                selectedBooking.remove();
-                updateAvailability();
-                document.getElementById('deletePopup').style.display = 'none';
+            if (day === 'saturday' || day === 'both') {
+                saturdaySlots++;
+                bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
             }
+
+            if (day === 'sunday' || day === 'both') {
+                sundaySlots++;
+                bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
+            }
+
+            bookingRow.remove();
+            document.getElementById('deletePopup').style.display = 'none';
         });
 
         document.getElementById('cancelDelete').addEventListener('click', () => {
             document.getElementById('deletePopup').style.display = 'none';
         });
-
-        function updateAvailability() {
-            bars.saturday.textContent = `Saturday: ${saturdaySlots} slots available`;
-            bars.sunday.textContent = `Sunday: ${sundaySlots} slots available`;
-        }
     </script>
+
 </body>
 </html>
