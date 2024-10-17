@@ -13,11 +13,11 @@
         <form id="bookingForm">
             <label for="slot">Select Time Slot:</label>
             <select id="slot" required>
-                <option value="9:00 AM">9:00 AM</option>
                 <option value="10:00 AM">10:00 AM</option>
                 <option value="11:00 AM">11:00 AM</option>
                 <option value="12:00 PM">12:00 PM</option>
                 <option value="1:00 PM">1:00 PM</option>
+                <option value="2:00 PM">2:00 PM</option>
             </select>
 
             <label for="archerName">Your Name (optional):</label>
@@ -35,6 +35,6 @@
     <!-- Include Firebase and App.js -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
