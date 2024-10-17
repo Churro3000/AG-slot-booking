@@ -15,7 +15,7 @@ body {
     color: white; /* White text color */
     font-family: sans-serif; /* Use sans-serif font */
     font-weight: bold; /* Bold text */
-    font-size: 24px; /* Increase the font size */
+    font-size: 25px; /* Increase the font size */
     margin: 0; /* Remove default margin */
 }
 
@@ -26,41 +26,20 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center content */
 }
 
-h1 {
-    text-align: center;
-    color: #0d0d0d;
+/* Styling for the stacked bars */
+.slot-bar {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    padding: 20px; /* Padding inside the bars */
+    border-radius: 200px; /* Fully curved edges */
+    margin: 10px 0; /* Space between the bars */
+    font-size: 18px; /* Text size */
+    font-weight: bold; /* Make the text bold */
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-label, input, select {
-    margin: 10px 0;
-}
-
-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-li {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+.slot-bar p {
+    margin: 0; /* Remove any default margin in the paragraphs */
 }
