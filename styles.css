@@ -49,12 +49,12 @@ body {
     font-weight: bold;
     color: black;
     text-align: center;
-    padding-top: 25px;  /* Add space above the title */
-    padding-bottom: 20px; /* Add space below the title */
+    padding-top: 40px;  /* Increase space above the title */
+    padding-bottom: 20px; /* Decrease space below the title */
     margin: 0;  /* Ensure no margin conflicts */
 }
 
 .container {
-    margin-top: 25px;  /* Increase space between title and bars */
+    margin-top: 0px;  /* Remove extra space between title and bars */
 }
 
