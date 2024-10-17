@@ -48,11 +48,11 @@ body {
     font-size: 32px;
     font-weight: bold;
     color: black;
-    padding: 30px 0; /* Add padding on top and bottom */
     text-align: center;
 }
 
 .container {
     margin-top: 25px; /* Add some space between title and bars */
+    margin-bottom: 20px; 
 }
 
