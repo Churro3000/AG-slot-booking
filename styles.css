@@ -58,3 +58,65 @@ body {
     margin-top: 0px;  /* Remove extra space between title and bars */
 }
 
+/* Space between containers */
+.container + .container {
+    margin-top: 30px;
+}
+
+/* Table styling */
+#bookingTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#bookingTable th, #bookingTable td {
+    border: 1px solid black; /* Black border */
+    padding: 10px;
+    text-align: center;
+}
+
+/* Table headers */
+#bookingTable th {
+    background-color: #f4f4f4;
+}
+
+/* Padding between rows */
+#bookingTable tr {
+    margin-bottom: 10px;
+}
+
+/* Editable input for name cells */
+#bookingTable td input {
+    width: 100%;
+    border: none;
+    padding: 5px;
+    text-align: center;
+}
+
+/* Clickable time blocks */
+.time-block {
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+.time-block.green {
+    background-color: green;
+    color: white;
+}
+
+/* Hidden delete button until booking is made */
+.delete-btn {
+    display: none;
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-btn.visible {
+    display: inline-block;
+}
+
+
