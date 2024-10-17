@@ -66,7 +66,8 @@ body {
 /* Table styling */
 #bookingTable {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate; /* Change to 'separate' */
+    border-spacing: 0 10px; /* Adds space between rows */
 }
 
 #bookingTable th, #bookingTable td {
@@ -80,17 +81,14 @@ body {
     background-color: #f4f4f4;
 }
 
-/* Padding between rows */
-#bookingTable tr {
-    margin-bottom: 10px;
-}
-
 /* Editable input for name cells */
 #bookingTable td input {
     width: 100%;
-    border: none;
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px; /* Rounded corners */
     padding: 5px;
     text-align: center;
+    box-sizing: border-box; /* Ensures padding is included in width */
 }
 
 /* Clickable time blocks */
@@ -98,6 +96,10 @@ body {
     cursor: pointer;
     background-color: white;
     transition: background-color 0.3s ease;
+}
+
+.time-block:hover {
+    background-color: #e0e0e0; /* Light grey on hover */
 }
 
 .time-block.green {
@@ -118,5 +120,3 @@ body {
 .delete-btn.visible {
     display: inline-block;
 }
-
-
