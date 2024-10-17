@@ -43,3 +43,11 @@ body {
 .slot-bar p {
     margin: 0; /* Remove any default margin in the paragraphs */
 }
+
+.page-title {
+    color: #000; /* Black text */
+    font-size: 32px; /* Large font size */
+    font-weight: bold; /* Bold text */
+    text-align: center; /* Center the title */
+    margin: 20px 0; /* Add spacing between the red bar and blue bars */
+}
