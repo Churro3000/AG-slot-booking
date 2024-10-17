@@ -11,8 +11,10 @@
         <h1>Active Generation</h1>
     </div>
 
-    <h1 class="page-title">Book Your Slot!</h1> <!-- Removed comment -->
+    <!-- Title -->
+    <h1 class="page-title">Book Your Slot!</h1>
 
+    <!-- First Container with the blue bars -->
     <div class="container">
         <div class="slot-bar" id="saturday-bar">
             <p>Saturday: 14 slots available</p>
@@ -22,6 +24,24 @@
         </div>
     </div>
 
+    <!-- Second Container with the table -->
+    <div class="container" id="booking-table-container">
+        <table id="bookingTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>9-10</th>
+                    <th>10-11</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 14 rows will be generated here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Firebase and app.js -->
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <script type="module" src="app.js"></script>
