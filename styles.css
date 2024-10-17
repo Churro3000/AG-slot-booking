@@ -67,3 +67,27 @@ li {
     padding: 10px;
     border-bottom: 1px solid #ccc;
 }
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    .header h1 {
+        font-size: 20px; /* Decrease header font size */
+    }
+
+    h1 {
+        font-size: 22px; /* Decrease the main h1 font size */
+    }
+
+    label, input, select {
+        margin: 8px 0; /* Adjust margin for smaller screens */
+        padding: 8px; /* Reduce padding for smaller screens */
+    }
+
+    button {
+        padding: 8px; /* Reduce button padding */
+    }
+}
