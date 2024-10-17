@@ -45,9 +45,12 @@ body {
 }
 
 .page-title {
-    color: #000; /* Black text */
-    font-size: 32px; /* Large font size */
-    font-weight: bold; /* Bold text */
+    font-size: 32px; /* Adjust font size as needed */
+    font-weight: bold;
+    color: black;
+    margin: 20px 0; /* Adds space around the title */
+    padding-top: 20px; /* Padding at the top */
+    padding-bottom: 20px; /* Padding at the bottom */
     text-align: center; /* Center the title */
-    margin: 20px 0; /* Add spacing between the red bar and blue bars */
 }
+
