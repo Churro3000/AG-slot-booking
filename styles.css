@@ -1,69 +1,44 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archery Slot Booking</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Active Generation</h1>
+    </div>
 
-.header {
-    background-color: #c30010; /* Red background */
-    padding: 20px; /* Add padding for spacing */
-    text-align: center; /* Center the text */
-    width: 100%; /* Full width */
-    position: relative; /* Ensure it stays in place */
-    left: 0; /* Align to the left */
-}
+    <div class="container">
+        <h1>Archery Slot Booking System</h1>
 
-.header h1 {
-    color: white; /* White text color */
-    font-family: sans-serif; /* Use sans-serif font */
-    font-weight: bold; /* Bold text */
-    font-size: 24px; /* Increase the font size */
-    margin: 0; /* Remove default margin */
-}
+        <form id="bookingForm">
+            <label for="slot">Select Time Slot:</label>
+            <select id="slot" required>
+                <option value="9:00 AM">9:00 AM</option>
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="1:00 PM">1:00 PM</option>
+            </select>
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+            <label for="archerName">Your Name (optional):</label>
+            <input type="text" id="archerName" placeholder="Enter your name">
 
-h1 {
-    text-align: center;
-    color: #333;
-}
+            <button type="submit">Book Slot</button>
+        </form>
 
-form {
-    display: flex;
-    flex-direction: column;
-}
+        <h2>Available Slots</h2>
+        <ul id="availableSlots">
+            <!-- Booked slots will be shown here -->
+        </ul>
+    </div>
 
-label, input, select {
-    margin: 10px 0;
-}
-
-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-li {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
+    <!-- Include Firebase and App.js as modules -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
