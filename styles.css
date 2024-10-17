@@ -9,8 +9,8 @@ body {
     background-color: #c30010; /* Red background */
     padding: 20px; /* Add padding for spacing */
     text-align: center; /* Center the text */
-    position: relative; /* Ensure it stays in place */
-    transform: translateX(-50%); /* Center it by offsetting */
+    max-width: 600px; /* Match the width of the container */
+    margin: 0 auto; /* Center the header */
 }
 
 .header h1 {
