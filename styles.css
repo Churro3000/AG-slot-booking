@@ -9,6 +9,7 @@ body {
     background-color: #c30010; /* Red background */
     padding: 20px; /* Add padding for spacing */
     text-align: center; /* Center the text */
+    left: 50%; /* Align to the center */
     max-width: 600px; /* Match the width of the container */
     margin: 0 auto; /* Center the header */
 }
