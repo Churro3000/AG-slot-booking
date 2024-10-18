@@ -21,6 +21,41 @@ const bookingForm = document.getElementById('bookingForm');
 const availableSlotsDiv = document.getElementById('availableSlots');
 const bookingTableBody = document.querySelector('#bookingTable tbody');
 
+// Saturday and Sunday button handling
+const saturdayButton = document.getElementById('saturdayBtn');
+const sundayButton = document.getElementById('sundayBtn');
+const backArrow = document.getElementById('backArrow');
+const buttonContainer = document.querySelector('.button-container');
+
+// Function to reset the view back to the initial state
+function resetView() {
+    saturdayButton.classList.remove('large', 'hidden');
+    sundayButton.classList.remove('large', 'hidden');
+    buttonContainer.classList.remove('center');
+    backArrow.classList.remove('visible');
+}
+
+// Saturday button click event
+saturdayButton.addEventListener('click', function() {
+    sundayButton.classList.add('hidden'); // Hide Sunday button
+    saturdayButton.classList.add('large'); // Enlarge Saturday button
+    buttonContainer.classList.add('center'); // Center align
+    backArrow.classList.add('visible'); // Show back arrow
+});
+
+// Sunday button click event
+sundayButton.addEventListener('click', function() {
+    saturdayButton.classList.add('hidden'); // Hide Saturday button
+    sundayButton.classList.add('large'); // Enlarge Sunday button
+    buttonContainer.classList.add('center'); // Center align
+    backArrow.classList.add('visible'); // Show back arrow
+});
+
+// Back arrow click event to reset everything
+backArrow.addEventListener('click', function() {
+    resetView();
+});
+
 // Function to display available slots
 async function displayAvailableSlots() {
     const slots = ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM']; // Example slots
@@ -190,5 +225,6 @@ async function loadBookings() {
 // Call loadBookings on page load
 window.onload = async () => {
     await loadBookings();
-    displayAvailableSlots(); // Initial display of available slots
+    displayAvailableSlots();
 };
+
