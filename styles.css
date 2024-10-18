@@ -58,11 +58,41 @@ body {
     border-radius: 200px; /* Curved radius for round edges */
     font-size: 18px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .button-container button:hover {
     background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* When button is clicked and enlarged */
+button.large {
+    width: 300px; /* Enlarged width */
+    height: 100px; /* Enlarged height */
+    font-size: 24px; /* Larger font size */
+    padding: 20px; /* Adjust padding for the enlarged button */
+    margin: 0 auto; /* Center the button */
+    display: block;
+}
+
+/* Hidden buttons */
+button.hidden {
+    display: none;
+}
+
+/* Back arrow styling */
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: black;
+    cursor: pointer;
+    display: none; /* Hidden by default */
+}
+
+.back-arrow.visible {
+    display: block;
 }
 
 /* Table styling */
