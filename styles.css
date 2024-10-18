@@ -29,38 +29,24 @@ body {
     text-align: center; /* Center content */
 }
 
-/* Styling for the stacked bars */
-.slot-bar {
-    background-color: #007bff; /* Blue background */
-    color: white; /* White text */
-    padding: 20px; /* Padding inside the bars */
-    border-radius: 200px; /* Fully curved edges */
-    margin: 10px 0; /* Space between the bars */
-    font-size: 18px; /* Text size */
-    font-weight: bold; /* Make the text bold */
+/* Styling for the dropdown menus */
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Space between the dropdown menus */
+    margin: 20px 0; /* Space above and below the dropdowns */
 }
 
-.slot-bar p {
-    margin: 0; /* Remove any default margin in the paragraphs */
-}
-
-.page-title {
-    font-size: 32px;
-    font-weight: bold;
-    color: black;
-    text-align: center;
-    padding-top: 40px; /* Increase space above the title */
-    padding-bottom: 20px; /* Decrease space below the title */
-    margin: 0; /* Ensure no margin conflicts */
-}
-
-.container {
-    margin-top: 0px; /* Remove extra space between title and bars */
-}
-
-/* Space between containers */
-.container + .container {
-    margin-top: 30px;
+.dropdown-container select {
+    width: 80%; /* Adjust width to fit within the container */
+    padding: 10px;
+    border: 1px solid #007bff; /* Border color */
+    border-radius: 5px;
+    font-size: 16px; /* Text size */
+    background-color: white;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Table styling */
