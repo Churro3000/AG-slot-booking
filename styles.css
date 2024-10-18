@@ -17,6 +17,9 @@ body {
     font-weight: bold; /* Bold text */
     font-size: 25px; /* Increase the font size */
     margin: 0; /* Remove default margin */
+    text-align: centre;
+    top-padding: 25px;
+    bottom-padding: 20px;
 }
 
 .container {
