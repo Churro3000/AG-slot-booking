@@ -73,15 +73,16 @@ for (let i = 0; i < 14; i++) {
 
     const nameCell = document.createElement('td');
     const nameInput = document.createElement('input');
+    nameInput.placeholder = "Enter name"; // Add a placeholder for clarity
     nameCell.appendChild(nameInput);
 
     const nineToTenCell = document.createElement('td');
     nineToTenCell.classList.add('time-block');
-    nineToTenCell.innerText = "Available";  // Always show as available
+    nineToTenCell.innerText = "Available";  // Default to available
 
     const tenToElevenCell = document.createElement('td');
     tenToElevenCell.classList.add('time-block');
-    tenToElevenCell.innerText = "Available";  // Always show as available
+    tenToElevenCell.innerText = "Available";  // Default to available
 
     const actionCell = document.createElement('td');
     const deleteBtn = document.createElement('button');
