@@ -14,13 +14,28 @@
     <!-- Title -->
     <h1 class="page-title">Book Your Slot!</h1>
 
-    <!-- First Container with the blue bars -->
+ <!-- First Container with the two drop-down menus -->
     <div class="container">
-        <div class="slot-bar" id="saturday-bar">
-            <p>Saturday: 28 slots available</p>
+        <!-- First Drop-Down: Days (Saturday, Sunday, Sat & Sun) -->
+        <div class="dropdown-container">
+            <select id="daySelect">
+                <option value="saturday">Saturday</option>
+                <option value="sunday">Sunday</option>
+                <option value="sat-sun">Sat & Sun</option>
+            </select>
         </div>
-        <div class="slot-bar" id="sunday-bar">
-            <p>Sunday: 28 slots available</p>
+
+        <!-- Padding space between dropdowns -->
+        <div style="height: 10px;"></div>
+
+        <!-- Second Drop-Down: Time slots (8-9, 9-10, etc.) -->
+        <div class="dropdown-container">
+            <select id="timeSelect">
+                <option value="8-9">8-9</option>
+                <option value="9-10">9-10</option>
+                <option value="10-11">10-11</option>
+                <option value="11-12">11-12</option>
+            </select>
         </div>
     </div>
 
