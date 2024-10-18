@@ -17,9 +17,6 @@ body {
     font-weight: bold; /* Bold text */
     font-size: 25px; /* Increase the font size */
     margin: 0; /* Remove default margin */
-    text-align: centre;
-    top-padding: 25px;
-    bottom-padding: 20px;
 }
 
 .container {
@@ -37,7 +34,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px; /* Space between the dropdown menus */
+    gap: 12px; /* Space between the dropdown menus */
     margin: 20px 0; /* Space above and below the dropdowns */
 }
 
