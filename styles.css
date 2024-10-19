@@ -203,3 +203,19 @@ button.hidden {
     text-align: center;
     box-sizing: border-box; /* Ensures padding is included in width */
 }
+
+.table-container {
+    margin-bottom: 20px; /* Space below the container */
+}
+
+.table-wrapper {
+    margin-bottom: 20px; /* Space below each table wrapper */
+}
+
+.divider {
+    border: none; /* Remove default border */
+    height: 1px; /* Height of the line */
+    background-color: #ccc; /* Color of the line */
+    margin: 20px 0; /* Spacing above and below the line */
+}
+
