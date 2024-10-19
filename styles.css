@@ -168,3 +168,38 @@ button.hidden {
 #bookingTable button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
+
+/* Saturday and Sunday Table Styles */
+#saturdayTable,
+#sundayTable {
+    width: 100%;
+    border-collapse: separate; /* Change to 'separate' */
+    border-spacing: 0 10px; /* Adds space between rows */
+}
+
+#saturdayTable th,
+#sundayTable th,
+#saturdayTable td,
+#sundayTable td {
+    border: 1px solid black; /* Black border */
+    padding: 10px;
+    text-align: center;
+}
+
+/* Table headers for Saturday and Sunday */
+#saturdayTable th,
+#sundayTable th {
+    background-color: #007bff; /* Blue background for headers */
+    color: white; /* White text color for headers */
+}
+
+/* Editable input for name cells in Saturday and Sunday tables */
+#saturdayTable td input,
+#sundayTable td input {
+    width: 100%;
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 5px;
+    text-align: center;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
