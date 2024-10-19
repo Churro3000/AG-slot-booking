@@ -95,27 +95,43 @@ button.hidden {
     display: block;
 }
 
-/* Table styling */
-#bookingTable {
+/* Combined Table Styling */
+.table-container {
+    margin-bottom: 20px; /* Space below the container */
+}
+
+.table-wrapper {
+    margin-bottom: 20px; /* Space below each table wrapper */
+}
+
+.divider {
+    border: none; /* Remove default border */
+    height: 1px; /* Height of the line */
+    background-color: #ccc; /* Color of the line */
+    margin: 20px 0; /* Spacing above and below the line */
+}
+
+/* Unified Table Styles */
+.table {
     width: 100%;
     border-collapse: separate; /* Change to 'separate' */
     border-spacing: 0 10px; /* Adds space between rows */
 }
 
-#bookingTable th, #bookingTable td {
+.table th, .table td {
     border: 1px solid black; /* Black border */
     padding: 10px;
     text-align: center;
 }
 
 /* Table headers */
-#bookingTable th {
+.table th {
     background-color: #007bff; /* Blue background for headers */
     color: white; /* White text color for headers */
 }
 
 /* Editable input for name cells */
-#bookingTable td input {
+.table td input {
     width: 100%;
     border: 1px solid #ccc; /* Light grey border */
     border-radius: 4px; /* Rounded corners */
@@ -155,7 +171,7 @@ button.hidden {
 }
 
 /* Button styling for booking actions */
-#bookingTable button {
+.table button {
     background-color: #007bff; /* Blue background */
     color: white; /* White text */
     border: none; /* Remove border */
@@ -165,57 +181,6 @@ button.hidden {
     transition: background-color 0.3s ease; /* Smooth background change */
 }
 
-#bookingTable button:hover {
+.table button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
-
-/* Saturday and Sunday Table Styles */
-#saturdayTable,
-#sundayTable {
-    width: 100%;
-    border-collapse: separate; /* Change to 'separate' */
-    border-spacing: 0 10px; /* Adds space between rows */
-}
-
-#saturdayTable th,
-#sundayTable th,
-#saturdayTable td,
-#sundayTable td {
-    border: 1px solid black; /* Black border */
-    padding: 10px;
-    text-align: center;
-}
-
-/* Table headers for Saturday and Sunday */
-#saturdayTable th,
-#sundayTable th {
-    background-color: #007bff; /* Blue background for headers */
-    color: white; /* White text color for headers */
-}
-
-/* Editable input for name cells in Saturday and Sunday tables */
-#saturdayTable td input,
-#sundayTable td input {
-    width: 100%;
-    border: 1px solid #ccc; /* Light grey border */
-    border-radius: 4px; /* Rounded corners */
-    padding: 5px;
-    text-align: center;
-    box-sizing: border-box; /* Ensures padding is included in width */
-}
-
-.table-container {
-    margin-bottom: 20px; /* Space below the container */
-}
-
-.table-wrapper {
-    margin-bottom: 20px; /* Space below each table wrapper */
-}
-
-.divider {
-    border: none; /* Remove default border */
-    height: 1px; /* Height of the line */
-    background-color: #ccc; /* Color of the line */
-    margin: 20px 0; /* Spacing above and below the line */
-}
-
