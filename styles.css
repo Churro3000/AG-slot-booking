@@ -30,39 +30,7 @@ body {
     margin: 0; /* Ensure no margin conflicts */
 }
 
-/* Updated container for Saturday and Sunday combined */
-.combined-container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Center content */
-    margin-bottom: 20px; /* Add space between the two containers */
-}
-
-.combined-container h2 {
-    flex: 1;
-    font-size: 24px;
-    margin: 0;
-}
-
-.combined-container .divider {
-    width: 1px;
-    background-color: #ccc;
-    margin: 0 20px; /* Add space between the Saturday and Sunday texts */
-}
-
-/* Updated styling for slot availability within the combined container */
-.slot-availability {
-    display: flex;
-    justify-content: space-between;
-    flex: 1;
-}
-
+/* Container for both days, now combined into one */
 .container {
     max-width: 600px;
     margin: 0 auto;
@@ -72,6 +40,12 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center; /* Center content */
     margin-bottom: 20px; /* Add space between the two containers */
+}
+
+.container h2 {
+    font-size: 24px;
+    margin: 0;
+    color: black;
 }
 
 /* Styling for the button container */
