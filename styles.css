@@ -72,34 +72,9 @@ body {
     background-color: #0056b3; /* Darker blue on hover */
 }
 
-/* When button is clicked and enlarged */
-button.large {
-    width: 300px; /* Enlarged width */
-    height: 100px; /* Enlarged height */
-    font-size: 24px; /* Larger font size */
-    padding: 20px; /* Adjust padding for the enlarged button */
-    margin: 0 auto; /* Center the button */
-    display: block;
-}
-
 /* Hidden buttons */
 button.hidden {
     display: none;
-}
-
-/* Back arrow styling */
-.back-arrow {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 24px;
-    color: black;
-    cursor: pointer;
-    display: none; /* Hidden by default */
-}
-
-.back-arrow.visible {
-    display: block;
 }
 
 /* Table styling */
@@ -182,4 +157,42 @@ button.hidden {
     height: 1px; /* Height of the line */
     background-color: #ccc; /* Color of the line */
     margin: 20px 0; /* Spacing above and below the line */
+}
+
+/* New CSS for "Book Your Slot!" section */
+.slot-table {
+    margin: 20px auto;
+    width: 80%; /* Adjust width for table */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+
+.slot-table h3 {
+    font-size: 18px;
+    color: #333;
+    text-align: left;
+    padding: 10px 0;
+}
+
+.slot-table .day {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.slot-table td {
+    padding: 10px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.slot-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.slot-table tr:hover {
+    background-color: #f1f1f1;
 }
