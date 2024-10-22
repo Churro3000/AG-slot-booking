@@ -33,7 +33,6 @@ body {
 /* Styling for the containers holding the tables */
 .container {
     background-color: white; /* White background for all containers */
-    border: 1px solid black; /* Black border */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Black shadow */
     border-radius: 8px; /* Rounded corners for aesthetic */
     margin-bottom: 20px; /* Space below each container */
@@ -82,9 +81,8 @@ button.hidden {
 }
 
 #bookingTable th, #bookingTable td {
-    border: 1px solid black; /* Black border */
     padding: 10px;
-    text-align: center;
+    text-align: center; /* Center aligned text */
 }
 
 /* Table headers */
@@ -156,27 +154,33 @@ button.hidden {
     margin: 20px 0; /* Spacing above and below the line */
 }
 
+/* Slot table styling */
 .slot-table h3 {
     font-size: 18px;
-    color: #333;
-    text-align: left;
-    padding: 10px 0;
+    color: white; /* White text for the title */
+    text-align: center; /* Center aligned */
+    background-color: #007bff; /* Blue background */
+    padding: 10px 0; /* Padding for spacing */
 }
 
 .slot-table .day {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
+    text-align: center; /* Center aligned */
+    background-color: #007bff; /* Blue background for day title */
+    color: white; /* White text */
+    padding: 10px 0; /* Padding for day title */
 }
 
 .slot-table td {
     padding: 10px;
-    text-align: left;
+    text-align: center; /* Center aligned text */
     font-size: 16px;
 }
 
 .slot-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* Light gray for even rows */
 }
 
 .slot-table tr:hover {
