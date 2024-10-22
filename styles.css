@@ -30,10 +30,21 @@ body {
     margin: 0; /* Ensure no margin conflicts */
 }
 
-.container h2 {
-    font-size: 24px;
-    margin: 0;
-    color: black;
+/* Styling for the containers holding the tables */
+.container {
+    margin-bottom: 20px; /* Space below each container */
+}
+
+.table-container {
+    background-color: white; /* Background for table container */
+    border-radius: 8px; /* Rounded corners for aesthetic */
+    padding: 15px; /* Inner padding for the table */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Padding space */
+.padding-space {
+    height: 20px; /* Height of the padding space */
 }
 
 /* Styling for the button container */
@@ -171,5 +182,5 @@ button.hidden {
 }
 
 .slot-table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f1f1f1; /* Light gray background on hover */
 }
