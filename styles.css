@@ -19,7 +19,7 @@ body {
     margin: 0; /* Remove default margin */
 }
 
-/* Title padding adjustment */
+/* Padding adjustment for title */
 .page-title {
     font-size: 32px;
     font-weight: bold;
@@ -30,18 +30,22 @@ body {
     margin: 0; /* Ensure no margin conflicts */
 }
 
-/* Styling for the containers holding the tables */
+/* Container for both days, now combined into one */
 .container {
-    background-color: white; /* White background for all containers */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Black shadow */
-    border-radius: 8px; /* Rounded corners for aesthetic */
-    margin-bottom: 20px; /* Space below each container */
-    padding: 15px; /* Inner padding for the container */
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center content */
+    margin-bottom: 20px; /* Add space between the two containers */
 }
 
-/* Padding space */
-.padding-space {
-    height: 20px; /* Height of the padding space */
+.container h2 {
+    font-size: 24px;
+    margin: 0;
+    color: black;
 }
 
 /* Styling for the button container */
@@ -81,8 +85,9 @@ button.hidden {
 }
 
 #bookingTable th, #bookingTable td {
+    border: 1px solid black; /* Black border */
     padding: 10px;
-    text-align: center; /* Center aligned text */
+    text-align: center;
 }
 
 /* Table headers */
@@ -144,45 +149,4 @@ button.hidden {
 
 #bookingTable button:hover {
     background-color: #0056b3; /* Darker blue on hover */
-}
-
-/* Divider between sections */
-.divider {
-    border: none; /* Remove default border */
-    height: 1px; /* Height of the line */
-    background-color: #ccc; /* Color of the line */
-    margin: 20px 0; /* Spacing above and below the line */
-}
-
-/* Slot table styling */
-.slot-table h3 {
-    font-size: 18px;
-    color: white; /* White text for the title */
-    text-align: center; /* Center aligned */
-    background-color: #007bff; /* Blue background */
-    padding: 10px 0; /* Padding for spacing */
-}
-
-.slot-table .day {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-align: center; /* Center aligned */
-    background-color: #007bff; /* Blue background for day title */
-    color: white; /* White text */
-    padding: 10px 0; /* Padding for day title */
-}
-
-.slot-table td {
-    padding: 10px;
-    text-align: center; /* Center aligned text */
-    font-size: 16px;
-}
-
-.slot-table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Light gray for even rows */
-}
-
-.slot-table tr:hover {
-    background-color: #f1f1f1; /* Light gray background on hover */
 }
