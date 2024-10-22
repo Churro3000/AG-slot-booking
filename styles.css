@@ -40,6 +40,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center; /* Center content */
     margin-bottom: 20px; /* Add space between the two containers */
+    border: 2px solid black; /* Add border around the whole container */
 }
 
 .container h2 {
@@ -80,8 +81,7 @@ button.hidden {
 /* Table styling */
 #bookingTable {
     width: 100%;
-    border-collapse: separate; /* Change to 'separate' */
-    border-spacing: 0 10px; /* Adds space between rows */
+    border-collapse: collapse; /* Merge borders */
 }
 
 #bookingTable th, #bookingTable td {
@@ -168,6 +168,8 @@ button.hidden {
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 15px;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 .slot-table h3 {
@@ -183,10 +185,11 @@ button.hidden {
     margin-bottom: 10px;
 }
 
-.slot-table td {
+.slot-table td, .slot-table th {
     padding: 10px;
     text-align: left;
     font-size: 16px;
+    border: 1px solid black; /* Add border to cells */
 }
 
 .slot-table tr:nth-child(even) {
@@ -195,4 +198,15 @@ button.hidden {
 
 .slot-table tr:hover {
     background-color: #f1f1f1;
+}
+
+/* Add lines between rows, under each row, and between Saturday and Sunday sections */
+.section-divider {
+    border-top: 2px solid black;
+    margin: 20px 0; /* Space between sections */
+}
+
+.row-divider {
+    border-bottom: 2px solid black;
+    margin: 10px 0; /* Space between rows */
 }
