@@ -130,7 +130,8 @@ button.hidden {
 
 /* Editable input for name cells */
 .booking-table td input {
-    width: 100%;
+    width: 80%; /* Set width to 80% to make it a bit shorter */
+    max-width: 200px; /* Optional: limit maximum width to 200px */
     border: 1px solid #ccc; /* Light grey border */
     border-radius: 4px; /* Rounded corners */
     padding: 5px;
@@ -182,3 +183,4 @@ button.hidden {
 .booking-table button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
+
