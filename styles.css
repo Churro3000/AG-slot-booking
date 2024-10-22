@@ -30,7 +30,7 @@ body {
     margin: 0; /* Ensure no margin conflicts */
 }
 
-/* Container for both days, now combined into one */
+/* Main container styling */
 .container {
     max-width: 600px;
     margin: 0 auto;
@@ -39,14 +39,66 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center; /* Center content */
-    margin-bottom: 20px; /* Add space between the two containers */
+    margin-bottom: 20px; /* Add space between containers */
     border: 2px solid black; /* Add border around the whole container */
 }
 
-.container h2 {
+/* Styling for the table title (Saturday & Sunday) */
+.table-title {
+    background-color: blue; /* Blue background */
+    color: white; /* White text */
+    text-align: center; /* Center text */
     font-size: 24px;
-    margin: 0;
+    padding: 10px 0; /* Padding for better spacing */
+    margin: 0; /* Remove margins */
+}
+
+/* Styling for the individual table rows */
+.table-rows {
+    font-size: 18px;
     color: black;
+    padding: 10px;
+    text-align: center;
+}
+
+.table-rows td {
+    padding: 10px 0;
+    border-bottom: 1px solid black;
+}
+
+/* Adding padding between the two tables */
+.table-spacing {
+    margin-bottom: 20px; /* Space between Saturday and Sunday tables */
+}
+
+/* Styling for the second "Sunday" table */
+.table-container {
+    margin-top: 30px;
+}
+
+/* Styling for the table element */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table, th, td {
+    border: 1px solid black; /* Add border to table, header, and cells */
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+}
+
+/* Row background color for even rows */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Hover effect for rows */
 }
 
 /* Styling for the button container */
@@ -78,48 +130,7 @@ button.hidden {
     display: none;
 }
 
-/* New CSS for "Book Your Slot!" section */
-.slot-table {
-    margin: 20px auto;
-    width: 80%; /* Adjust width for table */
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-.slot-table h3 {
-    font-size: 18px;
-    color: #333;
-    text-align: left;
-    padding: 10px 0;
-}
-
-.slot-table .day {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.slot-table td, .slot-table th {
-    padding: 10px;
-    text-align: left;
-    font-size: 16px;
-    border: 1px solid black; /* Add border to cells */
-}
-
-.slot-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.slot-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-
+/* Row divider */
 .row-divider {
     border-bottom: 2px solid black;
     margin: 10px 0; /* Space between rows */
