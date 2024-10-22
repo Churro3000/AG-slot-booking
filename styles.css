@@ -78,87 +78,6 @@ button.hidden {
     display: none;
 }
 
-/* Table styling */
-#bookingTable {
-    width: 100%;
-    border-collapse: collapse; /* Merge borders */
-}
-
-#bookingTable th, #bookingTable td {
-    border: 1px solid black; /* Black border */
-    padding: 10px;
-    text-align: center;
-}
-
-/* Table headers */
-#bookingTable th {
-    background-color: #007bff; /* Blue background for headers */
-    color: white; /* White text color for headers */
-}
-
-/* Editable input for name cells */
-#bookingTable td input {
-    width: 100%;
-    border: 1px solid #ccc; /* Light grey border */
-    border-radius: 4px; /* Rounded corners */
-    padding: 5px;
-    text-align: center;
-    box-sizing: border-box; /* Ensures padding is included in width */
-}
-
-/* Clickable time blocks */
-.time-block {
-    cursor: pointer;
-    background-color: white;
-    transition: background-color 0.3s ease;
-}
-
-.time-block:hover {
-    background-color: #e0e0e0; /* Light grey on hover */
-}
-
-.time-block.green {
-    background-color: green;
-    color: white;
-}
-
-/* Hidden delete button until booking is made */
-.delete-btn {
-    display: none;
-    background-color: red;
-    color: white;
-    padding: 5px;
-    border: none;
-    cursor: pointer;
-}
-
-.delete-btn.visible {
-    display: inline-block;
-}
-
-/* Button styling for booking actions */
-#bookingTable button {
-    background-color: #007bff; /* Blue background */
-    color: white; /* White text */
-    border: none; /* Remove border */
-    padding: 10px 15px; /* Padding for button */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth background change */
-}
-
-#bookingTable button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-}
-
-/* Divider between sections */
-.divider {
-    border: none; /* Remove default border */
-    height: 1px; /* Height of the line */
-    background-color: #ccc; /* Color of the line */
-    margin: 20px 0; /* Spacing above and below the line */
-}
-
 /* New CSS for "Book Your Slot!" section */
 .slot-table {
     margin: 20px auto;
@@ -200,11 +119,6 @@ button.hidden {
     background-color: #f1f1f1;
 }
 
-/* Add lines between rows, under each row, and between Saturday and Sunday sections */
-.section-divider {
-    border-top: 2px solid black;
-    margin: 20px 0; /* Space between sections */
-}
 
 .row-divider {
     border-bottom: 2px solid black;
