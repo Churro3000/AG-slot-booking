@@ -30,75 +30,10 @@ body {
     margin: 0; /* Ensure no margin conflicts */
 }
 
-/* Main container styling */
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Center content */
-    margin-bottom: 20px; /* Add space between containers */
-    border: 2px solid black; /* Add border around the whole container */
-}
-
-/* Styling for the table title (Saturday & Sunday) */
-.table-title {
-    background-color: blue; /* Blue background */
-    color: white; /* White text */
-    text-align: center; /* Center text */
+.container h2 {
     font-size: 24px;
-    padding: 10px 0; /* Padding for better spacing */
-    margin: 0; /* Remove margins */
-}
-
-/* Styling for the individual table rows */
-.table-rows {
-    font-size: 18px;
+    margin: 0;
     color: black;
-    padding: 10px;
-    text-align: center;
-}
-
-.table-rows td {
-    padding: 10px 0;
-    border-bottom: 1px solid black;
-}
-
-/* Adding padding between the two tables */
-.table-spacing {
-    margin-bottom: 20px; /* Space between Saturday and Sunday tables */
-}
-
-/* Styling for the second "Sunday" table */
-.table-container {
-    margin-top: 30px;
-}
-
-/* Styling for the table element */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-table, th, td {
-    border: 1px solid black; /* Add border to table, header, and cells */
-}
-
-th, td {
-    padding: 15px;
-    text-align: center;
-}
-
-/* Row background color for even rows */
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f1f1f1; /* Hover effect for rows */
 }
 
 /* Styling for the button container */
@@ -130,8 +65,111 @@ button.hidden {
     display: none;
 }
 
-/* Row divider */
-.row-divider {
-    border-bottom: 2px solid black;
-    margin: 10px 0; /* Space between rows */
+/* Table styling */
+#bookingTable {
+    width: 100%;
+    border-collapse: separate; /* Change to 'separate' */
+    border-spacing: 0 10px; /* Adds space between rows */
+}
+
+#bookingTable th, #bookingTable td {
+    border: 1px solid black; /* Black border */
+    padding: 10px;
+    text-align: center;
+}
+
+/* Table headers */
+#bookingTable th {
+    background-color: #007bff; /* Blue background for headers */
+    color: white; /* White text color for headers */
+}
+
+/* Editable input for name cells */
+#bookingTable td input {
+    width: 100%;
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 5px;
+    text-align: center;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+/* Clickable time blocks */
+.time-block {
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+.time-block:hover {
+    background-color: #e0e0e0; /* Light grey on hover */
+}
+
+.time-block.green {
+    background-color: green;
+    color: white;
+}
+
+/* Hidden delete button until booking is made */
+.delete-btn {
+    display: none;
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-btn.visible {
+    display: inline-block;
+}
+
+/* Button styling for booking actions */
+#bookingTable button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 15px; /* Padding for button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth background change */
+}
+
+#bookingTable button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Divider between sections */
+.divider {
+    border: none; /* Remove default border */
+    height: 1px; /* Height of the line */
+    background-color: #ccc; /* Color of the line */
+    margin: 20px 0; /* Spacing above and below the line */
+}
+
+.slot-table h3 {
+    font-size: 18px;
+    color: #333;
+    text-align: left;
+    padding: 10px 0;
+}
+
+.slot-table .day {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.slot-table td {
+    padding: 10px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.slot-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.slot-table tr:hover {
+    background-color: #f1f1f1;
 }
