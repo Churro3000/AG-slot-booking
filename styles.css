@@ -72,32 +72,64 @@ body {
     background-color: #0056b3; /* Darker blue on hover */
 }
 
+/* When button is clicked and enlarged */
+button.large {
+    width: 300px; /* Enlarged width */
+    height: 100px; /* Enlarged height */
+    font-size: 24px; /* Larger font size */
+    padding: 20px; /* Adjust padding for the enlarged button */
+    margin: 0 auto; /* Center the button */
+    display: block;
+}
+
 /* Hidden buttons */
 button.hidden {
     display: none;
 }
 
+/* Back arrow styling */
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: black;
+    cursor: pointer;
+    display: none; /* Hidden by default */
+}
+
+.back-arrow.visible {
+    display: block;
+}
+
 /* Table styling */
-#bookingTable {
+.booking-table {
     width: 100%;
     border-collapse: separate; /* Change to 'separate' */
     border-spacing: 0 10px; /* Adds space between rows */
+    margin-top: 20px; /* Space above the table */
 }
 
-#bookingTable th, #bookingTable td {
-    border: 1px solid black; /* Black border */
+.booking-table th, .booking-table td {
+    border: 1px solid #ddd; /* Light grey border */
     padding: 10px;
     text-align: center;
+    background-color: #f9f9f9; /* Light background for table cells */
+    transition: background-color 0.3s ease; /* Smooth background transition */
 }
 
-/* Table headers */
-#bookingTable th {
+.booking-table th {
     background-color: #007bff; /* Blue background for headers */
     color: white; /* White text color for headers */
 }
 
+/* Hover effect for table cells */
+.booking-table td:hover {
+    background-color: #e0e0e0; /* Light grey on hover */
+}
+
 /* Editable input for name cells */
-#bookingTable td input {
+.booking-table td input {
     width: 100%;
     border: 1px solid #ccc; /* Light grey border */
     border-radius: 4px; /* Rounded corners */
@@ -137,7 +169,7 @@ button.hidden {
 }
 
 /* Button styling for booking actions */
-#bookingTable button {
+.booking-table button {
     background-color: #007bff; /* Blue background */
     color: white; /* White text */
     border: none; /* Remove border */
@@ -147,6 +179,6 @@ button.hidden {
     transition: background-color 0.3s ease; /* Smooth background change */
 }
 
-#bookingTable button:hover {
+.booking-table button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
