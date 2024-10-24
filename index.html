@@ -8,15 +8,16 @@
 </head>
 <body>
     <div class="header">
+        <span class="emoji">&#127993;</span> <!-- Decorative bow and arrow emoji (flipped) -->
         <h1>Active Generation</h1>
-        <span class="emoji">&#127993;</span> <!-- Bow and arrow emoji -->
+        <span id="emoji-btn" class="emoji">&#127993;</span> <!-- Clickable bow and arrow emoji -->
     </div>
 
     <!-- Title -->
     <h1 class="page-title">Book Your Slot!</h1>
 
     <!-- First Container for Saturday -->
-    <div class="container">
+    <div class="container" id="container-saturday">
         <h2>Saturday</h2>
         <table class="booking-table">
             <thead>
@@ -50,7 +51,7 @@
     <div class="padding-space"></div>
 
     <!-- Second Container for Sunday -->
-    <div class="container">
+    <div class="container" id="container-sunday">
         <h2>Sunday</h2>
         <table class="booking-table">
             <thead>
@@ -81,27 +82,37 @@
     </div>
 
     <!-- Third Container with the updated table -->
-<div class="container" id="booking-table-container">
-    <table id="bookingTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Day</th>
-                <th>Time</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="text" placeholder="Enter Name" /></td>
-                <td><input type="text" placeholder="Enter Day" /></td>
-                <td><input type="text" placeholder="Enter Time" /></td>
-                <td><button>Book</button></td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
-</div>
+    <div class="container" id="booking-table-container">
+        <table id="bookingTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="Enter Name" /></td>
+                    <td><input type="text" placeholder="Enter Day" /></td>
+                    <td><input type="text" placeholder="Enter Time" /></td>
+                    <td><button>Book</button></td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+
+      <!-- Fourth container (Coaches Only Zone) -->
+    <div id="coaches-zone" class="hidden">
+        <div class="back-btn" id="back-btn">&#x2190; Back</div> <!-- Back button with left arrow -->
+        <h1 class="coaches-title">Coaches Only Zone!</h1>
+        <div class="container">
+            <h2>Coaches Exclusive Content</h2>
+            <!-- Add content for coaches here -->
+        </div>
+    </div>
 
     <!-- Firebase and app.js -->
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
