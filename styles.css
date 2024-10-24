@@ -211,3 +211,7 @@ body {
     transform: translateY(-50%) scaleX(-1); /* Flip horizontally */
 }
 
+.container .coaches-exclusive-title {
+    font-size: 19px !important; /* Add `!important` to force the change */
+    color: #555555; /* Dark grey */
+}
