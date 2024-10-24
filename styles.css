@@ -211,6 +211,8 @@ body {
     transform: translateY(-50%) scaleX(-1); /* Flip horizontally */
 }
 
+/* --------------------- THIS SECTION IS FOR THE COACHES ONLY ZONE --------------- */
+
 /* CUSTOM TIME SLOT TITLE */
 .container .coaches-exclusive-title {
     font-size: 20px !important; /* Add `!important` to force the change */
