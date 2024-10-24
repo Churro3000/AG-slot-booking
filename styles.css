@@ -1,3 +1,4 @@
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -49,7 +50,7 @@ body {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     text-align: center; /* Center content */
     margin-bottom: 20px; /* Add space between the two containers */
 }
@@ -182,3 +183,32 @@ body {
 #bookingTable button:hover {
     background-color: #0044ff; /* Darker blue on hover */
 }
+
+/* Style for hidden coaches zone */
+.hidden {
+    display: none; /* Hide element */
+}
+
+/* Coaches Zone title styling */
+.coaches-title {
+    font-size: 30px; /* Adjusted font size */
+    margin: 27px 0; /* Margin above and below the title */
+   text-align: center; 
+   font-weight: bold;
+}
+
+/* Style for the back button */
+.back-btn {
+    cursor: pointer; /* Cursor change to pointer on hover */
+    font-size: 18px; /* Adjust font size */
+    color: blue; /* Blue text color */
+    margin-bottom: 20px; /* Space below the button */
+   margin-top: 15px;
+}
+
+/* Decorative bow and arrow emoji on the left (flipped) */
+.header .emoji:first-child {
+    left: -265px; /* Align to the left with some space */
+    transform: translateY(-50%) scaleX(-1); /* Flip horizontally */
+}
+
