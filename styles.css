@@ -5,18 +5,30 @@ body {
     padding: 20px;
 }
 
+/* Header container with red background */
 .header {
     background-color: #c30010; /* Red background */
     padding: 20px; /* Add padding for spacing */
     text-align: center; /* Center the text */
+    position: relative; /* Position relative for positioning the emoji */
 }
 
+/* Title inside the header */
 .header h1 {
     color: white; /* White text color */
     font-family: sans-serif; /* Use sans-serif font */
     font-weight: bold; /* Bold text */
     font-size: 25px; /* Increase the font size */
     margin: 0; /* Remove default margin */
+}
+
+/* Style for the bow and arrow emoji */
+.header .emoji {
+    position: absolute; /* Position it relative to the header */
+    right: 20px; /* Align to the right with some space */
+    top: 50%; /* Align vertically */
+    transform: translateY(-50%); /* Ensure it is vertically centered */
+    font-size: 25px; /* Adjust the size of the emoji */
 }
 
 /* Padding adjustment for title */
