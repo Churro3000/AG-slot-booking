@@ -24,6 +24,7 @@ const containerSaturday = document.getElementById('container-saturday');
 const containerSunday = document.getElementById('container-sunday');
 const coachesZone = document.getElementById('coaches-zone');
 const backBtn = document.getElementById('back-btn');
+const pageTitle = document.querySelector('.page-title'); // Select the page title
 
 // When emoji is clicked, show Coaches Only Zone
 emojiBtn.addEventListener('click', () => {
@@ -31,6 +32,7 @@ emojiBtn.addEventListener('click', () => {
     containerSunday.style.display = 'none'; // Hide Sunday container
     bookingTableContainer.style.display = 'none'; // Hide booking table container
     coachesZone.classList.remove('hidden'); // Show Coaches Only Zone
+    pageTitle.style.display = 'none'; // Hide the title
 });
 
 // When back button is clicked, go back to the main content
@@ -39,4 +41,5 @@ backBtn.addEventListener('click', () => {
     containerSunday.style.display = 'block'; // Show Sunday container
     bookingTableContainer.style.display = 'block'; // Show booking table container
     coachesZone.classList.add('hidden'); // Hide Coaches Only Zone
+    pageTitle.style.display = 'block'; // Show the title again
 });
