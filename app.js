@@ -1,6 +1,7 @@
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, doc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -16,215 +17,26 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Get the form and available slots display
-const bookingForm = document.getElementById('bookingForm');
-const availableSlotsDiv = document.getElementById('availableSlots');
-const bookingTableBody = document.querySelector('#bookingTable tbody');
+// Bow and arrow emoji button
+const emojiBtn = document.getElementById('emoji-btn');
+const bookingTableContainer = document.getElementById('booking-table-container');
+const containerSaturday = document.getElementById('container-saturday');
+const containerSunday = document.getElementById('container-sunday');
+const coachesZone = document.getElementById('coaches-zone');
+const backBtn = document.getElementById('back-btn');
 
-// Saturday and Sunday button handling
-const saturdayButton = document.getElementById('saturdayBtn');
-const sundayButton = document.getElementById('sundayBtn');
-const backArrow = document.getElementById('backArrow');
-const buttonContainer = document.querySelector('.button-container');
-
-// Function to reset the view back to the initial state
-function resetView() {
-    saturdayButton.classList.remove('large', 'hidden');
-    sundayButton.classList.remove('large', 'hidden');
-    buttonContainer.classList.remove('center');
-    backArrow.classList.remove('visible');
-}
-
-// Saturday button click event
-saturdayButton.addEventListener('click', function() {
-    sundayButton.classList.add('hidden'); // Hide Sunday button
-    saturdayButton.classList.add('large'); // Enlarge Saturday button
-    buttonContainer.classList.add('center'); // Center align
-    backArrow.classList.add('visible'); // Show back arrow
+// When emoji is clicked, show Coaches Only Zone
+emojiBtn.addEventListener('click', () => {
+    containerSaturday.style.display = 'none'; // Hide Saturday container
+    containerSunday.style.display = 'none'; // Hide Sunday container
+    bookingTableContainer.style.display = 'none'; // Hide booking table container
+    coachesZone.classList.remove('hidden'); // Show Coaches Only Zone
 });
 
-// Sunday button click event
-sundayButton.addEventListener('click', function() {
-    saturdayButton.classList.add('hidden'); // Hide Saturday button
-    sundayButton.classList.add('large'); // Enlarge Sunday button
-    buttonContainer.classList.add('center'); // Center align
-    backArrow.classList.add('visible'); // Show back arrow
+// When back button is clicked, go back to the main content
+backBtn.addEventListener('click', () => {
+    containerSaturday.style.display = 'block'; // Show Saturday container
+    containerSunday.style.display = 'block'; // Show Sunday container
+    bookingTableContainer.style.display = 'block'; // Show booking table container
+    coachesZone.classList.add('hidden'); // Hide Coaches Only Zone
 });
-
-// Back arrow click event to reset everything
-backArrow.addEventListener('click', function() {
-    resetView();
-});
-
-// Function to display available slots
-async function displayAvailableSlots() {
-    const slots = ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM']; // Example slots
-    availableSlotsDiv.innerHTML = ''; // Clear existing slots
-
-    // Fetch booked slots from Firestore
-    const bookedSlotsSnapshot = await getDocs(collection(db, 'bookedSlots'));
-    const bookedSlots = bookedSlotsSnapshot.docs.map(doc => doc.data().time);
-
-    // Display slots
-    slots.forEach(slot => {
-        const slotDiv = document.createElement('div');
-        slotDiv.textContent = `${slot} - ${bookedSlots.includes(slot) ? 'Booked' : 'Available'}`;
-        availableSlotsDiv.appendChild(slotDiv);
-    });
-}
-
-// Handle form submission
-bookingForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const slot = document.getElementById('slot').value;
-    const archerName = document.getElementById('archerName').value || "Anonymous";
-
-    // Check if the slot is already booked
-    const q = query(collection(db, 'bookedSlots'), where('time', '==', slot));
-    const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
-        // Slot is available, so book it
-        try {
-            await addDoc(collection(db, 'bookedSlots'), {
-                time: slot,
-                archerName: archerName
-            });
-            alert('Slot booked successfully!');
-            displayAvailableSlots();  // Update the slot list
-        } catch (err) {
-            console.error('Error booking slot:', err);
-            alert('Error: ' + err.message);
-        }
-    } else {
-        alert('This slot is already booked!');
-    }
-});
-
-// Create the table with 14 rows and empty time blocks
-for (let i = 0; i < 14; i++) {
-    const row = document.createElement('tr');
-
-    const nameCell = document.createElement('td');
-    const nameInput = document.createElement('input');
-    nameInput.placeholder = "Enter name"; // Add a placeholder for clarity
-    nameCell.appendChild(nameInput);
-
-    const nineToTenCell = document.createElement('td');
-    nineToTenCell.classList.add('time-block');
-    nineToTenCell.innerText = "Available";  // Default to available
-
-    const tenToElevenCell = document.createElement('td');
-    tenToElevenCell.classList.add('time-block');
-    tenToElevenCell.innerText = "Available";  // Default to available
-
-    const actionCell = document.createElement('td');
-    const deleteBtn = document.createElement('button');
-    deleteBtn.classList.add('delete-btn');
-    deleteBtn.innerText = "Delete";
-    deleteBtn.style.display = 'none'; // Initially hidden
-    actionCell.appendChild(deleteBtn);
-
-    row.appendChild(nameCell);
-    row.appendChild(nineToTenCell);
-    row.appendChild(tenToElevenCell);
-    row.appendChild(actionCell);
-    bookingTableBody.appendChild(row);
-
-    // Add click event to the time slots
-    nineToTenCell.addEventListener('click', () => toggleSlot(nineToTenCell, i));
-    tenToElevenCell.addEventListener('click', () => toggleSlot(tenToElevenCell, i));
-
-    // Add event listener for name input changes
-    nameInput.addEventListener('input', () => {
-        if (nameInput.value !== "") {
-            deleteBtn.style.display = 'block'; // Show delete button when name is entered
-        } else {
-            deleteBtn.style.display = 'none'; // Hide delete button when name is empty
-        }
-    });
-
-    // Delete booking
-    deleteBtn.addEventListener('click', () => {
-        nameInput.value = "";
-        nineToTenCell.classList.remove('green');
-        nineToTenCell.innerText = "Available"; // Reset text to available
-        tenToElevenCell.classList.remove('green');
-        tenToElevenCell.innerText = "Available"; // Reset text to available
-        deleteBtn.style.display = 'none';
-
-        // Remove from Firestore
-        deleteBooking(i);
-    });
-}
-
-// Toggle booking slot
-function toggleSlot(cell, rowIndex) {
-    if (cell.classList.contains('green')) {
-        cell.classList.remove('green');
-        cell.innerText = "Available"; // Reset text to available
-        // Update Firestore
-        updateBooking(rowIndex, false);
-    } else {
-        cell.classList.add('green');
-        cell.innerText = "Booked"; // Update text to booked
-        // Update Firestore
-        updateBooking(rowIndex, true);
-    }
-}
-
-// Update booking in Firestore
-async function updateBooking(rowIndex, isBooked) {
-    const nameInput = bookingTableBody.children[rowIndex].querySelector('td input');
-    const rowData = {
-        name: nameInput.value,
-        nineToTen: bookingTableBody.children[rowIndex].children[1].classList.contains('green'),
-        tenToEleven: bookingTableBody.children[rowIndex].children[2].classList.contains('green')
-    };
-
-    // Save or update to Firestore
-    const docRef = doc(db, 'bookedSlots', rowIndex.toString());
-    await setDoc(docRef, rowData);
-}
-
-// Delete booking from Firestore
-async function deleteBooking(docId) {
-    const docRef = doc(db, 'bookedSlots', docId.toString());
-    await deleteDoc(docRef);
-}
-
-// Load existing bookings from Firestore
-async function loadBookings() {
-    const snapshot = await getDocs(collection(db, "bookedSlots"));
-    snapshot.forEach(doc => {
-        const data = doc.data();
-        const rowIndex = parseInt(doc.id); // Assuming the document ID corresponds to the row index
-        const row = bookingTableBody.children[rowIndex];
-
-        // Set name
-        row.querySelector('td input').value = data.name;
-
-        // Set time slots
-        if (data.nineToTen) {
-            row.children[1].classList.add('green');
-            row.children[1].innerText = "Booked"; // Update text to booked
-        }
-        if (data.tenToEleven) {
-            row.children[2].classList.add('green');
-            row.children[2].innerText = "Booked"; // Update text to booked
-        }
-
-        // Show delete button if booked
-        if (data.name) {
-            row.querySelector('.delete-btn').style.display = 'block';
-        }
-    });
-}
-
-// Call loadBookings on page load
-window.onload = async () => {
-    await loadBookings();
-    displayAvailableSlots();
-};
-
