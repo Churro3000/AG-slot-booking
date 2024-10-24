@@ -202,7 +202,7 @@ body {
     font-size: 18px; /* Adjust font size */
     color: blue; /* Blue text color */
     margin-bottom: 20px; /* Space below the button */
-   margin-top: 15px;
+    margin-top: 15px;
 }
 
 /* Decorative bow and arrow emoji on the left (flipped) */
@@ -211,7 +211,50 @@ body {
     transform: translateY(-50%) scaleX(-1); /* Flip horizontally */
 }
 
+/* CUSTOM TIME SLOT TITLE */
 .container .coaches-exclusive-title {
-    font-size: 19px !important; /* Add `!important` to force the change */
+    font-size: 20px !important; /* Add `!important` to force the change */
     color: #555555; /* Dark grey */
+    padding-top: 10px;
+}
+
+/* Flexbox layout for days section */
+.days-section {
+    display: flex;
+    justify-content: 25px; /* Space between Saturday and Sunday sections */
+    margin-top: 35px; /* Add some space below the Coaches Exclusive title */
+    padding-right: 15px;
+}
+
+/* Column styling for Saturday and Sunday */
+.day-column {
+    width: 45%; /* Each column takes up 45% of the width */
+}
+
+/* Style for the Saturday and Sunday titles */
+.checkbox-row {
+    display: flex;
+    justify-content: flex-end; /* Align the label and checkbox to the right */
+    align-items: center; /* Vertically center the checkbox and text */
+    margin-bottom: 10px; /* Add space between rows */
+}
+
+.custom-title {
+    font-size: 19px; /* Custom font size */
+    color: black; /* Black text color */
+    margin-right: 10px; /* Space between label and checkbox */
+}
+
+/* Style for the checkboxes */
+.checkbox-row input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+/* Customizing the checkbox */
+.checkbox-row input[type="checkbox"] {
+    width: 25px;  /* Make the checkbox larger */
+    height: 25px; /* Make the checkbox larger */
+    border: 2px solid black; /* Add a black border to make it stand out */
+    cursor: pointer; /* Make it more interactive with a pointer cursor */
 }
