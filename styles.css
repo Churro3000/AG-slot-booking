@@ -260,3 +260,8 @@ body {
     border: 2px solid black; /* Add a black border to make it stand out */
     cursor: pointer; /* Make it more interactive with a pointer cursor */
 }
+
+/* New CSS - Hides the 4th container initially */
+.hidden {
+    display: none;
+}
