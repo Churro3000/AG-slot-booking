@@ -24,6 +24,7 @@ const containerSunday = document.getElementById('container-sunday');
 const coachesZone = document.getElementById('coaches-zone');
 const backBtn = document.getElementById('back-btn');
 const pageTitle = document.querySelector('.page-title'); // Select the page title
+const manageTimeSlotsContainer = document.getElementById('manage-time-slots'); // Fourth container
 
 // When emoji is clicked, show Coaches Only Zone
 emojiBtn.addEventListener('click', () => {
@@ -32,6 +33,7 @@ emojiBtn.addEventListener('click', () => {
     bookingTableContainer.style.display = 'none'; // Hide booking table container
     coachesZone.classList.remove('hidden'); // Show Coaches Only Zone
     pageTitle.style.display = 'none'; // Hide the title
+    manageTimeSlotsContainer.classList.remove('hidden'); // New Code: Show manage time slots container
 });
 
 // When back button is clicked, go back to the main content
@@ -41,4 +43,5 @@ backBtn.addEventListener('click', () => {
     bookingTableContainer.style.display = 'block'; // Show booking table container
     coachesZone.classList.add('hidden'); // Hide Coaches Only Zone
     pageTitle.style.display = 'block'; // Show the title again
+    manageTimeSlotsContainer.classList.add('hidden'); // New Code: Hide manage time slots container
 });
