@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> <!-- Compatibility meta tag -->
     <title>Archery Slot Booking</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,7 +15,7 @@
     </div>
 
     <!-- Title -->
-    <h1 class="page-title">Book Your Slot!</h1>
+    <h2 class="page-title">Book Your Slot!</h2> <!-- Changed to h2 for semantic structure -->
 
     <!-- First Container for Saturday -->
     <div class="container" id="container-saturday">
@@ -104,74 +105,70 @@
         </table>
     </div>
    
-   
     <!-- Fourth container (Coaches Only Zone TITLE) -->
     <div id="coaches-zone" class="hidden">
         <div class="back-btn" id="back-btn">&#x2190; Back</div> <!-- Back button with left arrow -->
         <h1 class="coaches-title">Coaches Only Zone!</h1>
     </div>
 
-   
     <!-- Fourth Container (Coaches Only Zone CONTAINER and SECOND TITLE) -->
-<div id="manage-time-slots" class="container hidden"> <!-- Added id and hidden class -->
-    <h2 class="coaches-exclusive-title">Manage Time Slots</h2>
-   <!-- Tickable Time Slots for Saturday and Sunday for Coaches Only Zone -->
-  <!-- Start of 4th container -->
-    <div class="fourth-container">
-        <div class="days-section">
-            <!-- Saturday section -->
-            <div class="day-column">
-                <div class="checkbox-row">
-                    <label for="saturday" class="custom-title">Saturday</label>
-                    <input type="checkbox" id="saturday">
+    <div id="manage-time-slots" class="container hidden"> <!-- Added id and hidden class -->
+        <h2 class="coaches-exclusive-title">Manage Time Slots</h2>
+        <!-- Tickable Time Slots for Saturday and Sunday for Coaches Only Zone -->
+        <div class="fourth-container">
+            <div class="days-section">
+                <!-- Saturday section -->
+                <div class="day-column">
+                    <div class="checkbox-row">
+                        <label for="saturday" class="custom-title">Saturday</label>
+                        <input type="checkbox" id="saturday">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time1" class="custom-title">8-9</label>
+                        <input type="checkbox" id="time1">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time2" class="custom-title">9-10</label>
+                        <input type="checkbox" id="time2">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time3" class="custom-title">10-11</label>
+                        <input type="checkbox" id="time3">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time4" class="custom-title">11-12</label>
+                        <input type="checkbox" id="time4">
+                    </div>
                 </div>
-                <div class="checkbox-row">
-                    <label for="time1" class="custom-title">8-9</label>
-                    <input type="checkbox" id="time1">
-                </div>
-                <div class="checkbox-row">
-                    <label for="time2" class="custom-title">9-10</label>
-                    <input type="checkbox" id="time2">
-                </div>
-                <div class="checkbox-row">
-                    <label for="time3" class="custom-title">10-11</label>
-                    <input type="checkbox" id="time3">
-                </div>
-                <div class="checkbox-row">
-                    <label for="time4" class="custom-title">11-12</label>
-                    <input type="checkbox" id="time4">
-                </div>
-            </div>
 
-   <!------------- Sunday section --------------->
-            <div class="day-column">
-                <div class="checkbox-row">
-                    <label for="sunday" class="custom-title">Sunday</label>
-                    <input type="checkbox" id="sunday">
-                </div>
-                <div class="checkbox-row">
-                    <label for="time5" class="custom-title">8-9</label>
-                    <input type="checkbox" id="time5">
-                </div>
-                <div class="checkbox-row">
-                    <label for="time6" class="custom-title">9-10</label>
-                    <input type="checkbox" id="time6">
-                </div>
-                <div class="checkbox-row">
-                    <label for="time7" class="custom-title">10-11</label>
-                    <input type="checkbox" id="time7">
-                </div>
-                <div class="checkbox-row">
-                    <label for="time8" class="custom-title">11-12</label>
-                    <input type="checkbox" id="time8">
+                <!-- Sunday section -->
+                <div class="day-column">
+                    <div class="checkbox-row">
+                        <label for="sunday" class="custom-title">Sunday</label>
+                        <input type="checkbox" id="sunday">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time5" class="custom-title">8-9</label>
+                        <input type="checkbox" id="time5">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time6" class="custom-title">9-10</label>
+                        <input type="checkbox" id="time6">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time7" class="custom-title">10-11</label>
+                        <input type="checkbox" id="time7">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time8" class="custom-title">11-12</label>
+                        <input type="checkbox" id="time8">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
     <!-- End of 4th container -->
    
-
     <!-- Firebase and app.js -->
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
