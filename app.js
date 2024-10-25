@@ -45,3 +45,61 @@ backBtn.addEventListener('click', () => {
     pageTitle.style.display = 'block'; // Show the title again
     manageTimeSlotsContainer.classList.add('hidden'); // New Code: Hide manage time slots container
 });
+
+// TICK-BOX Selecting the checkboxes for Saturday and Sunday
+const saturdayCheckbox = document.getElementById('saturday');
+const sundayCheckbox = document.getElementById('sunday');
+
+// TICK-BOX Function to update Saturday checkbox based on time slots
+function updateSaturdayCheckbox() {
+    const timeSlots = [document.getElementById('time1'), document.getElementById('time2'), document.getElementById('time3'), document.getElementById('time4')];
+    saturdayCheckbox.checked = timeSlots.some(checkbox => checkbox.checked);
+}
+
+// TICK-BOX Function to update Sunday checkbox based on time slots
+function updateSundayCheckbox() {
+    const timeSlots = [document.getElementById('time5'), document.getElementById('time6'), document.getElementById('time7'), document.getElementById('time8')];
+    sundayCheckbox.checked = timeSlots.some(checkbox => checkbox.checked);
+}
+
+// TICK-BOX Adding event listeners to Saturday time slots
+document.getElementById('time1').addEventListener('change', updateSaturdayCheckbox);
+document.getElementById('time2').addEventListener('change', updateSaturdayCheckbox);
+document.getElementById('time3').addEventListener('change', updateSaturdayCheckbox);
+document.getElementById('time4').addEventListener('change', updateSaturdayCheckbox);
+
+// TICK-BOX Adding event listeners to Sunday time slots
+document.getElementById('time5').addEventListener('change', updateSundayCheckbox);
+document.getElementById('time6').addEventListener('change', updateSundayCheckbox);
+document.getElementById('time7').addEventListener('change', updateSundayCheckbox);
+document.getElementById('time8').addEventListener('change', updateSundayCheckbox);
+
+// TICK-BOX Function to untick all Saturday time slots
+function untickSaturdayTimeSlots() {
+    const timeSlots = [document.getElementById('time1'), document.getElementById('time2'), document.getElementById('time3'), document.getElementById('time4')];
+    timeSlots.forEach(checkbox => {
+        checkbox.checked = false; // Untick each checkbox
+    });
+}
+
+// TICK-BOX Function to untick all Sunday time slots
+function untickSundayTimeSlots() {
+    const timeSlots = [document.getElementById('time5'), document.getElementById('time6'), document.getElementById('time7'), document.getElementById('time8')];
+    timeSlots.forEach(checkbox => {
+        checkbox.checked = false; // Untick each checkbox
+    });
+}
+
+// TICK-BOX Adding event listeners to Saturday checkbox
+saturdayCheckbox.addEventListener('change', function() {
+    if (!saturdayCheckbox.checked) {
+        untickSaturdayTimeSlots(); // Untick all time slots if Saturday checkbox is unticked
+    }
+});
+
+// TICK-BOX Adding event listeners to Sunday checkbox
+sundayCheckbox.addEventListener('change', function() {
+    if (!sundayCheckbox.checked) {
+        untickSundayTimeSlots(); // Untick all time slots if Sunday checkbox is unticked
+    }
+});
