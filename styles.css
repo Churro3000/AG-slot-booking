@@ -261,7 +261,52 @@ body {
     cursor: pointer; /* Make it more interactive with a pointer cursor */
 }
 
-/* New CSS - Hides the 4th container initially */
+/* CSS - Hides the 4th container initially */
 .hidden {
     display: none;
 }
+
+/*--------------- THIRD CONTAINER Styling for the '+' button in the booking table --------------------------*/
+.add-button-cell {
+    text-align: center;
+    padding: 10px;
+}
+
+.add-button {
+    background-color: green !important;
+    color: white; /* White '+' symbol */
+    border: none; /* Remove border */
+    border-radius: 50% !important; /* Circular button */
+    font-size: 35px; /* Larger '+' symbol */
+    width: 40px; /* Width of button */
+    height: 40px; /* Height of button */
+    cursor: pointer; /* Pointer on hover */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-button:hover {
+    background-color: #113822 !important; /* Darker green on hover */
+}
+
+/* THIRD CONTAINER Styling for the select (dropdown) elements */
+.select-dropdown {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+/* THIRD CONTAINER Style for the "Remove" button container to make it narrower */
+.remove-button {
+    width: 40px !important; /* Adjust width as desired */
+    padding: 5px; /* Adjust padding to fit within new width */
+    font-size: 14px; /* Adjust font size if needed */
+    text-align: center;
+}
+
+
+
