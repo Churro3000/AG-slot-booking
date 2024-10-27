@@ -103,3 +103,69 @@ sundayCheckbox.addEventListener('change', function() {
         untickSundayTimeSlots(); // Untick all time slots if Sunday checkbox is unticked
     }
 });
+
+
+/*------- "+" BUTTON FOR THIRD CONTAINER for the booking table --------*/
+
+// NEW: Function to add an empty row above the '+' button
+function addEmptyRow() {
+    const bookingTable = document.getElementById("bookingTable").getElementsByTagName('tbody')[0];
+
+    // Create new row and cells
+    const newRow = document.createElement("tr");
+
+    // NEW: Name cell with input field
+    const nameCell = document.createElement("td");
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.placeholder = "Enter name";
+    nameCell.appendChild(nameInput);
+
+    // NEW: Day cell with dropdown
+    const dayCell = document.createElement("td");
+    const daySelect = document.createElement("select");
+    daySelect.className = "select-dropdown";
+    ["Saturday", "Sunday"].forEach(day => {
+        const option = document.createElement("option");
+        option.value = day;
+        option.text = day;
+        daySelect.appendChild(option);
+    });
+    dayCell.appendChild(daySelect);
+
+    // NEW: Time cell with dropdown
+    const timeCell = document.createElement("td");
+    const timeSelect = document.createElement("select");
+    timeSelect.className = "select-dropdown";
+    ["8-9", "9-10", "10-11", "11-12"].forEach(time => {
+        const option = document.createElement("option");
+        option.value = time;
+        option.text = time;
+        timeSelect.appendChild(option);
+    });
+    timeCell.appendChild(timeSelect);
+
+    // NEW: Action cell with remove button
+    const actionCell = document.createElement("td");
+    const removeButton = document.createElement("button");
+    removeButton.innerText = "Remove";
+    removeButton.onclick = function() {
+        bookingTable.removeChild(newRow);
+    };
+    actionCell.appendChild(removeButton);
+
+    // Append cells to row
+    newRow.appendChild(nameCell);
+    newRow.appendChild(dayCell);
+    newRow.appendChild(timeCell);
+    newRow.appendChild(actionCell);
+
+    // Insert the new row above the '+' button row
+    const addButtonRow = bookingTable.lastElementChild;
+    bookingTable.insertBefore(newRow, addButtonRow);
+}
+
+// Add this in `script.js`
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector(".add-button").addEventListener("click", addEmptyRow);
+});
