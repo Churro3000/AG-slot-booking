@@ -82,7 +82,7 @@
         </table>
     </div>
 
-    <!-- Third Container with the updated table -->
+    <!-- Third Container with Booking Table and Add Button -->
     <div class="container" id="booking-table-container">
         <table id="bookingTable">
             <thead>
@@ -94,16 +94,18 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- '+' button row -->
                 <tr>
-                    <td><input type="text" placeholder="Enter Name" /></td>
-                    <td><input type="text" placeholder="Enter Day" /></td>
-                    <td><input type="text" placeholder="Enter Time" /></td>
-                    <td><button>Book</button></td>
+                    <td colspan="4" class="add-button-cell">
+                        <button class="add-button" onclick="addEmptyRow()">+</button> <!-- NEW: Add button with onclick handler -->
+                    </td>
                 </tr>
-                <!-- Add more rows as needed -->
             </tbody>
         </table>
     </div>
+   
+   <script src="script.js"></script>
+
    
     <!-- Fourth container (Coaches Only Zone TITLE) -->
     <div id="coaches-zone" class="hidden">
