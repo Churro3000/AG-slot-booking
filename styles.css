@@ -282,7 +282,7 @@ body {
     cursor: pointer;
     border: 1px solid #ddd;
     border-radius: 50px;
-    background-color: #b4b4b4;
+    background-color: #d4d4d4;
     transition: background-color 0.3s ease;
     margin-top: 25px;
     height: 55px;
@@ -295,11 +295,17 @@ body {
 }
 
 .content {
-    margin: 20px;
-    padding: 15px;
+    margin: 50px;
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 3px;
     display: none; /* Initially hidden */
+    margin-top: 27px;
+    text-align: center;
+    height: 15px;
+    background-color: black;
+    color: white;
+    margin-bottom: 10px;
 }
 
 .content.hidden {
@@ -317,7 +323,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 25px;
     
 }
 
@@ -347,14 +353,14 @@ body {
 
 
 
-/* : Time Slots Grid */
+/* NEW CODE: Time Slots Grid */
 .time-slots-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .time-slot-btn {
@@ -362,6 +368,73 @@ body {
     cursor: pointer;
 }
 
+.hidden {
+    display: none !Important;
+}
+
+
+/*----------------------------------------------------*/
+
+/* NEWEST: Dynamic Table Title Styling */
+.table-title {
+    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    margin: 20px 0;
+    margin-top: 45px;
+}
+
+/* NEWEST: Slots Container Styling */
+.slots-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* NEWEST: Slot Box Styling */
+.slot-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0e4d92;
+    padding: 10px;
+    width: 290px;
+    height: 50px;
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.slot-box input[type="text"] {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    margin-right: 10px;
+    margin-left: 2px;
+    border-radius: 5px;
+}
+
+.slot-box input[type="text"]:focus {
+    outline: none;
+}
+
+.slot-box button {
+    background-color: white;
+    color: #0e4d92;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    height: 35px;
+    width: 90px;
+}
+
+.slot-box button:hover {
+    background-color: black;
+    color: white;
+}
 
 
 
