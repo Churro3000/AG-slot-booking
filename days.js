@@ -46,13 +46,16 @@ sundayBtn.addEventListener('click', () => {
     showTimeSlots();
 });
 
-// NEW CODE: Hide Time Slots on Page Load
+// Hide Time Slots on Page Load
 hideTimeSlots();
 
-// NEW CODE: Add Event Listeners for Time Slot Buttons
+//  Add Event Listeners for Time Slot Buttons
 document.querySelectorAll('.time-slot-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-        alert(`You clicked the ${btn.textContent} time slot`);
+        //  Removed the alert and call the function to create the booking slots
+        const day = document.querySelector('.day-btn.active').textContent; // Get active day
+        const time = btn.textContent; // Get time slot text
+        createBookingSlots(day, time); // Generate booking slots dynamically
     });
 });
 
@@ -63,7 +66,7 @@ const dynamicTableContainer = document.getElementById('dynamic-table-container')
 const tableTitle = document.getElementById('table-title');
 const slotsContainer = document.querySelector('.slots-container');
 
-// NEWEST: Function to Create Booking Slots
+//  Function to Create Booking Slots
 function createBookingSlots(day, time) {
     // Set the title
     tableTitle.textContent = `${day} ${time}`;
