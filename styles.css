@@ -266,46 +266,47 @@ body {
     display: none;
 }
 
-/*--------------- THIRD CONTAINER Styling for the '+' button in the booking table --------------------------*/
-.add-button-cell {
+/*------- Styling for the 'BUTTONS SAT n SUN' button in the booking table ----------------*/
+/*-- NEW CODE: Add a style block for the required animations and layout --*/
+   
+ /* Button Container Styling */
+.days-container {
     text-align: center;
-    padding: 10px;
+    margin: 20px 0;
 }
 
-.add-button {
-    background-color: green !important;
-    color: white; /* White '+' symbol */
-    border: none; /* Remove border */
-    border-radius: 50% !important; /* Circular button */
-    font-size: 35px; /* Larger '+' symbol */
-    width: 40px; /* Width of button */
-    height: 40px; /* Height of button */
-    cursor: pointer; /* Pointer on hover */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.add-button:hover {
-    background-color: #113822 !important; /* Darker green on hover */
-}
-
-/* THIRD CONTAINER Styling for the select (dropdown) elements */
-.select-dropdown {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
+.day-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
     cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    background-color: #f5f5f5;
+    transition: background-color 0.3s ease;
+    margin-top: 25px;
 }
 
-/* THIRD CONTAINER Style for the "Remove" button container to make it narrower */
-.remove-button {
-    width: 40px !important; /* Adjust width as desired */
-    padding: 5px; /* Adjust padding to fit within new width */
-    font-size: 14px; /* Adjust font size if needed */
-    text-align: center;
+.day-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.content {
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: none; /* Initially hidden */
+}
+
+.content.hidden {
+    display: none;
+}
+
+.content:not(.hidden) {
+    display: block;
 }
 
 
