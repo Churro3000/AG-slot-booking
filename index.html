@@ -82,29 +82,26 @@
         </table>
     </div>
 
-    <!-- Third Container with Booking Table and Add Button -->
-    <div class="container" id="booking-table-container">
-        <table id="bookingTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Day</th>
-                    <th>Time</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- '+' button row -->
-                <tr>
-                    <td colspan="4" class="add-button-cell">
-                        <button class="add-button" onclick="addEmptyRow()">+</button> <!-- NEW: Add button with onclick handler -->
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-   
-   <script src="script.js"></script>
+     <!--------------- SAT AND SUN Main buttons --------------->
+    <div class="days-container">
+    <button id="saturday-btn" class="day-btn">Saturday</button>
+    <button id="sunday-btn" class="day-btn">Sunday</button>
+</div>
+
+<!-- Content for Saturday -->
+<div id="saturday-content" class="content hidden">
+    <h2>Saturday Times</h2>
+    <p>Details for Saturday will appear here.</p>
+</div>
+
+<!-- Content for Sunday -->
+<div id="sunday-content" class="content hidden">
+    <h2>Sunday Times</h2>
+    <p>Details for Sunday will appear here.</p>
+</div>
+
+<!-- Include the new JavaScript file -->
+<script src="days.js"></script>
 
    
     <!-- Fourth container (Coaches Only Zone TITLE) -->
