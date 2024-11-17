@@ -267,7 +267,7 @@ body {
 }
 
 /*------- Styling for the 'BUTTONS SAT n SUN' button in the booking table ----------------*/
-/*-- NEW CODE: Add a style block for the required animations and layout --*/
+/*-- : Add a style block for the required animations and layout --*/
    
  /* Button Container Styling */
 .days-container {
@@ -278,13 +278,14 @@ body {
 .day-btn {
     padding: 10px 20px;
     margin: 0 10px;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
     border: 1px solid #ddd;
     border-radius: 50px;
-    background-color: #f5f5f5;
+    background-color: #b4b4b4;
     transition: background-color 0.3s ease;
     margin-top: 25px;
+    height: 55px;
 }
 
 .day-btn.active {
@@ -308,6 +309,59 @@ body {
 .content:not(.hidden) {
     display: block;
 }
+
+
+
+/* : Time Slot Buttons Styling */
+#time-slots-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    
+}
+
+.time-slot-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.time-slot-btn {
+    padding: 10px 20px;
+    font-size: 20px;
+    border: none;
+    border-radius: 50px;
+    background-color: #0e4d92;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 95px;
+    height: 60px;
+}
+
+.time-slot-btn:hover {
+    background-color: black;
+}
+
+
+
+/* : Time Slots Grid */
+.time-slots-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.time-slot-btn {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
 
 
 
