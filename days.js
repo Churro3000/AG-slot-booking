@@ -1,3 +1,21 @@
+// Import Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
+    authDomain: "archer-slot-booking.firebaseapp.com",
+    projectId: "archer-slot-booking",
+    storageBucket: "archer-slot-booking",
+    messagingSenderId: "96539149968",
+    appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 // Select Buttons
 const saturdayBtn = document.getElementById('saturday-btn');
 const sundayBtn = document.getElementById('sunday-btn');
@@ -6,8 +24,11 @@ const sundayBtn = document.getElementById('sunday-btn');
 const saturdayContent = document.getElementById('saturday-content');
 const sundayContent = document.getElementById('sunday-content');
 
-// NEW CODE: Select Time Slots Container
+// Select Time Slots Container
 const timeSlotsContainer = document.getElementById('time-slots-container');
+const dynamicTableContainer = document.getElementById('dynamic-table-container');
+const tableTitle = document.getElementById('table-title');
+const slotsContainer = document.querySelector('.slots-container');
 
 // Function to Show Time Slots
 function showTimeSlots() {
@@ -21,53 +42,26 @@ function hideTimeSlots() {
 
 // Add Event Listeners for Buttons
 saturdayBtn.addEventListener('click', () => {
-    // Activate Saturday Button
     saturdayBtn.classList.add('active');
     sundayBtn.classList.remove('active');
-
-    // Show Saturday Content
     saturdayContent.classList.remove('hidden');
     sundayContent.classList.add('hidden');
-
-    // Show Time Slots
     showTimeSlots();
 });
 
 sundayBtn.addEventListener('click', () => {
-    // Activate Sunday Button
     sundayBtn.classList.add('active');
     saturdayBtn.classList.remove('active');
-
-    // Show Sunday Content
     sundayContent.classList.remove('hidden');
     saturdayContent.classList.add('hidden');
-
-    // Show Time Slots
     showTimeSlots();
 });
 
 // Hide Time Slots on Page Load
 hideTimeSlots();
 
-//  Add Event Listeners for Time Slot Buttons
-document.querySelectorAll('.time-slot-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-        //  Removed the alert and call the function to create the booking slots
-        const day = document.querySelector('.day-btn.active').textContent; // Get active day
-        const time = btn.textContent; // Get time slot text
-        createBookingSlots(day, time); // Generate booking slots dynamically
-    });
-});
-
-//-----------------------------------------------------------------------------------
-
-// Select dynamic table container
-const dynamicTableContainer = document.getElementById('dynamic-table-container');
-const tableTitle = document.getElementById('table-title');
-const slotsContainer = document.querySelector('.slots-container');
-
-//  Function to Create Booking Slots
-function createBookingSlots(day, time) {
+// Function to Create Booking Slots
+async function createBookingSlots(day, time) {
     // Set the title
     tableTitle.textContent = `${day} ${time}`;
 
@@ -88,6 +82,35 @@ function createBookingSlots(day, time) {
         const button = document.createElement('button');
         button.textContent = 'Book';
 
+        // Add booking functionality
+        button.addEventListener('click', async () => {
+            const name = input.value.trim();
+
+            if (name === '') {
+                alert('Please enter a name to book the slot.');
+                return;
+            }
+
+            // Mark slot as booked
+            slotBox.style.backgroundColor = 'green';
+            slotBox.textContent = name;
+            slotBox.style.fontSize = '1.2em';
+            slotBox.style.color = 'white';
+
+            // Save booking to Firebase
+            try {
+                await addDoc(collection(db, 'bookings'), {
+                    day,
+                    time,
+                    slot: i,
+                    name,
+                });
+                console.log(`Slot ${i} booked successfully.`);
+            } catch (error) {
+                console.error('Error booking slot: ', error);
+            }
+        });
+
         // Add input and button to the slot box
         slotBox.appendChild(input);
         slotBox.appendChild(button);
@@ -103,13 +126,8 @@ function createBookingSlots(day, time) {
 // Add Event Listeners for Time Slot Buttons
 document.querySelectorAll('.time-slot-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-        // Determine the day based on active button
         const day = document.querySelector('.day-btn.active').textContent;
-
-        // Get the time from the button's text
         const time = btn.textContent;
-
-        // Create and display the booking slots
         createBookingSlots(day, time);
     });
 });
