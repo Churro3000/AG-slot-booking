@@ -56,7 +56,6 @@ document.querySelectorAll('.time-slot-btn').forEach((btn) => {
     });
 });
 
-
 //-----------------------------------------------------------------------------------
 
 // Select dynamic table container
