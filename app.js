@@ -1,3 +1,5 @@
+import { app, db } from './fbc.js';
+
 // Bow and arrow emoji button
 const emojiBtn = document.getElementById('emoji-btn');
 const bookingTableContainer = document.getElementById('booking-table-container');
