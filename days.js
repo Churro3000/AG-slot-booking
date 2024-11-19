@@ -1,20 +1,4 @@
-// Import Firebase modules
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
-// Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAZ2BEsDvVRv9GIoNyA1wkIW4FqpTTcuxA",
-    authDomain: "archer-slot-booking.firebaseapp.com",
-    projectId: "archer-slot-booking",
-    storageBucket: "archer-slot-booking",
-    messagingSenderId: "96539149968",
-    appId: "1:96539149968:web:23d9987e0a0cf2e1137a15"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { app, db } from './fbc.js';
 
 // Select Buttons
 const saturdayBtn = document.getElementById('saturday-btn');
