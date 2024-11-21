@@ -82,6 +82,32 @@
         </table>
     </div>
 
+<!-- Third Container with Booking Table and Add Button -->
+    <div class="container" id="booking-table-container">
+        <table id="bookingTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Day</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- '+' button row -->
+                <tr>
+                    <td colspan="4" class="add-button-cell">
+                        <button class="add-button" onclick="addEmptyRow()">+</button> <!-- NEW: Add button with onclick handler -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+   
+   <script src="script.js"></script>
+
+
+    
       <!-- SATURDAY N SUNDAY: Main buttons -->
     <div class="days-container">
     <button id="saturday-btn" class="day-btn">Saturday</button>
