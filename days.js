@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,17 +22,10 @@ export { app, db };
 // Select Buttons
 const saturdayBtn = document.getElementById('saturday-btn');
 const sundayBtn = document.getElementById('sunday-btn');
-const emojiBtn = document.getElementById('emoji-btn'); // Bow and arrow emoji button
-
-// Select the bottom boxes (assuming they are adjacent to the buttons)
-const saturdayBtnBox = document.querySelector('.saturday-btn-box'); // Update with correct class or id
-const sundayBtnBox = document.querySelector('.sunday-btn-box'); // Update with correct class or id
 
 // Select Content Sections
 const saturdayContent = document.getElementById('saturday-content');
 const sundayContent = document.getElementById('sunday-content');
-const coachesZone = document.getElementById('coaches-zone'); // Coaches Only Zone
-const manageTimeSlots = document.getElementById('manage-time-slots'); // Manage Time Slots container
 
 // Select Time Slots Container
 const timeSlotsContainer = document.getElementById('time-slots-container');
@@ -40,44 +33,15 @@ const dynamicTableContainer = document.getElementById('dynamic-table-container')
 const tableTitle = document.getElementById('table-title');
 const slotsContainer = document.querySelector('.slots-container');
 
-// Function to Show Main Page and Hide Coaches Zone
-function showMainPage() {
-    coachesZone.classList.add('hidden'); // Hide Coaches Zone
-    manageTimeSlots.classList.add('hidden'); // Hide time management slots
-    saturdayContent.classList.remove('hidden'); // Show Saturday content
-    sundayContent.classList.remove('hidden'); // Show Sunday content
-    timeSlotsContainer.classList.remove('hidden'); // Show time slots container
-    saturdayBtn.classList.remove('hidden'); // Show Saturday button
-    sundayBtn.classList.remove('hidden'); // Show Sunday button
-
-    // Hide the black rectangles below buttons
-    if (saturdayBtnBox) saturdayBtnBox.classList.add('hidden');
-    if (sundayBtnBox) sundayBtnBox.classList.add('hidden');
+// Function to Show Time Slots
+function showTimeSlots() {
+    timeSlotsContainer.classList.remove('hidden');
 }
 
-// Function to Show Coaches Zone and Hide Main Page
-function showCoachesZone() {
-    coachesZone.classList.remove('hidden'); // Show Coaches Zone
-    manageTimeSlots.classList.remove('hidden'); // Show time management slots
-    saturdayContent.classList.add('hidden'); // Hide Saturday content
-    sundayContent.classList.add('hidden'); // Hide Sunday content
-    timeSlotsContainer.classList.add('hidden'); // Hide time slots container
-    saturdayBtn.classList.add('hidden'); // Hide Saturday button
-    sundayBtn.classList.add('hidden'); // Hide Sunday button
-
-    // Optionally, show the black rectangles again (if needed)
-    if (saturdayBtnBox) saturdayBtnBox.classList.remove('hidden');
-    if (sundayBtnBox) sundayBtnBox.classList.remove('hidden');
+// Function to Hide Time Slots
+function hideTimeSlots() {
+    timeSlotsContainer.classList.add('hidden');
 }
-
-// Add Event Listener for Emoji Button
-emojiBtn.addEventListener('click', () => {
-    if (coachesZone.classList.contains('hidden')) {
-        showCoachesZone(); // Switch to Coaches Zone
-    } else {
-        showMainPage(); // Switch back to Main Page
-    }
-});
 
 // Add Event Listeners for Buttons
 saturdayBtn.addEventListener('click', () => {
@@ -85,7 +49,7 @@ saturdayBtn.addEventListener('click', () => {
     sundayBtn.classList.remove('active');
     saturdayContent.classList.remove('hidden');
     sundayContent.classList.add('hidden');
-    timeSlotsContainer.classList.remove('hidden');
+    showTimeSlots();
 });
 
 sundayBtn.addEventListener('click', () => {
@@ -93,11 +57,11 @@ sundayBtn.addEventListener('click', () => {
     saturdayBtn.classList.remove('active');
     sundayContent.classList.remove('hidden');
     saturdayContent.classList.add('hidden');
-    timeSlotsContainer.classList.remove('hidden');
+    showTimeSlots();
 });
 
-// Function to Hide Slots Initially
-showMainPage(); // Ensure Main Page is visible on page load
+// Hide Time Slots on Page Load
+hideTimeSlots();
 
 // Function to Create Booking Slots
 async function createBookingSlots(day, time) {
