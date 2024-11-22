@@ -213,18 +213,11 @@ body {
 
 /* --------------------- THIS SECTION IS FOR THE COACHES ONLY ZONE --------------- */
 
-/* Hide Saturday and Sunday buttons when in Coaches Zone */
-.coaches-zone-active .saturday-btn,
-.coaches-zone-active .sunday-btn {
-    display: none;
-}
-
 /* CUSTOM TIME SLOT TITLE */
 .container .coaches-exclusive-title {
     font-size: 20px !important; /* Add !important to force the change */
     color: #555555; /* Dark grey */
     padding-top: 10px;
-    display: none;
 }
 
 /* Flexbox layout for days section */
