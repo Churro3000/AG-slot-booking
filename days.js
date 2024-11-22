@@ -38,20 +38,24 @@ const slotsContainer = document.querySelector('.slots-container');
 
 // Function to Show Main Page and Hide Coaches Zone
 function showMainPage() {
-    coachesZone.classList.add('hidden'); // NNNNNEEWWW: Hide Coaches Zone
-    manageTimeSlots.classList.add('hidden'); // NNNNNEEWWW: Hide time management slots
+    coachesZone.classList.add('hidden'); // Hide Coaches Zone
+    manageTimeSlots.classList.add('hidden'); // Hide time management slots
     saturdayContent.classList.remove('hidden'); // Show Saturday content
     sundayContent.classList.remove('hidden'); // Show Sunday content
     timeSlotsContainer.classList.remove('hidden'); // Show time slots container
+    saturdayBtn.classList.remove('hidden'); // Show Saturday button
+    sundayBtn.classList.remove('hidden'); // Show Sunday button
 }
 
 // Function to Show Coaches Zone and Hide Main Page
 function showCoachesZone() {
-    coachesZone.classList.remove('hidden'); // NNNNNEEWWW: Show Coaches Zone
-    manageTimeSlots.classList.remove('hidden'); // NNNNNEEWWW: Show time management slots
+    coachesZone.classList.remove('hidden'); // Show Coaches Zone
+    manageTimeSlots.classList.remove('hidden'); // Show time management slots
     saturdayContent.classList.add('hidden'); // Hide Saturday content
     sundayContent.classList.add('hidden'); // Hide Sunday content
     timeSlotsContainer.classList.add('hidden'); // Hide time slots container
+    saturdayBtn.classList.add('hidden'); // Hide Saturday button
+    sundayBtn.classList.add('hidden'); // Hide Sunday button
 }
 
 // Add Event Listener for Emoji Button
