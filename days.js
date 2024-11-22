@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,16 +22,43 @@ export { app, db };
 // Select Buttons
 const saturdayBtn = document.getElementById('saturday-btn');
 const sundayBtn = document.getElementById('sunday-btn');
+const emojiBtn = document.getElementById('emoji-btn');
 
 // Select Content Sections
 const saturdayContent = document.getElementById('saturday-content');
 const sundayContent = document.getElementById('sunday-content');
+const coachesZoneContainer = document.getElementById('coaches-zone-container');
 
 // Select Time Slots Container
 const timeSlotsContainer = document.getElementById('time-slots-container');
 const dynamicTableContainer = document.getElementById('dynamic-table-container');
 const tableTitle = document.getElementById('table-title');
 const slotsContainer = document.querySelector('.slots-container');
+
+// Track whether the emoji has been clicked
+let emojiClicked = false;
+
+// Function to handle the emoji button click
+emojiBtn.addEventListener('click', () => {
+    emojiClicked = !emojiClicked; // Toggle emoji click state
+
+    // Show or hide the coaches' zone container based on emoji state
+    if (emojiClicked) {
+        coachesZoneContainer.classList.remove('hidden');
+    } else {
+        coachesZoneContainer.classList.add('hidden');
+    }
+
+    // Also hide the Saturday and Sunday content and slot booking when emoji is clicked
+    if (emojiClicked) {
+        saturdayContent.classList.add('hidden');
+        sundayContent.classList.add('hidden');
+        timeSlotsContainer.classList.add('hidden');
+        dynamicTableContainer.classList.add('hidden');
+    } else {
+        // Optionally show back Saturday and Sunday content if needed
+    }
+});
 
 // Function to Show Time Slots
 function showTimeSlots() {
@@ -43,21 +70,25 @@ function hideTimeSlots() {
     timeSlotsContainer.classList.add('hidden');
 }
 
-// Add Event Listeners for Buttons
+// Add Event Listeners for Day Buttons
 saturdayBtn.addEventListener('click', () => {
-    saturdayBtn.classList.add('active');
-    sundayBtn.classList.remove('active');
-    saturdayContent.classList.remove('hidden');
-    sundayContent.classList.add('hidden');
-    showTimeSlots();
+    if (!emojiClicked) {
+        saturdayBtn.classList.add('active');
+        sundayBtn.classList.remove('active');
+        saturdayContent.classList.remove('hidden');
+        sundayContent.classList.add('hidden');
+        showTimeSlots();
+    }
 });
 
 sundayBtn.addEventListener('click', () => {
-    sundayBtn.classList.add('active');
-    saturdayBtn.classList.remove('active');
-    sundayContent.classList.remove('hidden');
-    saturdayContent.classList.add('hidden');
-    showTimeSlots();
+    if (!emojiClicked) {
+        sundayBtn.classList.add('active');
+        saturdayBtn.classList.remove('active');
+        sundayContent.classList.remove('hidden');
+        saturdayContent.classList.add('hidden');
+        showTimeSlots();
+    }
 });
 
 // Hide Time Slots on Page Load
