@@ -22,10 +22,13 @@ export { app, db };
 // Select Buttons
 const saturdayBtn = document.getElementById('saturday-btn');
 const sundayBtn = document.getElementById('sunday-btn');
+const emojiBtn = document.getElementById('emoji-btn'); // NNNNNEEWWW: Bow and arrow emoji button
 
 // Select Content Sections
 const saturdayContent = document.getElementById('saturday-content');
 const sundayContent = document.getElementById('sunday-content');
+const coachesZone = document.getElementById('coaches-zone'); // NNNNNEEWWW: Coaches Only Zone
+const manageTimeSlots = document.getElementById('manage-time-slots'); // NNNNNEEWWW: Manage Time Slots container
 
 // Select Time Slots Container
 const timeSlotsContainer = document.getElementById('time-slots-container');
@@ -33,15 +36,32 @@ const dynamicTableContainer = document.getElementById('dynamic-table-container')
 const tableTitle = document.getElementById('table-title');
 const slotsContainer = document.querySelector('.slots-container');
 
-// Function to Show Time Slots
-function showTimeSlots() {
-    timeSlotsContainer.classList.remove('hidden');
+// Function to Show Main Page and Hide Coaches Zone
+function showMainPage() {
+    coachesZone.classList.add('hidden'); // NNNNNEEWWW: Hide Coaches Zone
+    manageTimeSlots.classList.add('hidden'); // NNNNNEEWWW: Hide time management slots
+    saturdayContent.classList.remove('hidden'); // Show Saturday content
+    sundayContent.classList.remove('hidden'); // Show Sunday content
+    timeSlotsContainer.classList.remove('hidden'); // Show time slots container
 }
 
-// Function to Hide Time Slots
-function hideTimeSlots() {
-    timeSlotsContainer.classList.add('hidden');
+// Function to Show Coaches Zone and Hide Main Page
+function showCoachesZone() {
+    coachesZone.classList.remove('hidden'); // NNNNNEEWWW: Show Coaches Zone
+    manageTimeSlots.classList.remove('hidden'); // NNNNNEEWWW: Show time management slots
+    saturdayContent.classList.add('hidden'); // Hide Saturday content
+    sundayContent.classList.add('hidden'); // Hide Sunday content
+    timeSlotsContainer.classList.add('hidden'); // Hide time slots container
 }
+
+// Add Event Listener for Emoji Button
+emojiBtn.addEventListener('click', () => {
+    if (coachesZone.classList.contains('hidden')) {
+        showCoachesZone(); // Switch to Coaches Zone
+    } else {
+        showMainPage(); // Switch back to Main Page
+    }
+});
 
 // Add Event Listeners for Buttons
 saturdayBtn.addEventListener('click', () => {
@@ -49,7 +69,7 @@ saturdayBtn.addEventListener('click', () => {
     sundayBtn.classList.remove('active');
     saturdayContent.classList.remove('hidden');
     sundayContent.classList.add('hidden');
-    showTimeSlots();
+    timeSlotsContainer.classList.remove('hidden');
 });
 
 sundayBtn.addEventListener('click', () => {
@@ -57,11 +77,12 @@ sundayBtn.addEventListener('click', () => {
     saturdayBtn.classList.remove('active');
     sundayContent.classList.remove('hidden');
     saturdayContent.classList.add('hidden');
-    showTimeSlots();
+    timeSlotsContainer.classList.remove('hidden');
 });
 
-// Hide Time Slots on Page Load
-hideTimeSlots();
+// Function to Hide Slots Initially
+showMainPage(); // NNNNNEEWWW: Ensure Main Page is visible on page load
+
 
 // Function to Create Booking Slots
 async function createBookingSlots(day, time) {
@@ -134,3 +155,11 @@ document.querySelectorAll('.time-slot-btn').forEach((btn) => {
         createBookingSlots(day, time);
     });
 });
+
+
+
+
+
+
+
+
