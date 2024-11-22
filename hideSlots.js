@@ -8,6 +8,8 @@ const saturdayContent = document.getElementById('saturday-content');
 const sundayContent = document.getElementById('sunday-content');
 const timeSlotsContainer = document.getElementById('time-slots-container');
 const dynamicTableContainer = document.getElementById('dynamic-table-container');
+const slotsContainer = document.getElementById('slots-container');
+const coachesZone = document.querySelector('.coaches-zone');
 
 // Function to hide or show Saturday and Sunday-related elements
 function hideWeekendSlots() {
@@ -19,14 +21,20 @@ function hideWeekendSlots() {
         sundayContent,
         timeSlotsContainer,
         dynamicTableContainer,
+        slotsContainer, // Ensuring slot booking system is hidden
     ];
 
     // Toggle 'hidden' class on each element
     elements.forEach((el) => {
         if (el) {
-            el.classList.toggle('hidden'); // Ensure 'hidden' is defined in your CSS
+            el.classList.add('hidden'); // Ensure 'hidden' is defined in your CSS
         }
     });
+
+    // Show the coaches-only zone container after emoji click
+    if (coachesZone) {
+        coachesZone.classList.remove('hidden');
+    }
 }
 
 // Show Saturday and Sunday buttons and content by default
@@ -59,5 +67,34 @@ if (saturdayBtn) {
 if (sundayBtn) {
     sundayBtn.addEventListener('click', () => {
         sundayContent.classList.toggle('hidden');
+    });
+}
+
+// Firebase configuration and Firestore setup (ensure you're using the correct version of Firebase)
+import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js';
+
+// Initialize Firestore
+const db = getFirestore();
+
+// Function to handle booking slots
+const bookSlot = async (timeSlot) => {
+    try {
+        // Ensure you're booking the correct slot data
+        const docRef = await addDoc(collection(db, 'slots'), {
+            time: timeSlot, // Make sure 'timeSlot' corresponds to the actual time data
+            booked: true
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+};
+
+// Example of how to call this function when booking a slot (ensure the timeSlot is properly defined)
+const bookingButton = document.getElementById('book-slot-btn');
+if (bookingButton) {
+    bookingButton.addEventListener('click', () => {
+        const selectedTimeSlot = '12:00 PM'; // Replace this with actual time selection logic
+        bookSlot(selectedTimeSlot);
     });
 }
