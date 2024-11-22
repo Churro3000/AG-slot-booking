@@ -219,12 +219,6 @@ body {
     display: none;
 }
 
-/* Hide time slots when in Coaches Zone */
-.coaches-zone-active .time-slots-container {
-    display: none;
-}
-
-
 /* Flexbox layout for days section */
 .days-section {
     display: flex;
