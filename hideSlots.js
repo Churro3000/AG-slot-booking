@@ -1,5 +1,5 @@
 // Select the emoji element
-const emojiElement = document.getElementById('emoji'); // Replace 'emoji' with the actual ID or selector for the emoji element
+const emojiElement = document.getElementById('&#127993;');
 
 // Select Saturday and Sunday elements
 const saturdayBtn = document.getElementById('saturday-btn');
