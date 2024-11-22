@@ -29,6 +29,21 @@ function hideWeekendSlots() {
     });
 }
 
+// Show Saturday and Sunday buttons and content by default
+const showWeekendElements = [
+    saturdayBtn,
+    sundayBtn,
+    saturdayContent,
+    sundayContent,
+];
+
+// Ensure that Saturday and Sunday elements are visible on page load
+showWeekendElements.forEach((el) => {
+    if (el) {
+        el.classList.remove('hidden');
+    }
+});
+
 // Add an event listener to the emoji for click events
 if (emojiElement) {
     emojiElement.addEventListener('click', hideWeekendSlots);
