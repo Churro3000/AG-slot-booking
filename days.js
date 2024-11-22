@@ -159,11 +159,3 @@ document.querySelectorAll('.time-slot-btn').forEach((btn) => {
         createBookingSlots(day, time);
     });
 });
-
-
-
-
-
-
-
-
