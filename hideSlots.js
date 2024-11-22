@@ -44,7 +44,20 @@ showWeekendElements.forEach((el) => {
     }
 });
 
-// Add an event listener to the emoji for click events
+// Add event listener to the emoji for click events
 if (emojiElement) {
     emojiElement.addEventListener('click', hideWeekendSlots);
+}
+
+// Add event listeners to Saturday and Sunday buttons for toggling their content visibility
+if (saturdayBtn) {
+    saturdayBtn.addEventListener('click', () => {
+        saturdayContent.classList.toggle('hidden');
+    });
+}
+
+if (sundayBtn) {
+    sundayBtn.addEventListener('click', () => {
+        sundayContent.classList.toggle('hidden');
+    });
 }
