@@ -218,6 +218,7 @@ body {
     font-size: 20px !important; /* Add `!important` to force the change */
     color: #555555; /* Dark grey */
     padding-top: 10px;
+    display: none;
 }
 
 /* Flexbox layout for days section */
