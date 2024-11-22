@@ -115,51 +115,43 @@
        </div>
 
 <!-- Content for Saturday -->
-<div id="saturday-content" class="content hidden">
-    
-</div>
-
-<!-- Content for Sunday -->
-<div id="sunday-content" class="content hidden">
-    
-</div>
-
-   <!----- NEW CODE: Time Slots Container ----------->
-<div id="time-slots-container" class="hidden">
-    <div class="time-slots-grid">
-        <button class="time-slot-btn">8-9</button>
-        <button class="time-slot-btn">9-10</button>
-        <button class="time-slot-btn">10-11</button>
-        <button class="time-slot-btn">11-12</button>
+    <div id="saturday-content" class="content hidden">
+        <!-- Saturday content goes here -->
     </div>
-</div>
-   
-   
-   <!-- NEWEST: Placeholder for dynamic table -->
-<div id="dynamic-table-container" class="hidden">
-    <h2 id="table-title" class="table-title"></h2>
-    <div class="slots-container"></div>
-</div>
 
-   
-   
-<!-- Include the new JavaScript file -->
-<script src="days.js"></script>
+    <!-- Content for Sunday -->
+    <div id="sunday-content" class="content hidden">
+        <!-- Sunday content goes here -->
+    </div>
 
-   
-    <!-- Fourth container (Coaches Only Zone TITLE) -->
+    <!-- Time Slots for booking -->
+    <div id="time-slots-container" class="hidden">
+        <div class="time-slots-grid">
+            <button class="time-slot-btn">8-9</button>
+            <button class="time-slot-btn">9-10</button>
+            <button class="time-slot-btn">10-11</button>
+            <button class="time-slot-btn">11-12</button>
+        </div>
+    </div>
+
+    <!-- Dynamic Table Container for Booking Details -->
+    <div id="dynamic-table-container" class="hidden">
+        <h2 id="table-title" class="table-title"></h2>
+        <div class="slots-container"></div>
+    </div>
+
+    <!-- Coaches Zone Section -->
     <div id="coaches-zone" class="hidden">
-        <div class="back-btn" id="back-btn">&#x2190; Back</div> <!-- Back button with left arrow -->
+        <div class="back-btn" id="back-btn">&#x2190; Back</div>
         <h1 class="coaches-title">Coaches Only Zone!</h1>
     </div>
 
-    <!-- Fourth Container (Coaches Only Zone CONTAINER and SECOND TITLE) -->
-    <div id="manage-time-slots" class="container hidden"> <!-- Added id and hidden class -->
+    <!-- Manage Time Slots (Coaches Only) -->
+    <div id="manage-time-slots" class="container hidden">
         <h2 class="coaches-exclusive-title">Manage Time Slots</h2>
-        <!-- Tickable Time Slots for Saturday and Sunday for Coaches Only Zone -->
         <div class="fourth-container">
             <div class="days-section">
-                <!-- Saturday section -->
+                <!-- Saturday Time Slots -->
                 <div class="day-column">
                     <div class="checkbox-row">
                         <label for="saturday" class="custom-title">Saturday</label>
@@ -183,7 +175,7 @@
                     </div>
                 </div>
 
-                <!-- Sunday section -->
+                <!-- Sunday Time Slots -->
                 <div class="day-column">
                     <div class="checkbox-row">
                         <label for="sunday" class="custom-title">Sunday</label>
