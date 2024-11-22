@@ -1,5 +1,6 @@
 // Select the emoji element
-const emojiElement = document.getElementById('&#127993;'); 
+const emojiElement = document.getElementById('emoji'); // Replace 'emoji' with the actual ID or selector for the emoji element
+
 // Select Saturday and Sunday elements
 const saturdayBtn = document.getElementById('saturday-btn');
 const sundayBtn = document.getElementById('sunday-btn');
@@ -8,9 +9,9 @@ const sundayContent = document.getElementById('sunday-content');
 const timeSlotsContainer = document.getElementById('time-slots-container');
 const dynamicTableContainer = document.getElementById('dynamic-table-container');
 
-// Function to hide Saturday and Sunday-related elements
+// Function to hide or show Saturday and Sunday-related elements
 function hideWeekendSlots() {
-    // Toggle visibility of buttons and content
+    // List of elements to toggle visibility
     const elements = [
         saturdayBtn,
         sundayBtn,
@@ -20,12 +21,15 @@ function hideWeekendSlots() {
         dynamicTableContainer,
     ];
 
+    // Toggle 'hidden' class on each element
     elements.forEach((el) => {
         if (el) {
-            el.classList.toggle('hidden'); // Assume you have a 'hidden' CSS class
+            el.classList.toggle('hidden'); // Ensure 'hidden' is defined in your CSS
         }
     });
 }
 
 // Add an event listener to the emoji for click events
-emojiElement.addEventListener('click', hideWeekendSlots);
+if (emojiElement) {
+    emojiElement.addEventListener('click', hideWeekendSlots);
+}
