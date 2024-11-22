@@ -415,3 +415,7 @@ body {
     height: 35px;
     width: 90px;
 }
+
+.hidden {
+    display: none !important;
+}
