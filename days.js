@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,13 +22,17 @@ export { app, db };
 // Select Buttons
 const saturdayBtn = document.getElementById('saturday-btn');
 const sundayBtn = document.getElementById('sunday-btn');
-const emojiBtn = document.getElementById('emoji-btn'); // NNNNNEEWWW: Bow and arrow emoji button
+const emojiBtn = document.getElementById('emoji-btn'); // Bow and arrow emoji button
+
+// Select the bottom boxes (assuming they are adjacent to the buttons)
+const saturdayBtnBox = document.querySelector('.saturday-btn-box'); // Update with correct class or id
+const sundayBtnBox = document.querySelector('.sunday-btn-box'); // Update with correct class or id
 
 // Select Content Sections
 const saturdayContent = document.getElementById('saturday-content');
 const sundayContent = document.getElementById('sunday-content');
-const coachesZone = document.getElementById('coaches-zone'); // NNNNNEEWWW: Coaches Only Zone
-const manageTimeSlots = document.getElementById('manage-time-slots'); // NNNNNEEWWW: Manage Time Slots container
+const coachesZone = document.getElementById('coaches-zone'); // Coaches Only Zone
+const manageTimeSlots = document.getElementById('manage-time-slots'); // Manage Time Slots container
 
 // Select Time Slots Container
 const timeSlotsContainer = document.getElementById('time-slots-container');
@@ -45,6 +49,10 @@ function showMainPage() {
     timeSlotsContainer.classList.remove('hidden'); // Show time slots container
     saturdayBtn.classList.remove('hidden'); // Show Saturday button
     sundayBtn.classList.remove('hidden'); // Show Sunday button
+
+    // Hide the black rectangles below buttons
+    if (saturdayBtnBox) saturdayBtnBox.classList.add('hidden');
+    if (sundayBtnBox) sundayBtnBox.classList.add('hidden');
 }
 
 // Function to Show Coaches Zone and Hide Main Page
@@ -56,6 +64,10 @@ function showCoachesZone() {
     timeSlotsContainer.classList.add('hidden'); // Hide time slots container
     saturdayBtn.classList.add('hidden'); // Hide Saturday button
     sundayBtn.classList.add('hidden'); // Hide Sunday button
+
+    // Optionally, show the black rectangles again (if needed)
+    if (saturdayBtnBox) saturdayBtnBox.classList.remove('hidden');
+    if (sundayBtnBox) sundayBtnBox.classList.remove('hidden');
 }
 
 // Add Event Listener for Emoji Button
@@ -85,8 +97,7 @@ sundayBtn.addEventListener('click', () => {
 });
 
 // Function to Hide Slots Initially
-showMainPage(); // NNNNNEEWWW: Ensure Main Page is visible on page load
-
+showMainPage(); // Ensure Main Page is visible on page load
 
 // Function to Create Booking Slots
 async function createBookingSlots(day, time) {
