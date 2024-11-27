@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> <!-- Compatibility meta tag -->
     <title>Archery Slot Booking</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="header">
-        <span class="emoji">&#127993;</span>
+        <span class="emoji">&#127993;</span> <!-- Decorative bow and arrow emoji (flipped) -->
         <h1>Active Generation</h1>
-        <span id="emoji-btn" class="emoji">&#127993;</span>
+        <span id="emoji-btn" class="emoji">&#127993;</span> <!-- Clickable bow and arrow emoji -->
     </div>
 
-    <h2 class="page-title">Book Your Slot!</h2>
+    <!-- Title -->
+    <h2 class="page-title">Book Your Slot!</h2> <!-- Changed to h2 for semantic structure -->
 
-    <!-- Saturday Container -->
+    <!-- First Container for Saturday -->
     <div class="container" id="container-saturday">
         <h2>Saturday</h2>
         <table class="booking-table">
@@ -47,9 +48,10 @@
         </table>
     </div>
 
+    <!-- Padding space between the two containers -->
     <div class="padding-space"></div>
 
-    <!-- Sunday Container -->
+    <!-- Second Container for Sunday -->
     <div class="container" id="container-sunday">
         <h2>Sunday</h2>
         <table class="booking-table">
@@ -80,7 +82,7 @@
         </table>
     </div>
 
-    <!-- Booking Table Container -->
+<!-- Third Container with Booking Table and Add Button -->
     <div class="container" id="booking-table-container">
         <table id="bookingTable">
             <thead>
@@ -92,76 +94,123 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- '+' button row -->
                 <tr>
                     <td colspan="4" class="add-button-cell">
-                        <button class="add-button" onclick="addEmptyRow()">+</button>
+                        <button class="add-button" onclick="addEmptyRow()">+</button> <!-- NEW: Add button with onclick handler -->
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+   
+   <script src="script.js"></script>
 
+
+      <!-- SATURDAY N SUNDAY: Main buttons -->
     <div class="days-container">
-        <button id="saturday-btn" class="day-btn">Saturday</button>
-        <button id="sunday-btn" class="day-btn">Sunday</button>
-    </div>
+    <button id="saturday-btn" class="day-btn">Saturday</button>
+    <button id="sunday-btn" class="day-btn">Sunday</button>
+       </div>
 
-    <!-- Placeholder Containers -->
-    <div id="time-slots-container" class="hidden">
-        <div class="time-slots-grid">
-            <button class="time-slot-btn">8-9</button>
-            <button class="time-slot-btn">9-10</button>
-            <button class="time-slot-btn">10-11</button>
-            <button class="time-slot-btn">11-12</button>
-        </div>
-    </div>
+<!-- Content for Saturday -->
+<div id="saturday-content" class="content hidden">
+    
+</div>
 
-    <div id="dynamic-table-container" class="hidden">
-        <h2 id="table-title" class="table-title"></h2>
-        <div class="slots-container"></div>
-    </div>
+<!-- Content for Sunday -->
+<div id="sunday-content" class="content hidden">
+    
+</div>
 
+   <!----- NEW CODE: Time Slots Container ----------->
+<div id="time-slots-container" class="hidden">
+    <div class="time-slots-grid">
+        <button class="time-slot-btn">8-9</button>
+        <button class="time-slot-btn">9-10</button>
+        <button class="time-slot-btn">10-11</button>
+        <button class="time-slot-btn">11-12</button>
+    </div>
+</div>
+   
+   
+   <!-- NEWEST: Placeholder for dynamic table -->
+<div id="dynamic-table-container" class="hidden">
+    <h2 id="table-title" class="table-title"></h2>
+    <div class="slots-container"></div>
+</div>
+
+
+   
+    <!-- Fourth container (Coaches Only Zone TITLE) -->
     <div id="coaches-zone" class="hidden">
-        <div class="back-btn" id="back-btn">&#x2190; Back</div>
+        <div class="back-btn" id="back-btn">&#x2190; Back</div> <!-- Back button with left arrow -->
         <h1 class="coaches-title">Coaches Only Zone!</h1>
     </div>
 
-    <div id="manage-time-slots" class="container hidden">
+    <!-- Fourth Container (Coaches Only Zone CONTAINER and SECOND TITLE) -->
+    <div id="manage-time-slots" class="container hidden"> <!-- Added id and hidden class -->
         <h2 class="coaches-exclusive-title">Manage Time Slots</h2>
-        <div class="days-section">
-            <!-- Saturday Section -->
-            <div class="day-column">
-                <div class="checkbox-row">
-                    <label for="saturday-checkbox" class="custom-title">Saturday</label>
-                    <input type="checkbox" id="saturday-checkbox">
+        <!-- Tickable Time Slots for Saturday and Sunday for Coaches Only Zone -->
+        <div class="fourth-container">
+            <div class="days-section">
+                <!-- Saturday section -->
+                <div class="day-column">
+                    <div class="checkbox-row">
+                        <label for="saturday" class="custom-title">Saturday</label>
+                        <input type="checkbox" id="saturday">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time1" class="custom-title">8-9</label>
+                        <input type="checkbox" id="time1">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time2" class="custom-title">9-10</label>
+                        <input type="checkbox" id="time2">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time3" class="custom-title">10-11</label>
+                        <input type="checkbox" id="time3">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time4" class="custom-title">11-12</label>
+                        <input type="checkbox" id="time4">
+                    </div>
                 </div>
-                <div class="checkbox-row">
-                    <label for="time1" class="custom-title">8-9</label>
-                    <input type="checkbox" id="time1">
-                </div>
-                <!-- Add other time slots similarly -->
-            </div>
 
-            <!-- Sunday Section -->
-            <div class="day-column">
-                <div class="checkbox-row">
-                    <label for="sunday-checkbox" class="custom-title">Sunday</label>
-                    <input type="checkbox" id="sunday-checkbox">
+                <!-- Sunday section -->
+                <div class="day-column">
+                    <div class="checkbox-row">
+                        <label for="sunday" class="custom-title">Sunday</label>
+                        <input type="checkbox" id="sunday">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time5" class="custom-title">8-9</label>
+                        <input type="checkbox" id="time5">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time6" class="custom-title">9-10</label>
+                        <input type="checkbox" id="time6">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time7" class="custom-title">10-11</label>
+                        <input type="checkbox" id="time7">
+                    </div>
+                    <div class="checkbox-row">
+                        <label for="time8" class="custom-title">11-12</label>
+                        <input type="checkbox" id="time8">
+                    </div>
                 </div>
-                <div class="checkbox-row">
-                    <label for="time5" class="custom-title">8-9</label>
-                    <input type="checkbox" id="time5">
-                </div>
-                <!-- Add other time slots similarly -->
             </div>
         </div>
     </div>
-
-    <!-- Firebase and Scripts -->
+    <!-- End of 4th container -->
+   
+    <!-- Firebase and app.js -->
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="script.js"></script>
-    <script src="days.js"></script>
-    <script src="app.js" type="module"></script>
+    <!-- Script includes -->
+<script type="module" src="app.js"></script>
+<script type="module" src="days.js"></script>
+
 </body>
 </html>
