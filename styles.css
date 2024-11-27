@@ -418,5 +418,5 @@ body {
 
 /*----------- Utility class to hide elements-------------- */
 .hidden {
-    display: none;
+    display: none !important; /* Ensure it overrides inline or other styles */
 }
