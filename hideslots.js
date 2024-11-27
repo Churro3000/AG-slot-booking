@@ -1,6 +1,8 @@
+// 55555555555555555555555
 // Select the emoji element by its ID (use 'emoji' or similar instead of the emoji itself as the ID)
 const emojiElement = document.getElementById('emoji-btn');
 
+// 55555555555555555555555
 // Select Saturday and Sunday elements
 const saturdayBtn = document.getElementById('saturday-btn');
 const sundayBtn = document.getElementById('sunday-btn');
@@ -11,6 +13,7 @@ const dynamicTableContainer = document.getElementById('dynamic-table-container')
 const slotsContainer = document.getElementById('slots-container');
 const coachesZone = document.querySelector('.coaches-zone');
 
+// 55555555555555555555555
 // Function to hide or show Saturday and Sunday-related elements
 function hideWeekendSlots() {
     // List of elements to toggle visibility
@@ -37,7 +40,8 @@ function hideWeekendSlots() {
     }
 }
 
-// Show Saturday and Sunday buttons and content by default
+// 55555555555555555555555
+// Ensure that Saturday and Sunday elements are visible on page load
 const showWeekendElements = [
     saturdayBtn,
     sundayBtn,
@@ -70,7 +74,7 @@ if (sundayBtn) {
     });
 }
 
-// Firebase configuration and Firestore setup (ensure you're using the correct version of Firebase)
+// Firebase configuration and Firestore setup
 import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js';
 
 // Initialize Firestore
@@ -79,9 +83,8 @@ const db = getFirestore();
 // Function to handle booking slots
 const bookSlot = async (timeSlot) => {
     try {
-        // Ensure you're booking the correct slot data
         const docRef = await addDoc(collection(db, 'slots'), {
-            time: timeSlot, // Make sure 'timeSlot' corresponds to the actual time data
+            time: timeSlot,
             booked: true
         });
         console.log("Document written with ID: ", docRef.id);
@@ -90,7 +93,7 @@ const bookSlot = async (timeSlot) => {
     }
 };
 
-// Example of how to call this function when booking a slot (ensure the timeSlot is properly defined)
+// Example of how to call this function
 const bookingButton = document.getElementById('book-slot-btn');
 if (bookingButton) {
     bookingButton.addEventListener('click', () => {
